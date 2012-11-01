@@ -1,0 +1,151 @@
+<?php
+
+/**
+*
+*
+*/
+
+    $usehtmleditor = can_use_html_editor();
+    $defaultformat = FORMAT_MOODLE;    
+    $categories = array_values(magtest_get_categories($magtest->id));
+?>
+<center>
+<form name="addupdateform" method="POST" action="view.php" />
+<input type="hidden" name="id" value="<?php p($cm->id) ?>" />
+<input type="hidden" name="view" value="questions" />
+<input type="hidden" name="what" value="" />
+<?php
+// we are updating ?
+if (isset($qid)){
+?>
+<input type="hidden" name="qid" value="<?php p($qid) ?>" />
+<?php
+}
+?>
+<fieldset name="">
+<legend><?php print_string('question', 'magtest') ?></legend>
+<table width="90%">
+<tr>
+    <td><b><?php print_string('questiontext', 'magtest') ?></b></td>
+    <td>
+        <?php
+           print_textarea($usehtmleditor, 5, 45, 500, 400, 'questiontext', @$question->questiontext);
+    
+           if ($usehtmleditor) {
+               echo '<input type="hidden" name="format" value="'.FORMAT_HTML.'" />';
+               $nohtmleditorneeded = false;
+           } else {
+               echo '<p align="right">';
+               helpbutton('textformat', get_string('formattexttype'));
+               print_string('formattexttype');
+               echo ':&nbsp;';
+               $format = (isset($question->format)) ? $question->format : $defaultformat ;
+               choose_from_menu(format_text_menu(), 'format', $format , '');
+               echo '</p>';
+           }
+        ?>
+    </td>
+</tr>
+</table>
+</fieldset>
+<fieldset name="">
+<legend><?php print_string('answers', 'magtest') ?></legend>
+
+<?php
+// give all existing answers a positive id, or 0 prefix to create new answers.
+for($i = 0 ; $i < count($categories) ; $i++){
+    if (!empty($question->answers)){
+        $answerids = array_keys($question->answers);
+        $aid = 0 + @$answerids[$i];
+    } else {
+        $aid = 0;
+    }
+    $aid = ($aid == 0) ? "$aid-$i" : $aid ;
+?>
+<table width="90%">
+    <tr>
+        <td><b><?php print_string('answertext', 'magtest', format_string($categories[$i]->name)) ?></b>
+            <input type="hidden" name="cat<?php p($aid) ?>" value="<?php p($categories[$i]->id) ?>" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+        <?php
+           print_textarea($usehtmleditor, 5, 45, 500, 400, "answer{$aid}", @$question->answers[$aid]->answertext);
+    
+           if ($usehtmleditor) {
+               echo "<input type=\"hidden\" name=\"format{$aid}\" value=\"".FORMAT_HTML.'" />';
+               $nohtmleditorneeded = false;
+           } else {
+               echo '<p align="right">';
+               helpbutton('textformat', get_string('formattexttype'));
+               print_string('formattexttype');
+               echo ':&nbsp;';
+               $format = (isset($question) && isset($question->answers[$aid]->format)) ? $question->answers[$aid]->format : $defaultformat ;
+               choose_from_menu(format_text_menu(), "format{$aid}", $format, '');
+               echo '</p>';
+           }
+        ?>
+        </td>
+    </tr>
+<?php
+if ($magtest->weighted){
+    $weight = (isset($question->answers[$aid]->weight)) ? $question->answers[$aid]->weight : 1 ;
+?>
+    <tr>
+        <td><b><?php print_string('weight', 'magtest') ?></b></td>
+    </tr>
+    <tr>
+        <td>
+            <input type="textfield" name="weight<?php p($aid) ?>" value="<?php echo p($weight); ?>" />
+        </td>
+    </tr>
+<?php
+}
+?>
+    <tr>
+        <td><b><?php print_string('helpertext', 'magtest', format_string($categories[$i]->name)) ?></b>
+            <input type="hidden" name="cat<?php p($aid) ?>" value="<?php p($categories[$i]->id) ?>" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+        <?php
+           print_textarea($usehtmleditor, 5, 45, 500, 400, "helper{$aid}", @$question->answers[$aid]->helper);
+    
+           if ($usehtmleditor) {
+               echo "<input type=\"hidden\" name=\"helperformat{$aid}\" value=\"".FORMAT_HTML.'" />';
+               $nohtmleditorneeded = false;
+           } else {
+               echo '<p align="right">';
+               helpbutton('textformat', get_string('formattexttype'));
+               print_string('formattexttype');
+               echo ':&nbsp;';
+               $format = (isset($question) && isset($question->answers[$aid]->helperformat)) ? $question->answers[$aid]->helperformat : $defaultformat ;
+               choose_from_menu(format_text_menu(), "helperformat{$aid}", $format, '');
+               echo '</p>';
+           }
+        ?>
+        </td>
+    </tr>
+</table>
+<?php
+}
+$onsubmit = '';
+if ($usehtmleditor && @$CFG->defaulthtmleditor != 'tinymce'){
+    $onsubmit = "document.forms['addupdateform'].onsubmit();";
+}
+?>
+</fieldset>
+
+<table width="90%">
+<tr>
+    <td colspan="2" align="center">
+        <input type="button" name="go_btn" value="<?php print_string('update') ?>" onclick="document.forms['addupdateform'].what.value = '<?php p($command) ?>';<?php echo $onsubmit ?>document.forms['addupdateform'].submit();" />
+        <input type="submit" name="cancel_btn" value="<?php print_string('cancel') ?>" />
+    </td>
+</tr>
+
+</table>
+</form>
+</center>

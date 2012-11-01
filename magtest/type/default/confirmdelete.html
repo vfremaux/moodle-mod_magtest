@@ -1,0 +1,21 @@
+<center>
+<form name="confirmform" action="#">
+<input type="hidden" name="id" value="<?php p($cm->id) ?>" />
+<input type="hidden" name="qid" value="<?php p($qid) ?>" />
+<input type="hidden" name="what" value="delete" />
+<input type="hidden" name="confirm" value="1" />
+<table>
+<tr>
+    <td align="center">
+        <p><?php print_string('confirmdeletemessage', 'magtest') ?></p>
+    </td>
+</tr>
+<tr>
+    <td align="center">
+        <p><br/><input type="submit" name="go_btn" value="<?php print_string('confirm') ?>" />
+        &nbsp;<input type="button" name="cancel_btn" value="<?php print_string('cancel') ?>" onclick="document.forms['confirmform'].what.value = '';document.forms['confirmform'].submit();" /></p>
+    </td>
+</tr>
+</table>
+</form>
+</center>
