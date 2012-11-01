@@ -1,0 +1,87 @@
+<<<<<<< install.xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="mod/magtest/db" VERSION="20121029" COMMENT="XMLDB file for Moodle mod/magtest"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="magtest" COMMENT="magtest table retrofitted from MySQL" NEXT="magtest_answer">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="course"/>
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="name"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="course" NEXT="intro"/>
+        <FIELD NAME="intro" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" PREVIOUS="name" NEXT="introformat"/>
+        <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="intro" NEXT="starttime"/>
+        <FIELD NAME="starttime" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" PREVIOUS="introformat" NEXT="starttimeenable"/>
+        <FIELD NAME="starttimeenable" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="starttime" NEXT="endtime"/>
+        <FIELD NAME="endtime" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" PREVIOUS="starttimeenable" NEXT="endtimeenable"/>
+        <FIELD NAME="endtimeenable" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="endtime" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" PREVIOUS="endtimeenable" NEXT="result"/>
+        <FIELD NAME="result" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" PREVIOUS="timecreated" NEXT="weighted"/>
+        <FIELD NAME="weighted" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" PREVIOUS="result" NEXT="usemakegroups"/>
+        <FIELD NAME="usemakegroups" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" PREVIOUS="weighted" NEXT="pagesize"/>
+        <FIELD NAME="pagesize" TYPE="int" LENGTH="4" NOTNULL="true" UNSIGNED="true" DEFAULT="4" SEQUENCE="false" PREVIOUS="usemakegroups" NEXT="allowreplay"/>
+        <FIELD NAME="allowreplay" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="1" SEQUENCE="false" PREVIOUS="pagesize"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key for magtest"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="magtest_answer" COMMENT="magtest_answer table retrofitted from MySQL" PREVIOUS="magtest" NEXT="magtest_question">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="questionid"/>
+        <FIELD NAME="questionid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="magtestid"/>
+        <FIELD NAME="magtestid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="questionid" NEXT="answertext"/>
+        <FIELD NAME="answertext" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" PREVIOUS="magtestid" NEXT="answertextformat"/>
+        <FIELD NAME="answertextformat" TYPE="int" LENGTH="5" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" PREVIOUS="answertext" NEXT="helper"/>
+        <FIELD NAME="helper" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" PREVIOUS="answertextformat" NEXT="helperformat"/>
+        <FIELD NAME="helperformat" TYPE="int" LENGTH="5" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" PREVIOUS="helper" NEXT="categoryid"/>
+        <FIELD NAME="categoryid" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" PREVIOUS="helperformat" NEXT="weight"/>
+        <FIELD NAME="weight" TYPE="number" LENGTH="10" NOTNULL="false" UNSIGNED="true" DEFAULT="1.0" SEQUENCE="false" DECIMALS="2" PREVIOUS="categoryid"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key for magtest_answer"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="magtest_question" COMMENT="magtest_question table retrofitted from MySQL" PREVIOUS="magtest_answer" NEXT="magtest_useranswer">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="magtestid"/>
+        <FIELD NAME="magtestid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="questiontext"/>
+        <FIELD NAME="questiontext" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" PREVIOUS="magtestid" NEXT="questiontextformat"/>
+        <FIELD NAME="questiontextformat" TYPE="int" LENGTH="5" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" PREVIOUS="questiontext" NEXT="sortorder"/>
+        <FIELD NAME="sortorder" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" PREVIOUS="questiontextformat"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key for magtest_question"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="magtest_useranswer" COMMENT="magtest_useranswer table retrofitted from MySQL" PREVIOUS="magtest_question" NEXT="magtest_category">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="magtestid"/>
+        <FIELD NAME="magtestid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="answerid"/>
+        <FIELD NAME="answerid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="magtestid" NEXT="userid"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" PREVIOUS="answerid" NEXT="questionid"/>
+        <FIELD NAME="questionid" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" PREVIOUS="userid" NEXT="timeanswered"/>
+        <FIELD NAME="timeanswered" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" PREVIOUS="questionid"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key for magtest_useranswer"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="magtest_category" COMMENT="magtest_category table retrofitted from MySQL" PREVIOUS="magtest_useranswer">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="magtestid"/>
+        <FIELD NAME="magtestid" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="name"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" PREVIOUS="magtestid" NEXT="descriptionformat"/>
+        <FIELD NAME="descriptionformat" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" PREVIOUS="name" NEXT="description"/>
+        <FIELD NAME="description" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" PREVIOUS="descriptionformat" NEXT="result"/>
+        <FIELD NAME="result" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" PREVIOUS="description" NEXT="sortorder"/>
+        <FIELD NAME="sortorder" TYPE="int" LENGTH="4" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="result" NEXT="symbol"/>
+        <FIELD NAME="symbol" TYPE="char" LENGTH="64" NOTNULL="false" SEQUENCE="false" PREVIOUS="sortorder"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key for magtest_category"/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>
