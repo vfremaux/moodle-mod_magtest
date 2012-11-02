@@ -1,10 +1,10 @@
 <?php 
-    // $Id: view.php,v 1.6 2012-11-02 14:58:36 wa Exp $
+    // $Id: view.php,v 1.4 2012-11-01 21:12:55 vf Exp $
     /**
     * This page prints a particular instance of NEWMODULE
     * 
     * @author 
-    * @version $Id: view.php,v 1.6 2012-11-02 14:58:36 wa Exp $
+    * @version $Id: view.php,v 1.4 2012-11-01 21:12:55 vf Exp $
     * @package magtest
     **/
 
@@ -18,6 +18,10 @@
     $page 	= optional_param('page',@$SESSION->page, PARAM_ACTION); // page
     $action = optional_param('what', '', PARAM_RAW);                // command
 
+    //load jquery
+    $PAGE->requires->js('/mod/magtest/js/jquery-1.8.2.min.js');
+    $PAGE->requires->js('/mod/magtest/js/view.js');
+    
     $SESSION->view = $view;
     $SESSION->page = $page;
    

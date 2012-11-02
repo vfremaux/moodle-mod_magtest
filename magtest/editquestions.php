@@ -40,9 +40,9 @@
     echo $OUTPUT->header();
            
     if($qid <= 0){ 
- 	 	$form = new Question_Form($magtest, 'add', $howmany, $url);
+		$form = new Question_Form($magtest, 'add', $howmany, $url);
     } else {
-     	$form = new Question_Form($magtest, 'update', $howmany, $url);       
+		$form = new Question_Form($magtest, 'update', $howmany, $url);       
     }
     $maxbytes = 1024 * 1024 * 1000 ; //100 mb TODO: add settings
     $questionoptions = array('trusttext'=>true, 'subdirs'=>false,'maxfiles'=>100, 'maxbytes'=>$maxbytes, 'context'=>$mod_context);
@@ -50,13 +50,12 @@
 
     //   DebugBreak();
 	if ($data = $form->get_data()){
- 	    
+	
         $cmd = $data->cmd ; 
 
-        if ($cmd == 'add'){
+        if ($cmd == 'add') {
          
-            $data = file_postupdate_standard_editor($data, 'questiontext', $questionoptions, $mod_context,
-                                        'mod_magtest', 'question',0);
+            $data = file_postupdate_standard_editor($data, 'questiontext', $questionoptions, $mod_context,'mod_magtest', 'question',0);
                                            
             $question = new stdClass();
             $question->questiontext = $data->questiontext; 
@@ -69,60 +68,58 @@
             //store the cats answers 
             foreach ($data->cats as $catid) {
                
-                $data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'questionanswer',$new_answer_id); 
+				$data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'questionanswer',$new_answer_id); 
                	$answer = new stdClass();
-               	$answer->questionid = $new_answer_id; 
-               	$answer->magtestid =  $magtest->id;
-               	$answer->answertextformat =  FORMAT_HTML;
-               	$answer->answertext =  $data->{'questionanswer'.$catid} ;
-               	$answer->categoryid = $catid;
-               	$DB->insert_record('magtest_answer',$answer);
-            }
-            
+				$answer->questionid = $new_answer_id; 
+				$answer->magtestid =  $magtest->id;
+				$answer->answertextformat =  FORMAT_HTML;
+				$answer->answertext =  $data->{'questionanswer'.$catid} ;
+				$answer->categoryid = $catid;
+				$DB->insert_record('magtest_answer',$answer);
+            }            
         } else {
 //            DebugBreak();
-           	//update question
-           	$data = file_postupdate_standard_editor($data, 'questiontext', $questionoptions, $mod_context,
-                                        'mod_magtest', 'question', 0);
-           	$question = $DB->get_record('magtest_question',array('id' => $data->qid));
-           	$question->questiontext = $data->questiontext ;
-           	$question->questiontextformat = FORMAT_HTML ;
-           	$DB->update_record('magtest_question', $question);
+			//update question
+			$data = file_postupdate_standard_editor($data, 'questiontext', $questionoptions, $mod_context, 'mod_magtest', 'question', 0);
+			$question = $DB->get_record('magtest_question',array('id' => $data->qid));
+			$question->questiontext = $data->questiontext ;
+			$question->questiontextformat = FORMAT_HTML ;
+			$DB->update_record('magtest_question', $question);
    
-           	foreach ($data->cats as $catid) {
+			foreach ($data->cats as $catid) {
 
-             	//try load the answer 
-				$old_answer = $DB->get_record('magtest_answer',array('questionid' => $qid,'categoryid' => $catid));
-             	
+				//try load the answer 
+                $old_answer = $DB->get_record('magtest_answer',array('questionid' => $qid,'categoryid' => $catid));
+                 
                 if($old_answer){
-                 	//do an update
-                 	$data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'questionanswer', $old_answer->id);     
+                	//do an update
+                    $data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'questionanswer', $old_answer->id);     
                     $old_answer->answertext =$data->{'questionanswer'.$catid};
-                 	$DB->update_record('magtest_answer',$old_answer);
-             	} else {
-                 	//insert a new record 
-					$new_answer = new stdClass();
+                    $DB->update_record('magtest_answer',$old_answer);
+                } else {
+					//insert a new record 
+                    $new_answer = new stdClass();
                     $new_answer->id = null;
                    
-                 	$new_answer->questionid = $qid;
-                 	$new_answer->categoryid = $catid ;
-                 	$new_answer->answertext =  '';//$data->{'questionanswer'.$catid};
-                 	$new_answer->magtestid = $data->magtestid;               
-                 	$new_answer->id = $DB->insert_record('magtest_answer', $new_answer);
+                    $new_answer->questionid = $qid;
+                    $new_answer->categoryid = $catid ;
+                    $new_answer->answertext =  '';//$data->{'questionanswer'.$catid};
+                    $new_answer->magtestid = $data->magtestid;               
+                    $new_answer->id = $DB->insert_record('magtest_answer', $new_answer);
                     $data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'questionanswer',$new_answer->id); 
                     $new_answer->answertext =  $data->{'questionanswer'.$catid};
                     $DB->update_record('magtest_answer',$new_answer);
-             	}
-           	}           
+				}
+			}           
         }
-		$options['id'] = $id;
+        $options['id'] = $id;
 
         echo $OUTPUT->continue_button(new moodle_url($CFG->wwwroot.'/mod/magtest/view.php', $options));         
 
         echo $OUTPUT->footer($course);                                        
         exit;
     }
- 	
- 	$form->display();
- 	
+     
+     $form->display();
+     
     echo $OUTPUT->footer($course);

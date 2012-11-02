@@ -37,6 +37,8 @@
     $questionstr = get_string('question', 'magtest');
     $answersstr = get_string('answercount', 'magtest');
     $commandstr = get_string('commands', 'magtest');
+    
+    //prepare the table
     $table = new html_table();
     $table->head = array("<b>$orderstr</b>","<b>$questionstr</b>","<b>$answersstr</b>","<b>$commandstr</b>");
     $table->size = array('5%','50%','30%','15%');
@@ -45,8 +47,9 @@
         foreach($questions as $question){
             if (empty($question->answers)) $question->answers = array();
             $order = $question->sortorder;
-            $commands = "<a href=\"{$CFG->wwwroot}/mod/magtest/editquestions.php?id={$cm->id}&qid={$question->id}\"><img src=\"".$OUTPUT->pix_url('t/edit')."\"></a>";
-            $commands .= "&nbsp;<a href=\"{$CFG->wwwroot}/mod/magtest/view.php?id={$cm->id}&amp;view=questions&amp;what=delete&amp;qid={$question->id}\"><img src=\"".$OUTPUT->pix_url('t/delete')."\"></a>";
+            $commands = '<div class="questioncommands">';
+            $commands .= "<a href=\"{$CFG->wwwroot}/mod/magtest/editquestions.php?id={$cm->id}&qid={$question->id}\"><img src=\"".$OUTPUT->pix_url('t/edit')."\"></a>";
+            $commands .= "&nbsp;<a id='delete' href=\"{$CFG->wwwroot}/mod/magtest/view.php?id={$cm->id}&amp;view=questions&amp;what=delete&amp;qid={$question->id}\"><img src=\"".$OUTPUT->pix_url('t/delete')."\"></a>";
             if ($question->sortorder > 1) {
                 $commands .= "&nbsp;<a href=\"{$CFG->wwwroot}/mod/magtest/view.php?id={$cm->id}&amp;view=questions&amp;what=up&amp;qid={$question->id}\"><img src=\"".$OUTPUT->pix_url('t/up')."\"></a>";
             } else {
@@ -57,6 +60,7 @@
             } else {
                 $commands .= '&nbsp;<img src="'.pix_url('down_shadow', 'magtest').'">';
             }
+            $commands .='</div>';
             $validanswercount = 0;
             foreach($question->answers as $answer){
                 if (!empty($answer->answertext)){

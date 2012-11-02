@@ -19,18 +19,14 @@
     }
 
     require_login($course->id);
-
     add_to_log($course->id, 'magtest', "view all", "index.php?id=$course->id", "");
 
 
 /// Get all required strings
-
     $strmagtests = get_string('modulenameplural', 'magtest');
     $strmagtest  = get_string('modulename', 'magtest');
 
-
 /// Print the header
-
     if ($course->category) {
         $navigation = "<a href=\"../../course/view.php?id=$course->id\">$course->shortname</a> ->";
     } else {
@@ -92,7 +88,6 @@
     echo html_writer::table($table);
 
 /// Finish the page
-
     echo $OUTPUT->footer($course);
 
 ?>

@@ -28,14 +28,14 @@
     $url = $CFG->wwwroot.'/mod/magtest/editcategories.php?id='.$id;
 
     if($catid <= 0) { 
- 	 	$form = new Category_Form($magtest, 'add', $howmany, $url);
+		$form = new Category_Form($magtest, 'add', $howmany, $url);
     } else {
-     	$form = new Category_Form($magtest, 'update', $howmany, $url);       
+		$form = new Category_Form($magtest, 'update', $howmany, $url);       
     }
     
- 	if ($form->is_cancelled()){
- 		redirect($CFG->wwwroot.'/mod/magtest/view.php?id='.$id);
- 	}
+	if ($form->is_cancelled()){
+		redirect($CFG->wwwroot.'/mod/magtest/view.php?id='.$id);
+	}
 
     $PAGE->set_title("$course->shortname: $magtest->name");
     $PAGE->set_heading("$course->fullname");
@@ -47,7 +47,7 @@
     $PAGE->set_headingmenu(navmenu($course, $cm));
     echo $OUTPUT->header();
            
- 	if ($data = $form->get_data()){ 	    
+	if ($data = $form->get_data()) {
         $cmd = $data->cmd ; 
         
         if($cmd == 'add'){  
@@ -61,33 +61,33 @@
              	$var = 'catname_'.$i;
              	$cat->name = $data->{$var};
              
-				if($cat->name == "" || empty($cat->name)){   //unfilled category, ignore it .
-                 	continue;
-             	}
+				if ($cat->name == '' || empty($cat->name)){   //unfilled category, ignore it .
+					continue;
+				}
              
-	            $var = 'catsymbol_'.$i;
+				$var = 'catsymbol_'.$i;
 	            $cat->symbol = $data->{$var};//$data->catsymbol[$var];
-	             
-	            $var = 'catdescription_'.$i;
-	            $cat->description = $data->{$var}['text'];   
-	             
-             	$var = 'catdescriptionformat_'.$i;
- 	            $cat->descriptionformat = 1;//$data->{$var}['format'];   
-             
-             	$var = 'catresult_'.$i;
-             	$cat->result = $data->{$var}['text'];  
-             	
-             	$var = 'outputgroupname_'.$i;
-             	$cat->outputgroupname = $data->{$var};   
 
-             	$var = 'outputgroupdesc_'.$i;
-             	$cat->outputgroupdesc = $data->{$var};   
-         
-             	$catid = magtest::addCategory($magtest->id, $cat) ;
+				$var = 'catdescription_'.$i;
+				$cat->description = $data->{$var}['text'];   
+
+				$var = 'catdescriptionformat_'.$i;
+				$cat->descriptionformat = 1; //$data->{$var}['format'];   
              
-             	if(!$catid){
-                 	print_error("an error occured while adding new category.");
-             	}
+                $var = 'catresult_'.$i;
+                $cat->result = $data->{$var}['text'];  
+                 
+                $var = 'outputgroupname_'.$i;
+                $cat->outputgroupname = $data->{$var};   
+
+                $var = 'outputgroupdesc_'.$i;
+                $cat->outputgroupdesc = $data->{$var};   
+         
+                $catid = magtest::addCategory($magtest->id, $cat) ;
+             
+                if(!$catid){
+                     print_error("an error occured while adding new category.");
+				}
             }
         } else {
         //   DebugBreak();
@@ -108,11 +108,11 @@
         echo $OUTPUT->footer($course);                                        
         exit;
     }
- 	
- 	if ($catid >= 0){
+     
+     if ($catid >= 0){
        $category = $DB->get_record('magtest_category', array('id' => $catid));
        $form->set_data($category);
- 	}
- 	$form->display();
- 	
+     }
+     $form->display();
+     
     echo $OUTPUT->footer($course);

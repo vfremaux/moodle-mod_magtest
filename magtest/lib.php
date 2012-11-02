@@ -1,4 +1,4 @@
-<?php  // $Id: lib.php,v 1.8 2012-11-02 15:02:51 wa Exp $
+<?php  // $Id: lib.php,v 1.5 2012-11-01 18:54:36 vf Exp $
 
 /**
  * Library of functions and constants for module magtest
@@ -316,11 +316,11 @@ function magtest_activity_completed(&$cm, $userid) {
 
 function magtest_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload) {
     global $CFG, $DB;
-
+	
     if ($context->contextlevel != CONTEXT_MODULE) {
         return false;
     }
-
+	
     require_course_login($course, true, $cm);
 
     $fileareas = array('question', 'questionanswer');
@@ -328,12 +328,7 @@ function magtest_pluginfile($course, $cm, $context, $filearea, $args, $forcedown
         return false;
     }
 
-    $questionid = (int)array_shift($args);
-
-  /*  if (!$question = $DB->get_record('magtest_question', array('id'=>$questionid))) {
-        return false;
-    }
-    */
+    $itemid = (int)array_shift($args);
 
     if (!$magtest = $DB->get_record('magtest', array('id'=>$cm->instance))) {
         return false;
