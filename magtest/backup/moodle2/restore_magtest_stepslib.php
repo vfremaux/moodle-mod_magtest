@@ -39,10 +39,10 @@ class restore_magtest_activity_structure_step extends restore_activity_structure
         $paths[] = $magtest;
         $categories = new restore_path_element('magtest_category', '/activity/magtest/categories/category');
         $paths[] = $categories;
-        $answers = new restore_path_element('magtest_answer', '/activity/magtest/answers/answer');
-        $paths[] = $answers;
         $questions = new restore_path_element('magtest_question', '/activity/magtest/questions/question');
         $paths[] = $questions;
+        $answers = new restore_path_element('magtest_answer', '/activity/magtest/answers/answer');
+        $paths[] = $answers;
         
         if ($userinfo){
 	        $paths[] = new restore_path_element('magtest_useranswer', '/activity/magtest/useranswers/useranswer');
@@ -59,7 +59,7 @@ class restore_magtest_activity_structure_step extends restore_activity_structure
         $oldid = $data->id;
         $data->course = $this->get_courseid();
 
-        $data->timemodified = $this->apply_date_offset($data->timemodified);
+        $data->timecreated = $this->apply_date_offset($data->timecreated);
 
         // insert the label record
         $newitemid = $DB->insert_record('magtest', $data);
@@ -96,6 +96,7 @@ class restore_magtest_activity_structure_step extends restore_activity_structure
 
         $data->magtestid = $this->get_new_parentid('magtest');
         $data->questionid = $this->get_mappingid('magtest_question', $data->questionid);
+        $data->categoryid = $this->get_mappingid('magtest_category', $data->categoryid);
 
         // The data is actually inserted into the database later in inform_new_usage_id.
         $newitemid = $DB->insert_record('magtest_answer', $data);

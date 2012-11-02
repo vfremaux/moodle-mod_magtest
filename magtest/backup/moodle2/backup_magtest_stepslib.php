@@ -37,28 +37,28 @@ class backup_magtest_activity_structure_step extends backup_activity_structure_s
         $userinfo = $this->get_setting_value('userinfo');
 
         // Define each element separated
-        $tracker = new backup_nested_element('magtest', array('id'), array(
-			));
+        $magtest = new backup_nested_element('magtest', array('id'), array(
+			'name', 'intro', 'introformat', 'starttime', 'starttimeenable', 'endtime', 'endtimeenable', 'timecreated', 'result', 'weighted', 'usemakegroups', 'pagesize', 'allowreplay'));
 
         $answers = new backup_nested_element('answers');
 
         $answer = new backup_nested_element('answer', array('id'), array(
-            ));
+            'questionid', 'answertext', 'answertextformat', 'helper', 'helperformat', 'categoryid', 'weight'));
 
         $questions = new backup_nested_element('questions');
 
         $question = new backup_nested_element('question', array('id'), array(
-            ));
+           'questiontext', 'questiontextformat', 'sortorder' ));
 
         $useranswers = new backup_nested_element('useranswers');
 
         $useranswer = new backup_nested_element('useranswer', array('id'), array(
-            ));
+            'answerid', 'userid', 'questionid', 'timeanswered'));
             
         $categories = new backup_nested_element('categories');
         
         $category = new backup_nested_element('category', array('id'), array(
-			));
+			'name', 'descriptionformat', 'description', 'result', 'sortorder', 'symbol', 'outputgroupname', 'outputgroupdesc'));
             
         // Build the tree
         // (love this)
@@ -69,7 +69,7 @@ class backup_magtest_activity_structure_step extends backup_activity_structure_s
         $questions->add_child($question);
 
         $magtest->add_child($answers);
-        $answer->add_child($answer);
+        $answers->add_child($answer);
 
 		$magtest->add_child($useranswers);
 		$useranswers->add_child($useranswer);
@@ -91,9 +91,9 @@ class backup_magtest_activity_structure_step extends backup_activity_structure_s
         // Define file annotations
         $magtest->annotate_files('mod_magtest', 'intro', null); // This file area hasn't itemid
         $magtest->annotate_files('mod_magtest', 'result', null); // This file area hasn't itemid
-        $answer->annotate_files('mod_magtest', 'answertext', 'id'); // This file area hasn't itemid
-        $category->annotate_files('mod_magtest', 'result', 'id'); // This file area hasn't itemid
-        $question->annotate_files('mod_magtest', 'questiontext', 'id'); // This file area hasn't itemid
+        $answer->annotate_files('mod_magtest', 'answertext', 'id'); // This file area has itemid
+        $category->annotate_files('mod_magtest', 'result', 'id'); // This file area has itemid
+        $question->annotate_files('mod_magtest', 'questiontext', 'id'); // This file area has itemid
 
         // Return the root element (tracker), wrapped into standard activity structure
         return $this->prepare_activity_structure($magtest);
