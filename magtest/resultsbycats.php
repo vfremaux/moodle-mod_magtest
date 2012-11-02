@@ -54,7 +54,8 @@
 
 /// make table head
 
-    echo '<center>';          
+    echo '<center>';  
+    $table = new html_table();        
     $table->head[] = '<b>'.get_string('category', 'magtest').'</b>';
     $table->head[] = '<b>'.get_string('results', 'magtest').'</b>';
     $table->size = array('30%', '70%');
@@ -72,11 +73,7 @@
                     }
                 }
                 $user = $DB->get_record('user', array('id' => $userid));
-                $userpic = new user_picture();
-                $userpic->user = $user;
-                $userpic->courseid = $course->id;
-                $userpic->image->src = true;
-                $username = $OUTPUT->user_picture($userpic).fullname($user);
+                $username = $OUTPUT->user_picture($user).' '.fullname($user);
                 $score = @$max_cat[$user->id]->score;
                 $scoreboard .= "<tr><td>{$username}</td><td align=\"right\">{$score}</td></tr>";
             }
@@ -85,7 +82,7 @@
         }
         $scoreboard .= '</table>';
 
-        $table->data[] = array('<span class="magtest-cat-name">'.$symbolimg.' '.$cat->name.'</span><br/>'.format_string(format_text($cat->description, $cat->format)), $scoreboard);
+        $table->data[] = array('<span class="magtest-cat-name">'.$symbolimg.' '.$cat->name.'</span><br/>'.format_string($cat->description, $cat->descriptionformat), $scoreboard);
     }    
     echo html_writer::table($table);
     echo '<br/>';

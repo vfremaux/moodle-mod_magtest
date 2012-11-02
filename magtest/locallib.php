@@ -6,7 +6,7 @@
 *
 */
 
-//require_once "filesystemlib.php";
+require_once "filesystemlib.php";
 
 /**
  * Get all the questions structure of a magtest.
@@ -249,6 +249,7 @@ function magtest_compile_results(&$magtest, &$users, &$categories, &$max_cat){
     }
     /// get max for each user and organize them in categories
     foreach($users as $user){
+    	$max_cat[$user->id] = new StdClass();
         $max_cat[$user->id]->score = 0;
         $max_cat[$user->id]->catid = 0;
         foreach($categories as $cat){
@@ -282,7 +283,8 @@ function magtest_get_unsubmitted_users(&$magtest, &$users){
             u.email,
             u.emailstop,
             u.picture,
-            u.mnethostid
+            u.mnethostid,
+            u.imagealt
         FROM 
             {user} u
         WHERE 

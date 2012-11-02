@@ -30,14 +30,19 @@
         echo '<ul>';
         foreach($questions as $question) {
             echo '<li>';
+            $question->questiontext = file_rewrite_pluginfile_urls( $question->questiontext, 'pluginfile.php',$context->id, 'mod_magtest', 'question', 0);
+
             echo format_string($question->questiontext);
             echo '<ul>';
             shuffle($question->answers);
             foreach($question->answers as $answer) {
                 $cat = $DB->get_record('magtest_category', array('id' => $answer->categoryid));
                 $imageurl = magtest_get_symbols_baseurl($magtest).$cat->symbol;
+                
+                $answer->answertext  = file_rewrite_pluginfile_urls( $answer->answertext, 'pluginfile.php',$context->id, 'mod_magtest', 'questionanswer', $answer->id);
+
                 echo "<img class=\"magtest-qsymbol\" src=\"$imageurl\" />&nbsp;&nbsp;";
-                echo format_string($answer->answertext).' ('.format_string($cat->name).')';
+                echo ($answer->answertext).' ('.format_string($cat->name).')';
                 if ($magtest->weighted){
                 echo ' ['.$answer->weight.'] ';
                 }
