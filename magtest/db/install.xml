@@ -1,4 +1,3 @@
-<<<<<<< install.xml
 <?xml version="1.0" encoding="UTF-8" ?>
 <XMLDB PATH="mod/magtest/db" VERSION="20121029" COMMENT="XMLDB file for Moodle mod/magtest"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -75,8 +74,10 @@
         <FIELD NAME="name" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" PREVIOUS="magtestid" NEXT="descriptionformat"/>
         <FIELD NAME="descriptionformat" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" PREVIOUS="name" NEXT="description"/>
         <FIELD NAME="description" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" PREVIOUS="descriptionformat" NEXT="result"/>
-        <FIELD NAME="result" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" PREVIOUS="description" NEXT="sortorder"/>
-        <FIELD NAME="sortorder" TYPE="int" LENGTH="4" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="result" NEXT="symbol"/>
+        <FIELD NAME="result" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" PREVIOUS="description" NEXT="outputgroupname"/>
+        <FIELD NAME="outputgroupname" TYPE="char" LENGTH="32" NOTNULL="false" SEQUENCE="false" PREVIOUS="result" NEXT="outputgroupdesc"/>
+        <FIELD NAME="outputgroupdesc" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" PREVIOUS="outputgroupname" NEXT="sortorder"/>
+        <FIELD NAME="sortorder" TYPE="int" LENGTH="4" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="outputgroupdesc" NEXT="symbol"/>
         <FIELD NAME="symbol" TYPE="char" LENGTH="64" NOTNULL="false" SEQUENCE="false" PREVIOUS="sortorder"/>
       </FIELDS>
       <KEYS>

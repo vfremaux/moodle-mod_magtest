@@ -1,4 +1,4 @@
-<?php  // $Id: lib.php,v 1.5 2012-11-01 18:54:36 vf Exp $
+<?php  // $Id: lib.php,v 1.8 2012-11-02 15:02:51 wa Exp $
 
 /**
  * Library of functions and constants for module magtest
@@ -314,5 +314,40 @@ function magtest_activity_completed(&$cm, $userid) {
 	return false;
 }
 
+function magtest_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload) {
+    global $CFG, $DB;
+
+    if ($context->contextlevel != CONTEXT_MODULE) {
+        return false;
+    }
+
+    require_course_login($course, true, $cm);
+
+    $fileareas = array('question', 'questionanswer');
+    if (!in_array($filearea, $fileareas)) {
+        return false;
+    }
+
+    $questionid = (int)array_shift($args);
+
+  /*  if (!$question = $DB->get_record('magtest_question', array('id'=>$questionid))) {
+        return false;
+    }
+    */
+
+    if (!$magtest = $DB->get_record('magtest', array('id'=>$cm->instance))) {
+        return false;
+    }
+
+    $fs = get_file_storage();
+    $relativepath = implode('/', $args);
+    $fullpath = "/$context->id/mod_magtest/$filearea/$itemid/$relativepath";
+    if (!$file = $fs->get_file_by_hash(sha1($fullpath)) or $file->is_directory()) {
+        return false;
+    }
+
+    // finally send the file
+    send_stored_file($file, 0, 0, false); // download MUST be forced - security!
+}
 
 ?>

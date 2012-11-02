@@ -11,9 +11,10 @@
     * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
     */
 
+    if (!defined('MOODLE_INTERNAL')) die('You cannot use this script that way');
+
     if (!(isset($id) and $view === 'stat' && has_capability('mod/magtest:viewgeneralstat', $context))) {
-        print 'You have not to see this page';
-        exit;
+        die('You cannot use this script that way');
      }
     require_once($CFG->libdir.'/tablelib.php');
 
@@ -53,6 +54,7 @@
             $questions[$id]->unanswered = $candidates - $answered;
         }
     }
+    $table = new html_table();
     $table->head = array(get_string('questions','magtest'));
     $table->head[] = get_string('unanswered','magtest');
     foreach($categories as $category) {

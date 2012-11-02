@@ -88,7 +88,11 @@ foreach($nextset as $question){
 <tr align="top">
   <td width="20%" align="right"><b><?php print_string('question', 'magtest') ?>:</b></td>
   <td align="left" colspan="2">
-    <?php echo format_string($question->questiontext) ?>
+    <?php echo 
+    $question->questiontext = file_rewrite_pluginfile_urls( $question->questiontext, 'pluginfile.php',$context->id, 'mod_magtest', 'question', 0);
+    format_string($question->questiontext) 
+    
+    ?>
   </td>
 </tr>
 <tr align="middle">
@@ -101,8 +105,9 @@ foreach($nextset as $question){
             $catsymbol = $categories[$answer->categoryid]->symbol;
             $symbolurl = magtest_get_symbols_baseurl($magtest).$catsymbol;
             $symbolimage = "<img class=\"magtest-qsymbol\" src=\"{$symbolurl}\" align=\"bottom\" />&nbsp;&nbsp;";
-            echo $symbolimage;            
-            echo format_string($answer->answertext);
+            echo $symbolimage;
+            $answer->answertext  = file_rewrite_pluginfile_urls( $answer->answertext, 'pluginfile.php',$context->id, 'mod_magtest', 'questionanswer', $answer->id);            
+            echo ($answer->answertext);
             echo '<br/>';
           }
         ?>

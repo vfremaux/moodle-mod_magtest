@@ -40,6 +40,7 @@ $string['helpnavigationquestion'] = 'Aide';
 $string['intro'] = 'Introduction';
 $string['magtest:doit'] = 'Faire le test';
 $string['default'] = 'Test type magazine par defaut';
+$string['magtest:addinstance'] = 'Ajouter une instance';
 $string['magtest:manage'] = 'Configurer le test';
 $string['magtest:multipleattempts'] = 'Rejouer le test';
 $string['magtest:viewgeneralstat'] = 'Voir les statistiques de réponse';

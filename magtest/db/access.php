@@ -35,6 +35,17 @@
 $capabilities = array(
 
 // Controls creation of magtest
+    'mod/magtest:addinstance' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_MODULE,
+        'legacy' => array(
+            'teacher' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW
+        )
+    ),
+
+// Controls creation of magtest
     'mod/magtest:manage' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,

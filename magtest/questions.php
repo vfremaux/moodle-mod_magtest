@@ -63,7 +63,10 @@
                     $validanswercount++;
                 }
             }
+            
             $answercheck = ($validanswercount == $categorycount) ? $validanswercount : '<span class="magtest-error">'.$validanswercount.' '.get_string('erroremptyanswers','magtest').'</span>' ;
+            $question->questiontext = file_rewrite_pluginfile_urls( $question->questiontext, 'pluginfile.php',$context->id, 'mod_magtest', 'question', 0);
+
             $table->data[] = array($question->sortorder, format_string(format_text($question->questiontext, $question->questiontextformat)), $answercheck, $commands);
         }
     }

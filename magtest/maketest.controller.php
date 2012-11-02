@@ -25,6 +25,7 @@ if ($action == 'save'){
     foreach($inputkeys as $akey){
         if (preg_match("/^answer(\\d+)/", $akey, $matches)){
             $questionid = $matches[1];
+            $useranswer = new StdClass();
             $useranswer->magtestid = $magtest->id;
             $useranswer->userid = $USER->id;
             $useranswer->answerid = required_param($akey, PARAM_INT);

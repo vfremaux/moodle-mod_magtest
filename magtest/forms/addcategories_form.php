@@ -45,7 +45,7 @@ class Category_Form extends moodleform{
            
             $symboloptions = magtest_get_symbols($magtest, $renderingpathbase);
       
-            $mform->addElement('selectgroups','symbol',get_string('symbol','mod_magtest'),$symboloptions);
+            $mform->addElement('selectgroups','catsymbol_'.$num, get_string('symbol','mod_magtest'),$symboloptions);
               
             //DebugBreak();
           //  $mform->addGroup( $group,'catsymbol');//$group, 'catsymbol', '', array('&nbsp;'), true);
@@ -60,8 +60,8 @@ class Category_Form extends moodleform{
                         'noclean' => true, 'context' =>  $mod_context));
             
             if ($this->magtest->usemakegroups){
-                $mform->addElement('text', 'outputgroupname', get_string('outputgroupname', 'magtest'), '', array('size' => '128', 'maxlength' => '255'));
-                $mform->addElement('text', 'outputgroupdesc', get_string('outputgroupdesc', 'magtest'), '', array('size' => '255', 'maxlength' => '255'));
+                $mform->addElement('text', 'outputgroupname_'.$num, get_string('outputgroupname', 'magtest'), '', array('size' => '128', 'maxlength' => '255'));
+                $mform->addElement('text', 'outputgroupdesc_'.$num, get_string('outputgroupdesc', 'magtest'), '', array('size' => '255', 'maxlength' => '255'));
             }  
                 
             }
