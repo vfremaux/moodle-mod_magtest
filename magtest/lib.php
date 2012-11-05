@@ -204,6 +204,15 @@ function magtest_grades($magtestid) {
 }
 
 /**
+ *
+ **/
+function magtest_scale_used_anywhere($scaleid){
+    global $DB;
+
+    return false;
+}
+
+/**
  * Must return an array of user records (all data) who are participants
  * for a given instance of magtest. Must include every user involved
  * in the instance, independent of his role (student, teacher, admin...)
