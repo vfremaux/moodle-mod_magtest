@@ -15,6 +15,9 @@
     if (!defined('MOODLE_INTERNAL')) {
       	die('You cannot access directly to this page');
     }
+
+    include_once 'renderer.php';
+    $MAGTESTOUTPUT = new magtest_renderer();
   
 /// run controller
     if ($action){
@@ -95,32 +98,36 @@ foreach($nextset as $question){
     ?>
   </td>
 </tr>
+<?php
+	$i = 0;
+	shuffle($question->answers);
+	foreach($question->answers as $answer) {
+?>
 <tr align="middle">
     <td width="20%" align="right">&nbsp;</td>
     <td align="left" class="magtest-answerline">
         <?php
-          $i = 0;
-          shuffle($question->answers);
-          foreach($question->answers as $answer) {
             $catsymbol = $categories[$answer->categoryid]->symbol;
             $symbolurl = magtest_get_symbols_baseurl($magtest).$catsymbol;
             $symbolimage = "<img class=\"magtest-qsymbol\" src=\"{$symbolurl}\" align=\"bottom\" />&nbsp;&nbsp;";
             echo $symbolimage;
             $answer->answertext  = file_rewrite_pluginfile_urls( $answer->answertext, 'pluginfile.php',$context->id, 'mod_magtest', 'questionanswer', $answer->id);            
-            echo ($answer->answertext);
+            $answertext = preg_replace('/^<p>(.*)<\/p>$/', '\\1', $answer->answertext);
+            echo ($answertext).' ';
+            if (!empty($answer->helper)){
+            	echo $MAGTESTOUTPUT->answer_help_icon($answer->id);
+            }
             echo '<br/>';
-          }
         ?>
     </td>
     <td class="magtest-answerline">
         <?php 
-        foreach($question->answers as $answer) {
             echo "<input type=\"radio\" name=\"answer{$question->id}\" value=\"{$answer->id}\" /><br/> ";
-        }
         ?>
     </td>
 </tr>
 <?php
+	}
 }
 ?>
 <tr align="top">

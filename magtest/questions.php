@@ -35,7 +35,7 @@
     $questions = magtest_get_questions($magtest->id);    
     $orderstr = get_string('sortorder', 'magtest');
     $questionstr = get_string('question', 'magtest');
-    $answersstr = get_string('answercount', 'magtest');
+    $answersstr = get_string('answerweights', 'magtest');
     $commandstr = get_string('commands', 'magtest');
     
     //prepare the table
@@ -62,13 +62,15 @@
             }
             $commands .='</div>';
             $validanswercount = 0;
+            $weights = array();
             foreach($question->answers as $answer){
                 if (!empty($answer->answertext)){
                     $validanswercount++;
+                	$weights[] = $answer->weight;
                 }
             }
             
-            $answercheck = ($validanswercount == $categorycount) ? $validanswercount : '<span class="magtest-error">'.$validanswercount.' '.get_string('erroremptyanswers','magtest').'</span>' ;
+            $answercheck = '('.implode(', ', $weights).')';
             $question->questiontext = file_rewrite_pluginfile_urls( $question->questiontext, 'pluginfile.php',$context->id, 'mod_magtest', 'question', 0);
 
             $table->data[] = array($question->sortorder, format_string(format_text($question->questiontext, $question->questiontextformat)), $answercheck, $commands);

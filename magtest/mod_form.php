@@ -52,6 +52,7 @@ class mod_magtest_mod_form extends moodleform_mod {
 
 	  $mform->addElement('checkbox', 'allowreplay', get_string('allowreplay', 'magtest'));
 	  $mform->addHelpButton('allowreplay', 'pagesize', 'magtest');
+
 	  $mform->addElement('htmleditor', 'result', get_string('resulttext', 'magtest'));
 	  $mform->setType('result', PARAM_RAW);
 

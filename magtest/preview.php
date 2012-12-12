@@ -11,12 +11,15 @@
     * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
     */
     if (!defined('MOODLE_INTERNAL')){
-      die('You cannot access directly to this page');
+      	die('You cannot access directly to this page');
     }
 
     if (!has_capability('mod/magtest:manage', $context)){
         die('You cannot see this page with your role');
-     }
+    }
+    
+    include_once 'renderer.php';
+    $MAGTESTOUTPUT = new magtest_renderer();
 
 /// get questions
 
@@ -44,7 +47,10 @@
                 echo "<img class=\"magtest-qsymbol\" src=\"$imageurl\" />&nbsp;&nbsp;";
                 echo ($answer->answertext).' ('.format_string($cat->name).')';
                 if ($magtest->weighted){
-                echo ' ['.$answer->weight.'] ';
+                	echo ' ['.$answer->weight.'] ';
+                }
+                if (!empty($answer->helper)){
+                	echo $MAGTESTOUTPUT->answer_help_icon($answer->id);
                 }
                 echo '<br/>';
             }
