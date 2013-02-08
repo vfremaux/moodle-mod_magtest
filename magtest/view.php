@@ -1,10 +1,10 @@
 <?php 
-    // $Id: view.php,v 1.4 2012-11-01 21:12:55 vf Exp $
+    // $Id: view.php,v 1.9 2012-11-02 20:30:48 vf Exp $
     /**
     * This page prints a particular instance of NEWMODULE
     * 
     * @author 
-    * @version $Id: view.php,v 1.4 2012-11-01 21:12:55 vf Exp $
+    * @version $Id: view.php,v 1.9 2012-11-02 20:30:48 vf Exp $
     * @package magtest
     **/
 
@@ -30,10 +30,6 @@
             print_error ('invalidcoursemodule');
         }
 
-        if (!$cm = $DB->get_record('course_modules', array('id' => $id))){
-            print_error ('invalidcoursemodule');
-		}
-
         if (!$course = $DB->get_record('course', array('id' => $cm->course))){
             print_error ('coursemisconf');
 		}
@@ -50,12 +46,12 @@
             print_error ('coursemisconf');
         }
 
-        if (!$cm=get_coursemodule_from_instance('magtest', $magtest->id, $course->id)){
+        if (!$cm = get_coursemodule_from_instance('magtest', $magtest->id, $course->id)){
             print_error ('invalidcoursemodule');
         }
     }
 
-    require_login($course->id);
+    require_course_login($course, true, $cm);
     /* 
     if (debugging()){
         echo "MVC[$view:$page:$action]";
@@ -72,17 +68,14 @@
     /// Guest trap    
 
     if (isguestuser()){
-        echo '<br/>';
-        echo $OUTPUT->box(get_string('guestcannotuse', 'magtest'));
-        echo $OUTPUT->continue_button($CFG->wwwroot . '/course/view.php?id=' . $course->id);
-        echo $OUTPUT->footer($course);
+        print_error('guestcannotuse', 'magtest', '', $CFG->wwwroot.'/course/view.php?id='.$course->id);
         exit;
     }
 
     /// print tabs
 
     if (!preg_match("/doit|preview|categories|questions|results|stat/", $view)){
-        $view='doit';
+        $view = 'doit';
     }
 
     if (has_capability('mod/magtest:doit', $context)){

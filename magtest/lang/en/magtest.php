@@ -92,6 +92,10 @@ $string['userchoices'] = 'User choices';
 $string['weight'] = 'Weight'; 
 $string['weighted'] = 'Weighted answers'; 
 $string['youneedcreatingcategories'] = 'Before create questions, you have to create at least two categories.';
+$string['modulename_help'] = "The Magtest activity provides a multicriteria evaluation summing a score on several scales for each answer. 
+At th end of the test, the student will be catagorized in his dominating category. 
+The teacher can use results to create course groups. 
+";
 $string['usemakegroups_help'] = '## Multitrack test
 
 ### Generating moodle groups from results

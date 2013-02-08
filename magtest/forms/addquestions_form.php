@@ -25,7 +25,7 @@ class Question_Form extends moodleform{
        global $DB, $CFG, $cm, $qid, $id, $magtest;
         
         $mform = $this->_form;
-        $mod_context = get_context_instance(CONTEXT_MODULE,$id); 
+        $mod_context = context_module::instance($id); 
         $mform->addElement('header', 'header0', get_string($this->cmd.'question', 'magtest'));
         $mform->addElement('hidden', 'qid');
         $mform->addElement('hidden', 'howmany');

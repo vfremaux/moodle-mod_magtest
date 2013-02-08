@@ -19,6 +19,7 @@ class magtest_renderer extends core_renderer{
         $src = $this->pix_url('help');
 
         $title = get_string('helper', 'magtest');
+		$alt = get_string('helper', 'magtest');
 
         $attributes = array('src' => $src, 'alt' => $alt, 'class' => 'iconhelp');
         $output = html_writer::empty_tag('img', $attributes);
