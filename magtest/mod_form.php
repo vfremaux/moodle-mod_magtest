@@ -64,7 +64,7 @@ class mod_magtest_mod_form extends moodleform_mod {
 	function definition_after_data(){
 	  $mform    =& $this->_form;
 	  }*/
-	function validation($data) {
+	function validation($data, $files = null) {
 	    $errors = array();
 	    return $errors;
 	}

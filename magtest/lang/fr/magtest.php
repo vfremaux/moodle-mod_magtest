@@ -42,7 +42,6 @@ $string['intro'] = 'Introduction';
 $string['helper'] = 'Consulter l\'aide';
 $string['magtest:doit'] = 'Faire le test';
 $string['default'] = 'Test type magazine par defaut';
-$string['magtest:addinstance'] = 'Ajouter une instance';
 $string['magtest:manage'] = 'Configurer le test';
 $string['magtest:multipleattempts'] = 'Rejouer le test';
 $string['magtest:viewgeneralstat'] = 'Voir les statistiques de réponse';
@@ -93,6 +92,11 @@ $string['userchoices'] = 'Réponses des utilisateurs';
 $string['weight'] = 'Pondération';
 $string['weighted'] = 'Mode pondéré';
 $string['youneedcreatingcategories'] = 'Il faut créer au moins deux catégories avant de pouvoir créer des questions';
+$string['modulename_help'] = "Le Test de Type Magazine permet de créer une évaluation multicritère additionnant un score
+sur plusieurs évaluateurs à la fois. A la fin du test, l'utilisateur est rangé dans la catégorie correspondant à son évaluateur
+dominant. L'enseignant peut constituer des groupes de cours à partir de ces résultats. 
+";
+
 $string['pagesize_help'] = '## Test type "Magazine"
 
 ### Taille des pages de test

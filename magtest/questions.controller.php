@@ -21,7 +21,7 @@ if (!defined('MOODLE_INTERNAL')) {
 include_once $CFG->dirroot."/mod/magtest/listlib.php";
 
 /******************************* Delete a question ****************/
-else if ($action == 'delete'){
+if ($action == 'delete'){
     $qid = required_param('qid', PARAM_INT);
 
     $DB->delete_records('magtest_useranswer', array('questionid' => $qid));

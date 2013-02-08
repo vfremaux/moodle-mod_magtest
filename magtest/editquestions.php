@@ -22,7 +22,7 @@
     
     require_login($course->id);
     
-    $mod_context = get_context_instance(CONTEXT_MODULE, $id);
+    $mod_context = context_module::instance($id);
     
     $url = $CFG->wwwroot.'/mod/magtest/editquestions.php?id='.$id;
 
@@ -91,7 +91,7 @@
 			foreach ($data->cats as $catid) {
 
 				//try load the answer 
-                $old_answer = $DB->get_record('magtest_answer',array('questionid' => $qid, 'categoryid' => $catid));
+                $old_answer = $DB->get_record('magtest_answer', array('questionid' => $qid, 'categoryid' => $catid));
                  
                 if($old_answer){
                 	//do an update
