@@ -1,10 +1,10 @@
 <?php 
-    // $Id: view.php,v 1.9 2012-11-02 20:30:48 vf Exp $
+    // $Id: view.php,v 1.4 2012-11-01 21:12:55 vf Exp $
     /**
     * This page prints a particular instance of NEWMODULE
     * 
     * @author 
-    * @version $Id: view.php,v 1.9 2012-11-02 20:30:48 vf Exp $
+    * @version $Id: view.php,v 1.4 2012-11-01 21:12:55 vf Exp $
     * @package magtest
     **/
 
@@ -75,7 +75,11 @@
     /// print tabs
 
     if (!preg_match("/doit|preview|categories|questions|results|stat/", $view)){
-        $view = 'doit';
+    	if (has_capability('mod/magtest:manage', $context)){
+	        $view = 'preview';
+	    } else {
+	        $view = 'doit';
+	    }
     }
 
     if (has_capability('mod/magtest:doit', $context)){
@@ -174,7 +178,7 @@
     
     $PAGE->set_title("$course->shortname: $magtest->name");
     $PAGE->set_heading("$course->fullname");
-    /* SCANMSG: may be additional work required for $navigation variable */
+    $PAGE->navbar->add(get_string($view, 'magtest'));
     $PAGE->set_focuscontrol('');
     $PAGE->set_cacheable(true);
     $PAGE->set_url($CFG->wwwroot . '/mod/magtest/view.php?id=' . $id);

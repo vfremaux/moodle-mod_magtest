@@ -23,10 +23,11 @@
         }
     }
 
-    require_login($course->id);
+    require_course_login($course->id, true, $cm);
     
     $url = $CFG->wwwroot.'/mod/magtest/editcategories.php?id='.$id;
-
+	$editurl = $CFG->wwwroot.'/mod/magtest/view.php?id='.$id.'&amp;view=categories';
+	
     if($catid <= 0) { 
 		$form = new Category_Form($magtest, 'add', $howmany, $url);
     } else {
@@ -39,14 +40,18 @@
 
     $PAGE->set_title("$course->shortname: $magtest->name");
     $PAGE->set_heading("$course->fullname");
-    /* SCANMSG: may be additional work required for $navigation variable */
+    $PAGE->navbar->add(get_string('categories', 'magtest'), $editurl);
+    $PAGE->navbar->add(get_string('addcategory', 'magtest'));
     $PAGE->set_focuscontrol('');
     $PAGE->set_cacheable(true);
     $PAGE->set_url($url);
     $PAGE->set_button($OUTPUT->update_module_button($cm->id, 'magtest'));
     $PAGE->set_headingmenu(navmenu($course, $cm));
-    echo $OUTPUT->header();
            
+    if ($form->is_cancelled()){
+    	redirect($editurl);
+    }
+
 	if ($data = $form->get_data()) {
         $cmd = $data->cmd ; 
         
@@ -86,11 +91,10 @@
                 $catid = magtest::addCategory($magtest->id, $cat) ;
              
                 if(!$catid){
-                     print_error("an error occured while adding new category.");
+                     print_error('erroraddcategory', 'magtest', $editurl);
 				}
             }
         } else {
-        //   DebugBreak();
            //update category 
            $category = $DB->get_record('magtest_category', array('id' => $catid));
            $category->name = $data->catname ; 
@@ -102,17 +106,16 @@
            
            $DB->update_record('magtest_category', $category);
         }
-        $options['id'] = $id;
-        echo $OUTPUT->continue_button(new moodle_url($CFG->wwwroot.'/mod/magtest/view.php', $options));
-         
-        echo $OUTPUT->footer($course);                                        
+
+    	redirect($editurl);
         exit;
     }
      
-     if ($catid >= 0){
+	if ($catid >= 0){
        $category = $DB->get_record('magtest_category', array('id' => $catid));
        $form->set_data($category);
-     }
-     $form->display();
-     
+	}
+
+	echo $OUTPUT->header();
+	$form->display();     
     echo $OUTPUT->footer($course);

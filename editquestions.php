@@ -20,21 +20,22 @@
         }
     }
     
-    require_login($course->id);
+    require_course_login($course->id, true, $cm);
     
     $mod_context = context_module::instance($id);
     
     $url = $CFG->wwwroot.'/mod/magtest/editquestions.php?id='.$id;
+    $editurl = $CFG->wwwroot.'/mod/magtest/view.php?id='.$id.'&amp;view=questions';
 
     $PAGE->set_title("$course->shortname: $magtest->name");
     $PAGE->set_heading("$course->fullname");
-    /* SCANMSG: may be additional work required for $navigation variable */
+    $PAGE->navbar->add(get_string('questions', 'magtest'), $editurl);
+    $PAGE->navbar->add(get_string('addquestion', 'magtest'));
     $PAGE->set_focuscontrol('');
     $PAGE->set_cacheable(true);
     $PAGE->set_url($url);
     $PAGE->set_button($OUTPUT->update_module_button($cm->id, 'magtest'));
     $PAGE->set_headingmenu(navmenu($course, $cm));
-    echo $OUTPUT->header();
            
     if($qid <= 0){ 
 		$form = new Question_Form($magtest, 'add', $howmany, $url);
@@ -45,7 +46,10 @@
     $questionoptions = array('trusttext' => true, 'subdirs' => false, 'maxfiles' => 100, 'maxbytes' => $maxbytes, 'context' => $mod_context);
     $answeroptions = array('trusttext' => true, 'subdirs' => false, 'maxfiles' => 100, 'maxbytes' => $maxbytes, 'context' => $mod_context);
 
-    //   DebugBreak();
+    if ($form->is_cancelled()){
+    	redirect($editurl);
+    }
+
 	if ($data = $form->get_data()){
 	
         $cmd = $data->cmd ; 
@@ -73,13 +77,16 @@
 				$answer->answertext = $data->{'questionanswer'.$catid} ;
 				$answer->helperformat = FORMAT_HTML;
 				$answer->helper = $data->{'helper'.$catid} ;
-				$weightkey = 'weight'.$catid;
-				$answer->weight = $data->$weightkey;
+				if ($magtest->weighted){
+					$weightkey = 'weight'.$catid;
+					$answer->weight = $data->$weightkey;
+				} else {
+					$answer->weight =  1;
+				}
 				$answer->categoryid = $catid;
 				$DB->insert_record('magtest_answer', $answer);
             }            
         } else {
-//            DebugBreak();
 			//update question
 			
 			$data = file_postupdate_standard_editor($data, 'questiontext', $questionoptions, $mod_context, 'mod_magtest', 'question', 0);
@@ -102,8 +109,12 @@
                     $old_answer->helper = $data->{'helper'.$catid};
                     $old_answer->helperformat = FORMAT_MOODLE;
                     
-                    $weightkey = 'weight'.$catid;
-                    $old_answer->weight = $data->$weightkey;
+					if ($magtest->weighted){
+	                    $weightkey = 'weight'.$catid;
+	                    $old_answer->weight = $data->$weightkey;
+	                } else {
+	                	$old_answer->weight = 1;
+	                }
 
                     $DB->update_record('magtest_answer', $old_answer);
                 } else {
@@ -115,8 +126,12 @@
                     $new_answer->categoryid = $catid ;
                     $new_answer->answertext = ''; // $data->{'questionanswer'.$catid};
                     $new_answer->magtestid = $data->magtestid;
-                    $weightkey = 'weight'.$catid;
-                    $new_answer->weight = $data->$weightkey;
+					if ($magtest->weighted){
+	                    $weightkey = 'weight'.$catid;
+	                    $new_answer->weight = $data->$weightkey;
+	                } else {
+	                	$new_answer->weight = 1;
+	                }
                     $new_answer->id = $DB->insert_record('magtest_answer', $new_answer);
                     $data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'questionanswer', $new_answer->id); 
                     $new_answer->answertext = $data->{'questionanswer'.$catid};
@@ -132,12 +147,10 @@
         }
         $options['id'] = $id;
 
-        echo $OUTPUT->continue_button(new moodle_url($CFG->wwwroot.'/mod/magtest/view.php', $options));         
-
-        echo $OUTPUT->footer($course);                                        
+    	redirect($editurl);
         exit;
     }
      
-    $form->display();
-     
+	echo $OUTPUT->header();
+    $form->display();     
     echo $OUTPUT->footer($course);

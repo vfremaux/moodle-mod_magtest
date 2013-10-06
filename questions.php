@@ -27,7 +27,7 @@
     $nb_cat = $DB->count_records_select('magtest_category', 'magtestid = '.$magtest->id.' AND name <> \'\'');
     if ( $nb_cat < 2) {
         echo $OUTPUT->notification(get_string('youneedcreatingcategories','magtest'));
-        exit;
+        return; // give control back to view.php
     }
 
     $categorycount = $DB->count_records('magtest_category', array('magtestid' => $magtest->id));
@@ -89,4 +89,3 @@
  
     echo $OUTPUT->single_button(new moodle_url('editquestions.php', $options), get_string('addquestion', 'magtest'), 'get');
     print('</center>');
-?>

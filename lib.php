@@ -26,7 +26,7 @@ function magtest_supports($feature) {
         case FEATURE_GROUPS:                  return false;
         case FEATURE_GROUPINGS:               return false;
         case FEATURE_GROUPMEMBERSONLY:        return false;
-        case FEATURE_MOD_INTRO:               return false;
+        case FEATURE_MOD_INTRO:               return true;
         case FEATURE_COMPLETION_TRACKS_VIEWS: return true;
         case FEATURE_GRADE_HAS_GRADE:         return false;
         case FEATURE_GRADE_OUTCOMES:          return false;
@@ -78,6 +78,7 @@ function magtest_update_instance($magtest) {
     if (!isset($magtest->endtimeenable)) $magtest->endtimeenable = 0;
     if (!isset($magtest->usemakegroups)) $magtest->usemakegroups = 0;
     if (!isset($magtest->allowreplay)) $magtest->allowreplay = 0;
+    if (!isset($magtest->weighted)) $magtest->weighted = 0;
 
     return $DB->update_record('magtest', $magtest);
 }
@@ -97,6 +98,12 @@ function magtest_delete_instance($id) {
         return false;
     }
 
+    if (!$cm = get_coursemodule_from_instance('magtest', $magtest->id)) {
+        return false;
+    }
+
+    $context = get_context_instance(CONTEXT_MODULE, $cm->id);
+
     $result = true;
 
     # Delete any dependent records here #
@@ -105,6 +112,10 @@ function magtest_delete_instance($id) {
     if (! $DB->delete_records('magtest', array('id' => "$magtest->id"))) {
         $result = false;
     }
+
+	// delete all files attached to this context
+    $fs = get_file_storage();
+    $fs->delete_area_files($context->id);
 
     return $result;
 }
@@ -303,6 +314,107 @@ function magtest_reset_course_form_definition(&$mform) {
             $mform->addElement('checkbox', MAGTEST_RESETFORM_RESET.$magtest->id, $magtest->name);
         }
     }
+}
+
+/**
+ * Print an overview of all magtests
+ * for the courses.
+ *
+ * @param mixed $courses The list of courses to print the overview for
+ * @param array $htmlarray The array of html to return
+ */
+function magtest_print_overview($courses, &$htmlarray) {
+    global $USER, $CFG, $DB;
+    
+    if (empty($courses) || !is_array($courses) || count($courses) == 0) {
+        return array();
+    }
+
+    if (!$magtests = get_all_instances_in_courses('magtest', $courses)) {
+        return;
+    }
+
+    $magtestids = array();
+
+    // check for open magtests
+    foreach ($magtests as $key => $magtest) {
+        $time = time();
+        $isopen = false;
+        if ($magtest->endtime) {
+        	if ($time <= $magtest->endtime){
+		        if ($magtest->starttime) {
+		        	if ($time >= $magtest->starttime){
+		        		$isopen = true;
+		        	}
+		        } else {
+	        		$isopen = true;
+		        }
+        	}
+        } else {
+	        if ($magtest->starttime) {
+	        	if ($time >= $magtest->starttime){
+	        		$isopen = true;
+	        	}
+	        } else {
+        		$isopen = true;
+	        }
+        }
+        if ($isopen) {
+            unset($magtests[$magtest->id]);
+        }
+    }
+
+    $strcutoffdate = get_string('endtime', 'magtest');
+    $strnotsubmittedyet = get_string('notsubmittedyet', 'magtest');
+    $strsubmitted = get_string('submitted', 'magtest');
+    $strmagtest = get_string('modulename', 'magtest');
+
+	foreach($magtests as $magtest){
+
+        $str = '<div class="magtest overview"><div class="name">'.$strmagtest. ': '.
+               '<a '.($magtest->visible ? '':' class="dimmed"').
+               'title="'.$strmagtest.'" href="'.$CFG->wwwroot.
+               '/mod/assign/view.php?id='.$magtest->coursemodule.'">'.
+               format_string($magtest->name).'</a></div>';
+        if ($magtest->endtime && $magtest->endtimeenable) {
+            $str .= '<div class="info">'.$strcutoffdate.': '.userdate($magtest->endtime).'</div>';
+        }
+        $context = context_module::instance($magtest->coursemodule);
+        if (has_capability('mod/magtest:viewotherresults', $context)) {
+
+            // count how many people need submit
+            $submissions = 0; // init
+
+            $sql = "
+            	SELECT DISTINCT
+            		userid, id
+            	FROM
+            		{magtest_useranswer}
+            	WHERE
+            		magtestid = ?
+            ";
+            $answeredbyusers = $DB->get_records_sql($sql, array($magtest->id));
+            
+            if ($students = get_enrolled_users($context, 'mod/assign:view', 0, 'u.id')) {
+                foreach ($students as $student) {
+                    if (array_key_exists($student->id, $answeredbyusers)) {
+                        $submissions++;
+                    }
+                }
+            }
+
+			$usersleft = count($students) - $submissions;
+            if ($submissions) {
+                $link = new moodle_url('/mod/magtest/view.php', array('id' => $magtest->coursemodule, 'view' => 'results'));
+                $str .= '<div class="details"><a href="'.$link.'">'.get_string('userstosubmit', 'magtest', $usersleft).'</a></div>';
+            }
+		}
+	    if (empty($htmlarray[$magtest->course]['magtest'])) {
+	        $htmlarray[$magtest->course]['magtest'] = $str;
+	    } else {
+	        $htmlarray[$magtest->course]['magtest'] .= $str;
+	    }
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////

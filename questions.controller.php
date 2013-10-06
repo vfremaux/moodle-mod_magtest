@@ -40,4 +40,3 @@ else if ($action == 'down'){
 
     magtest_list_down($magtest, $qid, 'magtest_question');
 }
-?>

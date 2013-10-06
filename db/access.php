@@ -87,14 +87,14 @@ $capabilities = array(
         )
     ),
 
-// Controls if allowed to reset the test and change answers
+	// Controls if allowed to make multiple attempts of the test
+	// Usually this is instance driven by the allowreplay instance parameter
+	// but it can be overriden by a role bound strategy
     'mod/magtest:multipleattempts' => array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'legacy' => array(
-            'teacher' => CAP_ALLOW,
-            'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
+            'student' => CAP_ALLOW
         )
     )
 );

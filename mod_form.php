@@ -37,10 +37,12 @@ class mod_magtest_mod_form extends moodleform_mod {
 	  $startdatearray[] = &$mform->createElement('checkbox', 'starttimeenable', '');
 	  $mform->addGroup($startdatearray, 'startfrom', get_string('starttime', 'magtest'), ' ', false);
 	  $mform->disabledIf('startfrom', 'starttimeenable');
+
 	  $enddatearray[] = &$mform->createElement('date_time_selector', 'endtime', '');
 	  $enddatearray[] = &$mform->createElement('checkbox', 'endtimeenable', '');
 	  $mform->addGroup($enddatearray, 'endfrom', get_string('endtime', 'magtest'), ' ', false);
 	  $mform->disabledIf('endfrom', 'endtimeenable');
+
 	  $mform->addElement('checkbox', 'weighted', get_string('weighted', 'magtest'));
 	  $mform->addHelpButton('weighted', 'weighted', 'magtest');
 
@@ -49,6 +51,7 @@ class mod_magtest_mod_form extends moodleform_mod {
 
 	  $mform->addElement('text', 'pagesize', get_string('pagesize', 'magtest'), array('size' => 3));
 	  $mform->addHelpButton('pagesize', 'pagesize', 'magtest');
+	  $mform->setType('pagesize', PARAM_TEXT);
 
 	  $mform->addElement('checkbox', 'allowreplay', get_string('allowreplay', 'magtest'));
 	  $mform->addHelpButton('allowreplay', 'pagesize', 'magtest');

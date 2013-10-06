@@ -1,6 +1,6 @@
 <?php
 
-if (!(isset($id) and $view === 'results' and  has_capability('mod/magtest:viewotherresults', $context))) {
+if (!(isset($id) and $view === 'results' and has_capability('mod/magtest:viewotherresults', $context))) {
   print 'You have not to see this page';
   exit;
  }

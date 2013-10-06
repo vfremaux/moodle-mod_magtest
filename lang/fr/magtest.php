@@ -1,5 +1,14 @@
 <?php
 
+$string['magtest:addinstance'] = 'Ajouter une instance';
+$string['magtest:manage'] = 'Configurer le test';
+$string['magtest:multipleattempts'] = 'Rejouer le test';
+$string['magtest:viewgeneralstat'] = 'Voir les statistiques de réponse';
+$string['magtest:viewotherresults'] = 'Voir les résultats de tous';
+
+$string['errorinvalidcategory'] = 'Catégorie invalide.';
+$string['erroraddcategory'] = 'Erreur lors de l\'ajout d\'une catégorie.';
+
 $string['<<'] = '<<';
 $string['>>'] = '>>';
 $string['addcategories'] = 'Ajouter des categories';
@@ -42,11 +51,6 @@ $string['intro'] = 'Introduction';
 $string['helper'] = 'Consulter l\'aide';
 $string['magtest:doit'] = 'Faire le test';
 $string['default'] = 'Test type magazine par defaut';
-$string['magtest:addinstance'] = 'Ajouter une instance';
-$string['magtest:manage'] = 'Configurer le test';
-$string['magtest:multipleattempts'] = 'Rejouer le test';
-$string['magtest:viewgeneralstat'] = 'Voir les statistiques de réponse';
-$string['magtest:viewotherresults'] = 'Voir les résultats de tous';
 $string['makegroups'] = 'Générer les groupes du cours à partir des résultats';
 $string['modulename'] = 'Test type magazine';
 $string['magtestattempted'] = 'Test magazine effectué le ';
@@ -80,6 +84,8 @@ $string['resultsbyusers'] = 'Résultats par utilisateur';
 $string['resulttext'] = 'Texte de conclusion';
 $string['save'] = 'Enregistrer la réponse';
 $string['score'] = 'Score';
+$string['notsubmittedyet'] = 'Pas encore soumis.';
+$string['submitted'] = 'Soumis.';
 $string['sortorder'] = 'Rang';
 $string['starttime'] = 'Date de début';
 $string['stat'] = 'Statistiques';

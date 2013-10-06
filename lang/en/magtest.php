@@ -1,5 +1,15 @@
 <?php
 
+$string['magtest:doit'] = 'Make the test';
+$string['magtest:manage'] = 'Configure the test';
+$string['magtest:addinstance'] = 'Add an instance';
+$string['magtest:multipleattempts'] = 'Make multiple attempts';
+$string['magtest:viewgeneralstat'] = 'View general statistics';
+$string['magtest:viewotherresults'] = 'See results of other participants';
+
+$string['errorinvalidcategory'] = 'Invalid Category.';
+$string['erroraddcategory'] = 'Error while adding a category.';
+
 $string['<<'] = '<<'; 
 $string['>>'] = '>>';
 $string['addcategories'] = 'Add categories'; 
@@ -42,12 +52,6 @@ $string['helper'] = 'Read hint';
 $string['intro'] = 'Intro';
 $string['magtestattempted'] = 'Attempted on';
 $string['magtestaccesses'] = 'Accessed: {$a} times';
-$string['magtest:doit'] = 'Make the test';
-$string['magtest:manage'] = 'Configure the test';
-$string['magtest:addinstance'] = 'Add an instance';
-$string['magtest:multipleattempts'] = 'Make multiple attempts';
-$string['magtest:viewgeneralstat'] = 'View general statistics';
-$string['magtest:viewotherresults'] = 'See results of other participants';
 $string['makegroups'] = 'Generate moodle groups from results'; 
 $string['modulename'] = 'Multitrack test';
 $string['pluginname'] = 'Multitrack test';
@@ -60,6 +64,8 @@ $string['notopened'] = 'This test is not opened yet.';
 $string['nouseranswer'] = 'No user answered';
 $string['nousersinthisgroup'] = 'No users in this category';
 $string['nocategories'] = 'No categories in the test.';
+$string['notsubmittedyet'] = 'Not submited yet.';
+$string['submitted'] = 'Submited.';
 $string['outputgroupdesc'] = 'Generated group description';
 $string['outputgroupname'] = 'Generated group name';
 $string['pagenotcomplete'] = 'All questions were not answered.'; 
@@ -89,6 +95,7 @@ $string['unanswered'] = 'These users did not answer';
 $string['updatecategory'] = 'Update a category'; 
 $string['usemakegroups'] = 'Use this test for generating course groups';
 $string['userchoices'] = 'User choices';
+$string['userstosubmit'] = 'User left to submit';
 $string['weight'] = 'Weight'; 
 $string['weighted'] = 'Weighted answers'; 
 $string['youneedcreatingcategories'] = 'Before create questions, you have to create at least two categories.';
