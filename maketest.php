@@ -19,11 +19,6 @@
     include_once 'renderer.php';
     $MAGTESTOUTPUT = new magtest_renderer();
   
-/// run controller
-    if ($action){
-        require 'maketest.controller.php';
-    }
-
     if ($magtest->starttimeenable && time() <= $magtest->starttime){
         echo '<center>';
         echo $OUTPUT->box(get_string('notopened', 'magtest'), 'errorbox');
@@ -38,19 +33,20 @@
         echo '</center>';
         return;
     }
+
     $replay = optional_param('replay', 0, PARAM_BOOL);
+    $currentpage = optional_param('qpage', 0, PARAM_INT);
+
     if ($replay && $magtest->allowreplay){
         $DB->delete_records('magtest_useranswer', array('magtestid' => $magtest->id, 'userid' => $USER->id));
     }
     
-    $nextset = magtest_get_next_questionset($magtest, $USER->id, $magtest->pagesize);
+    $nextset = magtest_get_next_questionset($magtest, $currentpage);
  
     if ($magtest->pagesize){
         $donerecords = $DB->count_records_select('magtest_useranswer', "magtestid = $magtest->id AND userid = $USER->id ");
-        $currentpage = ($donerecords / $magtest->pagesize) + 1;
         $allpages = ceil(($DB->count_records('magtest_question', array('magtestid' => $magtest->id)) / $magtest->pagesize));
     } else {
-        $currentpage = 1;
         $allpages = 1; // one unique page of any length
     }
 
@@ -58,6 +54,12 @@
         echo $OUTPUT->notification(get_string('testfinish','magtest'));
         include $CFG->dirroot."/mod/magtest/testfinished.php";
         return;
+    }
+
+/// run controller
+
+    if ($action){
+        require 'maketest.controller.php';
     }
 
     // Keep this after test finished test, to allow students that have 
@@ -70,7 +72,7 @@
     }
     $categories = magtest_get_categories($magtest->id);
   
-    echo $OUTPUT->heading(get_string('answerquestions', 'magtest').format_string($magtest->name).' : '.$currentpage.'/'.$allpages);
+    echo $OUTPUT->heading(get_string('answerquestions', 'magtest').format_string($magtest->name).' : '.($currentpage + 1).'/'.$allpages);
 
     // print a description on first page.
     if (!empty($magtest->description) && $currentpage == 1){
@@ -84,50 +86,13 @@
 <input type="hidden" name="view" value="doit" />
 <input type="hidden" name="magtestid" value="<?php echo $magtest->id ?>" />
 <input type="hidden" name="what" value="" />
+<input type="hidden" name="qpage" value="<?php echo ($currentpage + 1) ?>" />
 <table width="100%" cellspacing="10" cellpadding="10">
 <?php
-foreach($nextset as $question){
-?>
-<tr align="top">
-  <td width="20%" align="right"><b><?php print_string('question', 'magtest') ?>:</b></td>
-  <td align="left" colspan="2">
-    <?php echo 
-    $question->questiontext = file_rewrite_pluginfile_urls( $question->questiontext, 'pluginfile.php',$context->id, 'mod_magtest', 'question', 0);
-    format_string($question->questiontext) 
-    
-    ?>
-  </td>
-</tr>
-<?php
-	$i = 0;
-	shuffle($question->answers);
-	foreach($question->answers as $answer) {
-?>
-<tr align="middle">
-    <td width="20%" align="right">&nbsp;</td>
-    <td align="left" class="magtest-answerline">
-        <?php
-            $catsymbol = $categories[$answer->categoryid]->symbol;
-            $symbolurl = magtest_get_symbols_baseurl($magtest).$catsymbol;
-            $symbolimage = "<img class=\"magtest-qsymbol\" src=\"{$symbolurl}\" align=\"bottom\" />&nbsp;&nbsp;";
-            echo $symbolimage;
-            $answer->answertext  = file_rewrite_pluginfile_urls( $answer->answertext, 'pluginfile.php',$context->id, 'mod_magtest', 'questionanswer', $answer->id);            
-            $answertext = preg_replace('/^<p>(.*)<\/p>$/', '\\1', $answer->answertext);
-            echo ($answertext).' ';
-            if (!empty($answer->helper)){
-            	echo $MAGTESTOUTPUT->answer_help_icon($answer->id);
-            }
-            echo '<br/>';
-        ?>
-    </td>
-    <td class="magtest-answerline">
-        <?php 
-            echo "<input type=\"radio\" name=\"answer{$question->id}\" value=\"{$answer->id}\" /><br/> ";
-        ?>
-    </td>
-</tr>
-<?php
-	}
+if (empty($magtest->singlechoice)){
+	echo $MAGTESTOUTPUT->print_magtest_quiz($nextset, $categories, $context);
+} else {
+	echo $MAGTESTOUTPUT->print_magtest_singlechoice($nextset, $context);
 }
 ?>
 <tr align="top">
@@ -149,6 +114,7 @@ if (!$magtest->endtimeenable || time() < $magtest->endtime){
 </tr>
 </table>
 </form>
+<?php if (!$magtest->singlechoice){ ?>
 <script type="text/javascript">
 function checkanswers(){
     var checkids = [<?php echo implode(',', array_keys($nextset)) ?>];
@@ -167,3 +133,13 @@ function checkanswers(){
     return true;
 }
 </script>
+<?php
+} else {
+?>
+<script type="text/javascript">
+function checkanswers(){
+	return true;
+}
+</script>
+<?php 
+}

@@ -60,6 +60,7 @@
     $table->head[] = '<b>'.get_string('results', 'magtest').'</b>';
     $table->size = array('30%', '70%');
     $table->width = '80%';
+
     foreach($categories as $cat) {
         $symbolurl = magtest_get_symbols_baseurl($magtest).$cat->symbol;
         $symbolimg = "<img src=\"$symbolurl\" /> ";
@@ -85,7 +86,9 @@
         $table->data[] = array('<span class="magtest-cat-name">'.$symbolimg.' '.$cat->name.'</span><br/>'.format_string($cat->description, $cat->descriptionformat), $scoreboard);
     }    
     echo html_writer::table($table);
+
     echo '<br/>';
+
     if ($magtest->usemakegroups){
         $allgroups = groups_get_all_groups($COURSE->id);
         if (empty($allgroups)){

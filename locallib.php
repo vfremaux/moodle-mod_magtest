@@ -122,9 +122,11 @@ function magtest_get_useranswers($magtestid, $forusers = null) {
         // admits a single user or a comma separated list
         $userlist = str_replace(',', "','", $forusers);
     }
-    $userclause = (!is_null($forusers)) ? " AND userid IN ('$userlist') " : '' ;
-    $select = " magtestid = {$magtestid} {$userclause} ";
-    if ($useranswers = $DB->get_records_sql('select * from {magtest_useranswer} WHERE '.$select.' order by questionid')){
+    
+    // @TODO : use more portable IN sql version
+    $userclause = (!empty($forusers)) ? " AND userid IN ('$userlist') " : '' ;
+    $select = " magtestid = ? {$userclause} ";
+    if ($useranswers = $DB->get_records_select('magtest_useranswer', $select, array($magtestid), 'questionid')){
         return $useranswers;
     }
     return array();
@@ -134,42 +136,33 @@ function magtest_get_useranswers($magtestid, $forusers = null) {
 * get the next unanswered page of questions for a given user
 *
 */
-function magtest_get_next_questionset(&$magtest, $userid=null){
+function magtest_get_next_questionset(&$magtest, $currentpage){
     global $CFG, $USER, $DB;
-
-    if (is_null($userid)) $userid = $USER->id;
     
-    // get the last record that was answered
+    // if all questions have answers, test is finished (no next page)
     $sql = "
-        SELECT 
-            MAX(sortorder) as maxorder
-        FROM
-            {magtest_question} mq,
-            {magtest_useranswer} mua
-        WHERE
-            mq.magtestid = {$magtest->id} AND
-            mq.id = mua.questionid AND
-            userid = {$userid}
+    	SELECT DISTINCT(COALESCE(mq.id, mua.id)),
+    		mq.id,
+    		mua.id
+    	FROM
+    		{magtest_question} mq
+    	LEFT JOIN
+    		{magtest_useranswer} mua
+    	ON
+    		mua.questionid = mq.id
+    	WHERE
+    		mq.magtestid = ? AND
+    		(mua.userid = ? OR mua.userid IS NULL) AND
+    		mua.id IS NULL
     ";
-    $record = $DB->get_record_sql($sql);
-    $maxorder = 0 + @$record->maxorder;
-   
-    $sql = "
-        SELECT
-            *
-        FROM
-            {magtest_question}
-        WHERE
-            magtestid = {$magtest->id} AND
-            sortorder > {$maxorder}
-        ORDER BY 
-            sortorder
-    ";
+    if (!$unanswered = $DB->get_records_sql($sql, array($magtest->id, $USER->id))){
+    	return false;
+    }    
     
     if ($magtest->pagesize){
-        $questionset = $DB->get_records_sql($sql,null ,0, $magtest->pagesize);
+        $questionset = $DB->get_records('magtest_question', array('magtestid' => $magtest->id), 'sortorder', '*', $currentpage * $magtest->pagesize, $magtest->pagesize);
     } else {
-        $questionset = $DB->get_records_sql($sql);
+        $questionset = $DB->get_records('magtest_question', array('magtestid' => $magtest->id), 'sortorder');
     }
   
     if ($questionset){
@@ -229,24 +222,36 @@ function magtest_compile_results(&$magtest, &$users, &$categories, &$max_cat){
     global $COURSE, $OUTPUT;
 
     $usersanswers = magtest_get_useranswers($magtest->id, $users);
+
     if (! $usersanswers ) {
         echo $OUTPUT->notification(get_string('nouseranswer','magtest'));
         echo $OUTPUT->footer($COURSE);
         exit;
      }
+
     $categories = magtest_get_categories($magtest->id);
     $questions = magtest_get_questions($magtest->id);
     $count_cat = array();    
-    foreach($usersanswers as $useranswer) {      
-        $cat = $categories[$questions[$useranswer->questionid]->answers[$useranswer->answerid]->categoryid];    
-        // aggregate scores
-        if ($magtest->weighted){
-            $weight = $questions[$useranswer->questionid]->answers[$useranswer->answerid]->weight;
-            $count_cat[$useranswer->userid][$cat->id] = 0 + @$count_cat[$useranswer->userid][$cat->id] + $weight ;
-        } else {
-            $count_cat[$useranswer->userid][$cat->id] = 0 + @$count_cat[$useranswer->userid][$cat->id] + 1 ;
-        }
+
+    foreach($usersanswers as $useranswer) {
+    	if ($magtest->singlechoice){
+    		$question = $questions[$useranswer->questionid];
+    		foreach($question->answers as $answer){
+    			if ($useranswer->answerid == 1){
+			        $cat = $categories[$answer->categoryid];
+	            	$count_cat[$useranswer->userid][$cat->id] = 0 + @$count_cat[$useranswer->userid][$cat->id] + $answer->weight ;
+	            }
+    		}
+    	} else {
+    		$question = $questions[$useranswer->questionid];
+    		$answer = $question->answers[$useranswer->answerid];
+	        $cat = $categories[$answer->categoryid];    
+
+	        // aggregate scores
+            $count_cat[$useranswer->userid][$cat->id] = 0 + @$count_cat[$useranswer->userid][$cat->id] + $answer->weight ;
+	    }
     }
+
     /// get max for each user and organize them in categories
     foreach($users as $user){
     	$max_cat[$user->id] = new StdClass();
@@ -321,4 +326,3 @@ function magtest_test_configuration(&$magtest){
 
     return true;    
 }
-?>

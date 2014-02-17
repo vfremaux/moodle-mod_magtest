@@ -44,9 +44,23 @@ $count_cat = array();
 
 $nb_total = 0;
 
-foreach($usersanswers as $useranswer) {  
-  	$cat = $categories[$questions[$useranswer->questionid]->answers[$useranswer->answerid]->categoryid];
-  	$count_cat[$useranswer->userid][$cat->categoryshortname] = $count_cat[$useranswer->userid][$cat->categoryshortname] + 1 ;
+foreach($usersanswers as $useranswer) {
+	if ($magtest->singlechoice){
+		// sum each earned weight per category
+		$question = $questions[$useranswer->questionid];
+		foreach($questions->answers as $answer){
+			if ($useranswer->answerid == 1)
+				$cat = $categories[$answer->categoryid];
+	  			$count_cat[$useranswer->userid][$cat->categoryshortname] = $count_cat[$useranswer->userid][$cat->categoryshortname] + $answer->weight ;
+	  		}
+		}
+    } else {
+		// sum earned weight in choosen category
+		$question = $questions[$useranswer->questionid];
+		$answer = $question->answers[$useranswer->answerid];
+	  	$cat = $categories[$answer->categoryid];
+  		$count_cat[$useranswer->userid][$cat->categoryshortname] = $count_cat[$useranswer->userid][$cat->categoryshortname] + $answer->weight ;
+	}
 }
 
 $table->head = array(get_string('users'));
@@ -76,4 +90,3 @@ foreach($users as $user) {
 $table->data = $results;
 
 echo html_writer::table($table);
-?>

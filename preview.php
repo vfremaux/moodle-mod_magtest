@@ -21,42 +21,66 @@
     include_once 'renderer.php';
     $MAGTESTOUTPUT = new magtest_renderer();
 
+    echo $OUTPUT->heading(get_string('preview', 'magtest'));
+
+/// Categories
+
+    echo $OUTPUT->heading(get_string('categories', 'magtest'), 3);
+    $categories = magtest_get_categories($magtest->id);
+
 /// get questions
 
+    echo $OUTPUT->heading(get_string('questions', 'magtest'), 3);
     $questions = magtest_get_questions($magtest->id);
 
-    echo $OUTPUT->heading(get_string('preview', 'magtest'));
 
 /// print viewable question list
 
-    if ($questions ) {
-        echo '<ul>';
-        foreach($questions as $question) {
-            echo '<li>';
-            $question->questiontext = file_rewrite_pluginfile_urls( $question->questiontext, 'pluginfile.php',$context->id, 'mod_magtest', 'question', 0);
-
-            echo format_string($question->questiontext);
-            echo '<ul>';
-            shuffle($question->answers);
-            foreach($question->answers as $answer) {
-                $cat = $DB->get_record('magtest_category', array('id' => $answer->categoryid));
-                $imageurl = magtest_get_symbols_baseurl($magtest).$cat->symbol;
-                
-                $answer->answertext  = file_rewrite_pluginfile_urls( $answer->answertext, 'pluginfile.php',$context->id, 'mod_magtest', 'questionanswer', $answer->id);
-
-                echo "<img class=\"magtest-qsymbol\" src=\"$imageurl\" />&nbsp;&nbsp;";
-                echo ($answer->answertext).' ('.format_string($cat->name).')';
-                if ($magtest->weighted){
-                	echo ' ['.$answer->weight.'] ';
-                }
-                if (!empty($answer->helper)){
-                	echo $MAGTESTOUTPUT->answer_help_icon($answer->id);
-                }
-                echo '<br/>';
-            }
-            echo '</ul><br />';
-            echo '</li>';
-        }
-        echo '</ul><br />';
+    if ($questions) {
+    	if ($magtest->singlechoice){
+	        echo '<ul>';
+	        foreach($questions as $question) {
+	            echo '<li>';
+	            $question->questiontext = file_rewrite_pluginfile_urls( $question->questiontext, 'pluginfile.php',$context->id, 'mod_magtest', 'question', 0);
+	
+	            echo format_string($question->questiontext);
+	            $weights = array();
+	            foreach ($question->answers as $answer){
+	            	$weights[] = $answer->weight;
+	            }
+	            echo ' ('.implode(',', $weights).') ';
+	        }
+	        echo '</ul>';
+    	} else {
+	        echo '<ul>';
+	        foreach($questions as $question) {
+	            echo '<li>';
+	            $question->questiontext = file_rewrite_pluginfile_urls( $question->questiontext, 'pluginfile.php',$context->id, 'mod_magtest', 'question', 0);
+	
+	            echo format_string($question->questiontext);
+	            echo '<ul>';
+	            shuffle($question->answers);
+	            foreach($question->answers as $answer) {
+	                $cat = $DB->get_record('magtest_category', array('id' => $answer->categoryid));
+	                $imageurl = magtest_get_symbols_baseurl($magtest).$cat->symbol;
+	                
+	                $answer->answertext  = file_rewrite_pluginfile_urls( $answer->answertext, 'pluginfile.php',$context->id, 'mod_magtest', 'questionanswer', $answer->id);
+	
+	                echo "<img class=\"magtest-qsymbol\" src=\"$imageurl\" />&nbsp;&nbsp;";
+	                echo ($answer->answertext).' ('.format_string($cat->name).')';
+	                if ($magtest->weighted){
+	                	echo ' ['.$answer->weight.'] ';
+	                }
+	                if (!empty($answer->helper)){
+	                	echo $MAGTESTOUTPUT->answer_help_icon($answer->id);
+	                }
+	                echo '<br/>';
+	            }
+	            echo '</ul><br />';
+	            echo '</li>';
+	        }
+	        echo '</ul><br />';
+	    }
+    } else {
+    	echo $OUTPUT->box(get_string('noquestions', 'magtest'), 'notification');
     }
-?>

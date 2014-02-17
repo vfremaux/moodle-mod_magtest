@@ -137,7 +137,18 @@ function xmldb_magtest_upgrade($oldversion=0) {
 
         upgrade_mod_savepoint(true, 2012103100, 'magtest');
     }
+
+    if ($oldversion < 2014012802) {
+
+        $table = new xmldb_table('magtest');
+        $field = new xmldb_field('singlechoice');
+		$field->set_attributes(XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, XMLDB_NOTNULL, null,  0, 'allowreplay');
+        if (!$dbman->field_exists($table, $field)){
+	        $dbman->add_field($table, $field);
+        }
+
+        upgrade_mod_savepoint(true, 2014012802, 'magtest');
+    }
     
     return $result;
 }
-?>

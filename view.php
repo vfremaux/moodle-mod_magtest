@@ -94,6 +94,8 @@
         $row[]  	= new tabobject('categories', "view.php?id={$cm->id}&amp;view=categories", $tabname);
         $tabname	= get_string('questions', 'magtest');
         $row[]  	= new tabobject('questions', "view.php?id={$cm->id}&amp;view=questions", $tabname);
+        $tabname	= get_string('import', 'magtest');
+        $row[]  	= new tabobject('import', $CFG->wwwroot."/mod/magtest/import/import_questions.php?id={$cm->id}", $tabname);
     }
 
     if (has_capability('mod/magtest:viewotherresults', $context)){

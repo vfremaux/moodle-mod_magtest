@@ -47,7 +47,14 @@ $string['errorupdatecategory'] = 'Erreur de mise à jour de la catégorie {$a}';
 $string['guestcannotuse'] = 'Les invités ne peuvent accéder à ce test';
 $string['helpertext'] = 'Texte d\'aide pour la catégorie {$a}';
 $string['helpnavigationquestion'] = 'Aide';
+$string['clearalldata'] = 'Supprimer les anciennes questions';
 $string['intro'] = 'Introduction';
+$string['importfile'] = 'Fichier d\'import';
+$string['importformat'] = 'Format d\'import';
+$string['import'] = 'Importer';
+$string['importquestions'] = 'Importer des questions dans le test magazine';
+$string['cleardata'] = 'Supprimer toutes les anciennes données';
+$string['clearalladvice'] = 'Attention, supprimer les données supprimera aussi les réponses utilisateur';
 $string['helper'] = 'Consulter l\'aide';
 $string['magtest:doit'] = 'Faire le test';
 $string['default'] = 'Test type magazine par defaut';
@@ -64,8 +71,11 @@ $string['noquestions'] = 'Aucune question disponible.';
 $string['notopened'] = 'Ce test n\'est pas encore ouvert.';
 $string['nouseranswer'] = 'Aucune réponse n\'a été saisie.';
 $string['nousersinthisgroup'] = 'Aucun utilisateur ne s\'est placé dans cette catégorie';
+$string['noanswerusers'] = 'Sans réponse ';
 $string['outputgroupdesc'] = 'Description du groupe généré';
 $string['outputgroupname'] = 'Nom du groupe généré';
+$string['singlechoice'] = 'Choix simple';
+$string['singlechoice_help'] = 'Si actif, seule la première catégorie. Weights apply to all other categories if this questions is enabled. Magtest is necessarily weighted in this case.';
 $string['pagenotcomplete'] = 'Toutes les réposnes n\'ont pas été données';
 $string['pagesize'] = 'Nombre de questions par page';
 $string['preview'] = 'Prévisualisation';
@@ -85,6 +95,7 @@ $string['resulttext'] = 'Texte de conclusion';
 $string['save'] = 'Enregistrer la réponse';
 $string['score'] = 'Score';
 $string['notsubmittedyet'] = 'Pas encore soumis.';
+$string['selections'] = 'Sélections';
 $string['submitted'] = 'Soumis.';
 $string['sortorder'] = 'Rang';
 $string['starttime'] = 'Date de début';
@@ -97,8 +108,24 @@ $string['updatecategory'] = 'Modifier une catégorie';
 $string['usemakegroups'] = 'Utiliser pour générer des groupes de cours';
 $string['userchoices'] = 'Réponses des utilisateurs';
 $string['weight'] = 'Pondération';
+$string['weightfor'] = 'Poids pour "{$a}"'; 
 $string['weighted'] = 'Mode pondéré';
 $string['youneedcreatingcategories'] = 'Il faut créer au moins deux catégories avant de pouvoir créer des questions';
+
+// Help strings //
+
+$string['importformat_help'] = '
+### Format d\'import des questions
+
+Le fichier d\import doit être encodé en UTF8, séparé par des ";", une question par ligne et doit avoir une première colonne avec le texte de la question. 
+
+Si l\'option "Choix simple" est active, alors les colonnes suivantes donnent dans l\'ordre les poids de catégorie (entier).
+
+Si l\'option "Choix simple" est désactivée (par défaut), alors les colonnes suivantes viennent par groupe de trois et donnent dans l\'ordre et pour chaque catégorie,
+le texte de réponse, le poids et le texte d\'aide de la réponse.
+';
+
+
 $string['modulename_help'] = "Le Test de Type Magazine permet de créer une évaluation multicritère additionnant un score
 sur plusieurs évaluateurs à la fois. A la fin du test, l'utilisateur est rangé dans la catégorie correspondant à son évaluateur
 dominant. L'enseignant peut constituer des groupes de cours à partir de ces résultats. 

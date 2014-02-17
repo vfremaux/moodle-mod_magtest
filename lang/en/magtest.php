@@ -65,9 +65,20 @@ $string['nouseranswer'] = 'No user answered';
 $string['nousersinthisgroup'] = 'No users in this category';
 $string['nocategories'] = 'No categories in the test.';
 $string['notsubmittedyet'] = 'Not submited yet.';
+$string['noanswerusers'] = 'Unanswered ';
 $string['submitted'] = 'Submited.';
+$string['selections'] = 'Selections';
+$string['importfile'] = 'Import file';
+$string['import'] = 'Import';
+$string['clearalldata'] = 'Clear all previous data';
+$string['importquestions'] = 'Import questions in magtest';
+$string['importformat'] = 'Import format';
+$string['cleardata'] = 'Clear all data';
+$string['clearalladvice'] = 'Clearing all data will also clear all user results';
 $string['outputgroupdesc'] = 'Generated group description';
 $string['outputgroupname'] = 'Generated group name';
+$string['singlechoice'] = 'Single choice';
+$string['singlechoice_help'] = 'If checked each question is requested only one simple answer (selected or not). Weights apply to all marking categories for the questions that are checked. Magtest is necessarily weighted in this case.';
 $string['pagenotcomplete'] = 'All questions were not answered.'; 
 $string['pagesize'] = 'Questions per page'; 
 $string['preview'] = 'preview';
@@ -97,14 +108,28 @@ $string['usemakegroups'] = 'Use this test for generating course groups';
 $string['userchoices'] = 'User choices';
 $string['userstosubmit'] = 'User left to submit';
 $string['weight'] = 'Weight'; 
+$string['weightfor'] = 'Weight for "{$a}"'; 
 $string['weighted'] = 'Weighted answers'; 
 $string['youneedcreatingcategories'] = 'Before create questions, you have to create at least two categories.';
-$string['modulename_help'] = "The Magtest activity provides a multicriteria evaluation summing a score on several scales for each answer. 
+
+// Help strings //
+
+$string['importformat_help'] = '
+### Question import format
+
+Import file must be UTF8 encoded, separated with ";", one question per line and have one first column for question text. 
+
+If singlechoice options is on, next columns are weights (integer) for each category in category order.
+
+If singlechoice is off, next columns must feed in order : answer text, weight (1 if unweighted), and helpertext for each category in order.
+';
+
+$string['modulename_help'] = 'The Magtest activity provides a multicriteria evaluation summing a score on several scales for each answer. 
 At th end of the test, the student will be catagorized in his dominating category. 
 The teacher can use results to create course groups. 
-";
-$string['usemakegroups_help'] = '## Multitrack test
+';
 
+$string['usemakegroups_help'] = '
 ### Generating moodle groups from results
 
 Using the multitrack test will result in a splitting of the participants among the provided categories.
