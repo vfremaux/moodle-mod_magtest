@@ -8,11 +8,11 @@
  * @package magtest
  **/
 
-$module->version  = 2013070901;  // The current module version (Date: YYYYMMDDXX)
-$module->requires = 2011120500;  // Requires this Moodle version
+$module->version  = 2014012802;  // The current module version (Date: YYYYMMDDXX)
+$module->requires = 2012120304;  // Requires this Moodle version
 $module->cron     = 0;           // Period for cron to check this module (secs)
 $module->component = 'mod_magtest';   // Full name of the plugin (used for diagnostics)
 $module->maturity = MATURITY_RC;
-$module->release = '2.3.0 (Build 2013070901)';
+$module->release = '2.4.0 (Build 2013070902)';
 
 

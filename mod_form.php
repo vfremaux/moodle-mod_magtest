@@ -43,8 +43,12 @@ class mod_magtest_mod_form extends moodleform_mod {
 	  $mform->addGroup($enddatearray, 'endfrom', get_string('endtime', 'magtest'), ' ', false);
 	  $mform->disabledIf('endfrom', 'endtimeenable');
 
+	  $mform->addElement('checkbox', 'singlechoice', get_string('singlechoice', 'magtest'));
+	  $mform->addHelpButton('singlechoice', 'singlechoice', 'magtest');
+
 	  $mform->addElement('checkbox', 'weighted', get_string('weighted', 'magtest'));
 	  $mform->addHelpButton('weighted', 'weighted', 'magtest');
+	  $mform->disabledIf('weight', 'singlechoice', 'checked');
 
 	  $mform->addElement('checkbox', 'usemakegroups', get_string('usemakegroups', 'magtest'));
 	  $mform->addHelpButton('usemakegroups', 'usemakegroups', 'magtest');

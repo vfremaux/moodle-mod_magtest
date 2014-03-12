@@ -45,7 +45,7 @@ $capabilities = array(
         )
     ),
 
-// Controls creation of magtest
+// Controls who can manage questions and categories
     'mod/magtest:manage' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
@@ -98,4 +98,3 @@ $capabilities = array(
         )
     )
 );
-?>

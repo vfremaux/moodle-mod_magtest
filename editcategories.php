@@ -83,10 +83,10 @@
                 $cat->result = $data->{$var}['text'];  
                  
                 $var = 'outputgroupname_'.$i;
-                $cat->outputgroupname = $data->{$var};   
+                $cat->outputgroupname = @$data->{$var};   
 
                 $var = 'outputgroupdesc_'.$i;
-                $cat->outputgroupdesc = $data->{$var};   
+                $cat->outputgroupdesc = @$data->{$var};   
          
                 $catid = magtest::addCategory($magtest->id, $cat) ;
              
@@ -101,8 +101,10 @@
            $category->symbol = $data->symbol ; 
            $category->description = $data->catdescription['text'] ; 
            $category->result = $data->catresult['text'] ; 
-           $category->outputgroupname = $data->outputgroupname ; 
-           $category->outputgroupdesc = $data->outputgroupdesc ; 
+           if ($magtest->usemakegroups){
+	           $category->outputgroupname = $data->outputgroupname ; 
+	           $category->outputgroupdesc = $data->outputgroupdesc ; 
+	       }
            
            $DB->update_record('magtest_category', $category);
         }

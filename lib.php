@@ -3,7 +3,7 @@
 /**
  * Library of functions and constants for module magtest
  *
- * @author 
+ * @author Valery Fremaux (valery.fremaux@gmail.com)
  * @package mod-magtest
  * @category mod
  **/
@@ -50,6 +50,10 @@ function magtest_add_instance($magtest) {
 	global $DB;
 	
     $magtest->timemodified = time();
+    
+    if (!empty($magtest->singlechoice)){
+    	$magtest->weighted = 1;
+    }
 
     $return = $DB->insert_record('magtest', $magtest);
 
@@ -71,14 +75,27 @@ function pix_url(){
 function magtest_update_instance($magtest) {
 	global $DB;
 	
+	$oldmode = $DB->get_field('magtest', 'singlechoice', array('id' => $magtest->instance));
+
+	// If changing mode, we need delete all previous user dataas they are NOT relevant any more
+	// @TODO : add notification in mod_form to alert users...
+	if ($oldmode != $magtest->singlechoice){
+		$DB->delete_records('magtest_useranswer', array('magtestid' => $magtest->instance));
+	}
+	
     $magtest->timemodified = time();
     $magtest->id = $magtest->instance;
+
+    if (!empty($magtest->singlechoice)){
+    	$magtest->weighted = 1;
+    }
 
     if (!isset($magtest->starttimeenable)) $magtest->starttimeenable = 0;
     if (!isset($magtest->endtimeenable)) $magtest->endtimeenable = 0;
     if (!isset($magtest->usemakegroups)) $magtest->usemakegroups = 0;
     if (!isset($magtest->allowreplay)) $magtest->allowreplay = 0;
     if (!isset($magtest->weighted)) $magtest->weighted = 0;
+    if (!isset($magtest->singlechoice)) $magtest->singlechoice = 0;
 
     return $DB->update_record('magtest', $magtest);
 }
@@ -236,7 +253,7 @@ function magtest_get_participants($magtestid) {
     global $CFG, $DB;
 
     $sql = "
-        SELECT
+        SELECT DISTINCT
             u.*
         FROM
             {user} u,
@@ -371,10 +388,11 @@ function magtest_print_overview($courses, &$htmlarray) {
 
 	foreach($magtests as $magtest){
 
-        $str = '<div class="magtest overview"><div class="name">'.$strmagtest. ': '.
+        $str = '<div class="magtest overview">';
+        $str .= '<div class="name">'.$strmagtest. ': '.
                '<a '.($magtest->visible ? '':' class="dimmed"').
                'title="'.$strmagtest.'" href="'.$CFG->wwwroot.
-               '/mod/assign/view.php?id='.$magtest->coursemodule.'">'.
+               '/mod/magtest/view.php?id='.$magtest->coursemodule.'">'.
                format_string($magtest->name).'</a></div>';
         if ($magtest->endtime && $magtest->endtimeenable) {
             $str .= '<div class="info">'.$strcutoffdate.': '.userdate($magtest->endtime).'</div>';
@@ -387,7 +405,7 @@ function magtest_print_overview($courses, &$htmlarray) {
 
             $sql = "
             	SELECT DISTINCT
-            		userid, id
+            		userid, userid
             	FROM
             		{magtest_useranswer}
             	WHERE
@@ -408,6 +426,7 @@ function magtest_print_overview($courses, &$htmlarray) {
                 $link = new moodle_url('/mod/magtest/view.php', array('id' => $magtest->coursemodule, 'view' => 'results'));
                 $str .= '<div class="details"><a href="'.$link.'">'.get_string('userstosubmit', 'magtest', $usersleft).'</a></div>';
             }
+        	$str .= '</div>';
 		}
 	    if (empty($htmlarray[$magtest->course]['magtest'])) {
 	        $htmlarray[$magtest->course]['magtest'] = $str;

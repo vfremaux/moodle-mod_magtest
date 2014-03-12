@@ -30,8 +30,8 @@
         return; // give control back to view.php
     }
 
-    $categorycount = $DB->count_records('magtest_category', array('magtestid' => $magtest->id));
-    
+    $categories = magtest_get_categories($magtest->id);
+	$categorycount = count($categories);    
     $questions = magtest_get_questions($magtest->id);    
     $orderstr = get_string('sortorder', 'magtest');
     $questionstr = get_string('question', 'magtest');
@@ -64,13 +64,10 @@
             $validanswercount = 0;
             $weights = array();
             foreach($question->answers as $answer){
-                if (!empty($answer->answertext)){
-                    $validanswercount++;
-                	$weights[] = $answer->weight;
-                }
+            	$weights[] = $categories[$answer->categoryid]->name.': '.$answer->weight;
             }
             
-            $answercheck = '('.implode(', ', $weights).')';
+            $answercheck = '('.implode(',<br/> ', $weights).')';
             $question->questiontext = file_rewrite_pluginfile_urls( $question->questiontext, 'pluginfile.php',$context->id, 'mod_magtest', 'question', 0);
 
             $table->data[] = array($question->sortorder, format_string(format_text($question->questiontext, $question->questiontextformat)), $answercheck, $commands);
