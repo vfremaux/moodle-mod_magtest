@@ -20,7 +20,8 @@
         <FIELD NAME="weighted" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" PREVIOUS="result" NEXT="usemakegroups"/>
         <FIELD NAME="usemakegroups" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" PREVIOUS="weighted" NEXT="pagesize"/>
         <FIELD NAME="pagesize" TYPE="int" LENGTH="4" NOTNULL="true" UNSIGNED="true" DEFAULT="4" SEQUENCE="false" PREVIOUS="usemakegroups" NEXT="allowreplay"/>
-        <FIELD NAME="allowreplay" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="1" SEQUENCE="false" PREVIOUS="pagesize"/>
+        <FIELD NAME="allowreplay" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="1" SEQUENCE="false" PREVIOUS="pagesize" NEXT="singlechoice" />
+        <FIELD NAME="singlechoice" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="1" SEQUENCE="false" PREVIOUS="allowreplay"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key for magtest"/>

@@ -57,7 +57,7 @@
 	        '15%'
         );
 
-    $table->width='80%';
+    $table->width = '100%';
 
     foreach ($categories as $category){
         $commands = '<div class="categorycommands">';    
@@ -81,7 +81,7 @@
         $symbolimage     = "<img src=\"{$symbolurl}\" />";
         $category->format = 1;
 
-        $table->data[]=array(
+        $table->data[] = array(
 	            $symbolimage,
 	            format_string($category->name),
 	            format_string(format_text($category->description, $category->format)),
@@ -106,4 +106,3 @@
     echo $OUTPUT->single_button(new moodle_url($CFG->wwwroot . '/mod/magtest/editcategories.php', $options), get_string('addthree', 'magtest'), 'get');
     echo "</center>";
     echo '</p>';
-?>

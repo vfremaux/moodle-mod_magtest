@@ -20,21 +20,22 @@
         }
     }
     
-    require_login($course->id);
+    require_course_login($course->id, true, $cm);
     
-    $mod_context = get_context_instance(CONTEXT_MODULE, $id);
+    $mod_context = context_module::instance($id);
     
     $url = $CFG->wwwroot.'/mod/magtest/editquestions.php?id='.$id;
+    $editurl = $CFG->wwwroot.'/mod/magtest/view.php?id='.$id.'&amp;view=questions';
 
     $PAGE->set_title("$course->shortname: $magtest->name");
     $PAGE->set_heading("$course->fullname");
-    /* SCANMSG: may be additional work required for $navigation variable */
+    $PAGE->navbar->add(get_string('questions', 'magtest'), $editurl);
+    $PAGE->navbar->add(get_string('addquestion', 'magtest'));
     $PAGE->set_focuscontrol('');
     $PAGE->set_cacheable(true);
     $PAGE->set_url($url);
     $PAGE->set_button($OUTPUT->update_module_button($cm->id, 'magtest'));
     $PAGE->set_headingmenu(navmenu($course, $cm));
-    echo $OUTPUT->header();
            
     if($qid <= 0){ 
 		$form = new Question_Form($magtest, 'add', $howmany, $url);
@@ -45,7 +46,10 @@
     $questionoptions = array('trusttext' => true, 'subdirs' => false, 'maxfiles' => 100, 'maxbytes' => $maxbytes, 'context' => $mod_context);
     $answeroptions = array('trusttext' => true, 'subdirs' => false, 'maxfiles' => 100, 'maxbytes' => $maxbytes, 'context' => $mod_context);
 
-    //   DebugBreak();
+    if ($form->is_cancelled()){
+    	redirect($editurl);
+    }
+
 	if ($data = $form->get_data()){
 	
         $cmd = $data->cmd ; 
@@ -53,6 +57,7 @@
         if ($cmd == 'add') {
          
             $data = file_postupdate_standard_editor($data, 'questiontext', $questionoptions, $mod_context, 'mod_magtest', 'question', 0);
+	            
                                            
             $question = new stdClass();
             $question->questiontext = $data->questiontext; 
@@ -64,22 +69,34 @@
             
             //store the cats answers 
             foreach ($data->cats as $catid) {               
-				$data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'questionanswer', $new_answer_id); 
-				$data = file_postupdate_standard_editor($data, 'helper'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'helper', $new_answer_id); 
+         		if (!$magtest->singlechoice){
+					$data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'questionanswer', $new_answer_id); 
+					$data = file_postupdate_standard_editor($data, 'helper'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'helper', $new_answer_id); 
+				}
                	$answer = new stdClass();
 				$answer->questionid = $new_answer_id; 
 				$answer->magtestid = $magtest->id;
-				$answer->answertextformat = FORMAT_HTML;
-				$answer->answertext = $data->{'questionanswer'.$catid} ;
-				$answer->helperformat = FORMAT_HTML;
-				$answer->helper = $data->{'helper'.$catid} ;
-				$weightkey = 'weight'.$catid;
-				$answer->weight = $data->$weightkey;
+         		if (!$magtest->singlechoice){
+					$answer->answertextformat = FORMAT_HTML;
+					$answer->answertext = $data->{'questionanswer'.$catid} ;
+					$answer->helperformat = FORMAT_HTML;
+					$answer->helper = $data->{'helper'.$catid} ;
+				} else {
+					$answer->answertextformat = 0;
+					$answer->answertext = '';
+					$answer->helperformat = 0;
+					$answer->helper = '';
+				}
+				if ($magtest->weighted){
+					$weightkey = 'weight'.$catid;
+					$answer->weight = $data->$weightkey;
+				} else {
+					$answer->weight =  1;
+				}
 				$answer->categoryid = $catid;
 				$DB->insert_record('magtest_answer', $answer);
             }            
         } else {
-//            DebugBreak();
 			//update question
 			
 			$data = file_postupdate_standard_editor($data, 'questiontext', $questionoptions, $mod_context, 'mod_magtest', 'question', 0);
@@ -91,19 +108,25 @@
 			foreach ($data->cats as $catid) {
 
 				//try load the answer 
-                $old_answer = $DB->get_record('magtest_answer',array('questionid' => $qid, 'categoryid' => $catid));
+                $old_answer = $DB->get_record('magtest_answer', array('questionid' => $qid, 'categoryid' => $catid));
                  
                 if($old_answer){
                 	//do an update
-                    $data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'questionanswer', $old_answer->id);     
-                    $old_answer->answertext = $data->{'questionanswer'.$catid};
+                	if (!$magtest->singlechoice){
+	                    $data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'questionanswer', $old_answer->id);     
+	                    $old_answer->answertext = $data->{'questionanswer'.$catid};
 
-                    $data = file_postupdate_standard_editor($data, 'helper'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'helper', $old_answer->id);     
-                    $old_answer->helper = $data->{'helper'.$catid};
-                    $old_answer->helperformat = FORMAT_MOODLE;
+	                    $data = file_postupdate_standard_editor($data, 'helper'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'helper', $old_answer->id);     
+	                    $old_answer->helper = $data->{'helper'.$catid};
+	                    $old_answer->helperformat = FORMAT_MOODLE;
+	                }
                     
-                    $weightkey = 'weight'.$catid;
-                    $old_answer->weight = $data->$weightkey;
+					if ($magtest->weighted){
+	                    $weightkey = 'weight'.$catid;
+	                    $old_answer->weight = $data->$weightkey;
+	                } else {
+	                	$old_answer->weight = 1;
+	                }
 
                     $DB->update_record('magtest_answer', $old_answer);
                 } else {
@@ -114,17 +137,27 @@
                     $new_answer->questionid = $qid;
                     $new_answer->categoryid = $catid ;
                     $new_answer->answertext = ''; // $data->{'questionanswer'.$catid};
+                    $new_answer->helpertext = ''; // $data->{'questionanswer'.$catid};
                     $new_answer->magtestid = $data->magtestid;
-                    $weightkey = 'weight'.$catid;
-                    $new_answer->weight = $data->$weightkey;
+                    $new_answer->answertextformat = 0;
+                    $new_answer->helpertextformat = 0;
+					if ($magtest->weighted){
+	                    $weightkey = 'weight'.$catid;
+	                    $new_answer->weight = $data->$weightkey;
+	                } else {
+	                	$new_answer->weight = 1;
+	                }
                     $new_answer->id = $DB->insert_record('magtest_answer', $new_answer);
-                    $data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'questionanswer', $new_answer->id); 
-                    $new_answer->answertext = $data->{'questionanswer'.$catid};
-                    $new_answer->answertextformat = FORMAT_HTML;
+                    
+                    if (!$magtest->pluginchoice){
+	                    $data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'questionanswer', $new_answer->id); 
+	                    $new_answer->answertext = $data->{'questionanswer'.$catid};
+	                    $new_answer->answertextformat = FORMAT_HTML;
 
-                    $data = file_postupdate_standard_editor($data, 'helper'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'helper', $new_answer->id); 
-                    $new_answer->helper = $data->{'helper'.$catid};
-                    $new_answer->helperformat = FORMAT_HTML;
+	                    $data = file_postupdate_standard_editor($data, 'helper'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'helper', $new_answer->id); 
+	                    $new_answer->helper = $data->{'helper'.$catid};
+	                    $new_answer->helperformat = FORMAT_HTML;
+	                }
 
                     $DB->update_record('magtest_answer', $new_answer);
 				}
@@ -132,12 +165,10 @@
         }
         $options['id'] = $id;
 
-        echo $OUTPUT->continue_button(new moodle_url($CFG->wwwroot.'/mod/magtest/view.php', $options));         
-
-        echo $OUTPUT->footer($course);                                        
+    	redirect($editurl);
         exit;
     }
      
-    $form->display();
-     
+	echo $OUTPUT->header();
+    $form->display();     
     echo $OUTPUT->footer($course);

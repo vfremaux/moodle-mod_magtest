@@ -1,4 +1,4 @@
-<?php // $Id: index.php,v 1.2 2012-11-02 19:19:13 wa Exp $
+<?php // $Id: index.php,v 1.1 2012-09-16 21:01:29 vf Exp $
 /**
  * This page lists all the instances of magtest in a particular course
  *

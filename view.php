@@ -1,10 +1,10 @@
 <?php 
-    // $Id: view.php,v 1.8 2012-11-02 19:19:14 wa Exp $
+    // $Id: view.php,v 1.4 2012-11-01 21:12:55 vf Exp $
     /**
     * This page prints a particular instance of NEWMODULE
     * 
     * @author 
-    * @version $Id: view.php,v 1.8 2012-11-02 19:19:14 wa Exp $
+    * @version $Id: view.php,v 1.4 2012-11-01 21:12:55 vf Exp $
     * @package magtest
     **/
 
@@ -30,10 +30,6 @@
             print_error ('invalidcoursemodule');
         }
 
-        if (!$cm = $DB->get_record('course_modules', array('id' => $id))){
-            print_error ('invalidcoursemodule');
-		}
-
         if (!$course = $DB->get_record('course', array('id' => $cm->course))){
             print_error ('coursemisconf');
 		}
@@ -50,12 +46,12 @@
             print_error ('coursemisconf');
         }
 
-        if (!$cm=get_coursemodule_from_instance('magtest', $magtest->id, $course->id)){
+        if (!$cm = get_coursemodule_from_instance('magtest', $magtest->id, $course->id)){
             print_error ('invalidcoursemodule');
         }
     }
 
-    require_login($course->id);
+    require_course_login($course, true, $cm);
     /* 
     if (debugging()){
         echo "MVC[$view:$page:$action]";
@@ -72,17 +68,18 @@
     /// Guest trap    
 
     if (isguestuser()){
-        echo '<br/>';
-        echo $OUTPUT->box(get_string('guestcannotuse', 'magtest'));
-        echo $OUTPUT->continue_button($CFG->wwwroot . '/course/view.php?id=' . $course->id);
-        echo $OUTPUT->footer($course);
+        print_error('guestcannotuse', 'magtest', '', $CFG->wwwroot.'/course/view.php?id='.$course->id);
         exit;
     }
 
     /// print tabs
 
     if (!preg_match("/doit|preview|categories|questions|results|stat/", $view)){
-        $view='doit';
+    	if (has_capability('mod/magtest:manage', $context)){
+	        $view = 'preview';
+	    } else {
+	        $view = 'doit';
+	    }
     }
 
     if (has_capability('mod/magtest:doit', $context)){
@@ -97,6 +94,8 @@
         $row[]  	= new tabobject('categories', "view.php?id={$cm->id}&amp;view=categories", $tabname);
         $tabname	= get_string('questions', 'magtest');
         $row[]  	= new tabobject('questions', "view.php?id={$cm->id}&amp;view=questions", $tabname);
+        $tabname	= get_string('import', 'magtest');
+        $row[]  	= new tabobject('import', $CFG->wwwroot."/mod/magtest/import/import_questions.php?id={$cm->id}", $tabname);
     }
 
     if (has_capability('mod/magtest:viewotherresults', $context)){
@@ -181,7 +180,7 @@
     
     $PAGE->set_title("$course->shortname: $magtest->name");
     $PAGE->set_heading("$course->fullname");
-    /* SCANMSG: may be additional work required for $navigation variable */
+    $PAGE->navbar->add(get_string($view, 'magtest'));
     $PAGE->set_focuscontrol('');
     $PAGE->set_cacheable(true);
     $PAGE->set_url($CFG->wwwroot . '/mod/magtest/view.php?id=' . $id);

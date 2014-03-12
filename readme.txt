@@ -1,10 +1,12 @@
 MAGTEST Moodle 2 release
+########################
 
 magtest implements a online test based on magazine self testing, using a set of 
 answers tagged with letters A,B,C,D,... or symbols. User answers are counted "by answer range",
 and a test feedback is given depending on each answer serie count balance. 
 
 Developers : Valery Fremaux, Etienne Roze
+Moodle 2 version : Valery Fremaux, Wafa Adham
 
 Contact valery.fremaux@gmail.com
 

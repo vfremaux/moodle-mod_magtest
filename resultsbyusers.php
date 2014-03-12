@@ -63,16 +63,24 @@
     $questions = magtest_get_questions($magtest->id);
     $count_cat = array();
     $nb_total = 0;
-    foreach($usersanswers as $useranswer) {      
-        $cat = $categories[$questions[$useranswer->questionid]->answers[$useranswer->answerid]->categoryid];    
-        // aggregate scores
-        if ($magtest->weighted){
-            $weight = $questions[$useranswer->questionid]->answers[$useranswer->answerid]->weight;
-            $count_cat[$useranswer->userid][$cat->id] = 0 + @$count_cat[$useranswer->userid][$cat->id] + $weight ;
-        } else {
-            $count_cat[$useranswer->userid][$cat->id] = 0 + @$count_cat[$useranswer->userid][$cat->id] + 1 ;
-        }
+
+    foreach($usersanswers as $useranswer) {
+    	if ($magtest->singlechoice){
+	    	$question = $questions[$useranswer->questionid];
+			foreach($question->answers as $answer){
+		        // aggregate scores for each cat on each user
+		        $cat = $categories[$answer->categoryid];
+	            $count_cat[$useranswer->userid][$cat->id] = 0 + @$count_cat[$useranswer->userid][$cat->id] + $answer->weight;
+		    }
+    	} else {
+	    	$question = $questions[$useranswer->questionid];
+	    	$answer = $question->answers[$useranswer->answerid];
+	        $cat = $categories[$answer->categoryid];
+	        // aggregate scores
+            $count_cat[$useranswer->userid][$cat->id] = 0 + @$count_cat[$useranswer->userid][$cat->id] + $answer->weight ;
+	    }
     }
+
 /// get max for each user
 
     foreach($users as $user){
@@ -87,6 +95,7 @@
             }
         }
     }    
+
 /// make table head
 
     echo '<center>'; 
