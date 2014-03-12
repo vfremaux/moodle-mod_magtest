@@ -3,7 +3,7 @@
 /**
  * Library of functions and constants for module magtest
  *
- * @author 
+ * @author Valery Fremaux (valery.fremaux@gmail.com)
  * @package mod-magtest
  * @category mod
  **/
@@ -253,7 +253,7 @@ function magtest_get_participants($magtestid) {
     global $CFG, $DB;
 
     $sql = "
-        SELECT
+        SELECT DISTINCT
             u.*
         FROM
             {user} u,
@@ -405,7 +405,7 @@ function magtest_print_overview($courses, &$htmlarray) {
 
             $sql = "
             	SELECT DISTINCT
-            		userid, id
+            		userid, userid
             	FROM
             		{magtest_useranswer}
             	WHERE
@@ -485,4 +485,4 @@ function magtest_pluginfile($course, $cm, $context, $filearea, $args, $forcedown
     send_stored_file($file, 0, 0, false); // download MUST be forced - security!
 }
 
-?>
+

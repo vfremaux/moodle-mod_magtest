@@ -40,7 +40,13 @@
     if ($replay && $magtest->allowreplay){
         $DB->delete_records('magtest_useranswer', array('magtestid' => $magtest->id, 'userid' => $USER->id));
     }
-    
+
+/// run controller
+
+    if ($action){
+        require 'maketest.controller.php';
+    }
+   
     $nextset = magtest_get_next_questionset($magtest, $currentpage);
  
     if ($magtest->pagesize){
@@ -56,11 +62,6 @@
         return;
     }
 
-/// run controller
-
-    if ($action){
-        require 'maketest.controller.php';
-    }
 
     // Keep this after test finished test, to allow students that have 
     // completed the test to see results.

@@ -40,7 +40,7 @@ class magtest_renderer extends core_renderer{
     
     function print_magtest_quiz(&$questions, &$categories, $context, $return = true){
     	
-    	$str .= '';
+    	$str = '';
     	
 		foreach($questions as $question){
 			$str .= '<tr align="top">';
