@@ -1,18 +1,16 @@
-<?php // $Id: version.php,v 1.2 2012-11-01 18:05:14 vf Exp $
+<?php
 /**
  * Code fragment to define the version of magtest
  * This fragment is called by moodle_needs_upgrading() and /admin/index.php
  *
- * @author 
+ * @author Valery Fremaux
  * @version $Id: version.php,v 1.2 2012-11-01 18:05:14 vf Exp $
- * @package magtest
- **/
+ * @package mod-magtest
+ */
 
-$module->version  = 2014012802;  // The current module version (Date: YYYYMMDDXX)
-$module->requires = 2012120304;  // Requires this Moodle version
-$module->cron     = 0;           // Period for cron to check this module (secs)
-$module->component = 'mod_magtest';   // Full name of the plugin (used for diagnostics)
-$module->maturity = MATURITY_RC;
-$module->release = '2.4.0 (Build 2013070902)';
-
-
+$plugin->version  = 2014012802;  // The current module version (Date: YYYYMMDDXX)
+$plugin->requires = 2013111800;  // Requires this Moodle version
+$plugin->cron     = 0;           // Period for cron to check this module (secs)
+$plugin->component = 'mod_magtest';   // Full name of the plugin (used for diagnostics)
+$plugin->maturity = MATURITY_RC;
+$plugin->release = '2.6.0 (Build 2014012802)';
