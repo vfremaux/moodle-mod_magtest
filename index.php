@@ -1,4 +1,4 @@
-<?php // $Id: index.php,v 1.1 2012-09-16 21:01:29 vf Exp $
+<?php
 /**
  * This page lists all the instances of magtest in a particular course
  *
@@ -13,6 +13,9 @@
     require_once('lib.php');
 
     $id = required_param('id', PARAM_INT);   // course
+
+    $url = new moodle_url('/mod/magtest/index.php', array('id' => $id));
+    $PAGE->set_url($url);
 
     if (! $course = $DB->get_record('course', array('id' => $id))) {
         print_error('coursemisconf');
@@ -55,6 +58,7 @@
     $strweek  = get_string('week');
     $strtopic  = get_string('topic');
 
+    $table = new html_table();
     if ($course->format == 'weeks') {
         $table->head  = array ($strweek, $strname);
         $table->align = array ('center', 'left');

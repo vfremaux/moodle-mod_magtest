@@ -1,5 +1,4 @@
-<?php  // $Id: listlib.php,v 1.3 2012-11-01 17:52:37 vf Exp $
-
+<?php
 /**
 * Project : Magazine test 
 *

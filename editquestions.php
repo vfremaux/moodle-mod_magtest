@@ -57,7 +57,6 @@
         if ($cmd == 'add') {
          
             $data = file_postupdate_standard_editor($data, 'questiontext', $questionoptions, $mod_context, 'mod_magtest', 'question', 0);
-	            
                                            
             $question = new stdClass();
             $question->questiontext = $data->questiontext; 
@@ -149,7 +148,7 @@
 	                }
                     $new_answer->id = $DB->insert_record('magtest_answer', $new_answer);
                     
-                    if (!$magtest->pluginchoice){
+                    if (!$magtest->pluginchoice) {
 	                    $data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'questionanswer', $new_answer->id); 
 	                    $new_answer->answertext = $data->{'questionanswer'.$catid};
 	                    $new_answer->answertextformat = FORMAT_HTML;

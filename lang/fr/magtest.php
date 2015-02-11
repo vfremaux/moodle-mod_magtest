@@ -31,6 +31,8 @@ $string['choosecategoryforanswer'] = 'Choisissez une catégorie pour cette quest
 $string['closed'] = 'Ce test est fermé. Vous ne pouvez plus y participer.';
 $string['closedtestadvice'] = 'Ce test est fermé. Il n\'est pas possible de le rejouer';
 $string['commands'] = 'Commandes';
+$string['configshowmymoodle'] = 'Montrer les tests magazine sur les pages personnalisées';
+$string['configshowmymoodledesc'] = 'Si cette option est activée, alors les tests magazine à faire ne seront pas visible dans les pages personnalisées';
 $string['confirmdeletemessage'] = 'En supprimant cette question, vous supprimez également les réponses associées et tous les choix des utilisateurs déjà effectués pour cette question. Voulez-vous continuer ?';
 $string['delcategory'] = 'Supprimer cette catégorie';
 $string['delquestion'] = 'Supprimer cette question';
@@ -131,43 +133,46 @@ sur plusieurs évaluateurs à la fois. A la fin du test, l'utilisateur est rang�
 dominant. L'enseignant peut constituer des groupes de cours à partir de ces résultats. 
 ";
 
-$string['pagesize_help'] = '## Test type "Magazine"
-
+$string['pagesize_help'] = '
 ### Taille des pages de test
 
-Ce paramètre permet de régler le nombre de questions que vous voulez afficher sur chaque page du test. Si vous le réglez sur 1, le teste affichera chaque question sur une nouvelle page.';
-$string['weighted_help'] = '## Test type "Magazine"
+Ce paramètre permet de régler le nombre de questions que vous voulez afficher sur chaque page du test. Si vous le réglez sur 1, le teste affichera chaque question sur une nouvelle page.
+';
 
+$string['weighted_help'] = '
 ### Mode pondéré
 
 Si vous activez le mode pondéré, chaque réponse peut apporter un nombre non égal de points `la note de sa catégorie associée.
 
 Ceci permet de créer des tests qui permettent de faire varier l\'influence de certaines questions dans le "placement" des participants dans le score final.
 
-En mode pondéré, la pondération par défaut est de 1, ce qui revient `ne pas utiliser de pondération';
+En mode pondéré, la pondération par défaut est de 1, ce qui revient à ne pas utiliser de pondération';
 
 $string['magtest_help'] = '
-Le module "Test de magazine" propose un test qui se base sur un ensemble de cat覯ries de r误nses, comme les tests de psychologie qu l\'on trouve dans les magazines. Le test permet d\'賡blir les cat覯ries de classement du r貵ltat, et propose de d襩nir un jeu de questions �oser aux participants. A chaque question doit correspondre un certain nombre de propositions (une par cat覯rie) permettant au participant de faire son choix. 
+Le module "Test de magazine" propose un test qui se base sur un ensemble de catégories de réponses, comme les tests de psychologie qu l\'on trouve dans les magazines. Le test permet d\'établir les catégories de classement du résultat, et propose de définir un jeu de questions �oser aux participants. A chaque question doit correspondre un certain nombre de propositions (une par catégorie) permettant au participant de faire son choix. 
 
-Lorsque le participant fait le test, il devra choisir pour chaque question la r误nse appropri裬 ce qui rapportera un certain nombre de points �a cat覯rie correspondante.
+Lorsque le participant fait le test, il devra choisir pour chaque question la réponse appropriée ce qui rapportera un certain nombre de points à la catégorie correspondante.
 
-A la fin du test, la cat覯rie gagnante est celle qui a collect矬e meilleur score. Une conclusion est alors montr裠aux utilisateurs, laquelle souligne la conclusion "gagnante", suivie 赥ntuellement par une conslusion plus g诩rale.
+A la fin du test, la catégorie gagnante est celle qui a collecté de meilleur score. Une conclusion est alors montrée aux utilisateurs, laquelle souligne la conclusion "gagnante", suivie éventuellement par une conclusion plus générale.
 
-Les groupes de participants issus du test et class豠par cat覯rie gagnante peuvent 鳲e convertis en groupes Moodle du cours courant. Ce module peut donc servir comme "discriminateur �rit籥" pour former des groupes par l\'action des participants eux-m鬥s.';
-$string['usemakegroups_help'] = '## Test type "Magazine"
+Les groupes de participants issus du test et classés par catégorie gagnante peuvent être convertis en groupes Moodle du cours courant. Ce module peut donc servir comme "discriminateur à critère" pour former des groupes par l\'action des participants eux-mêmes.
+';
 
+$string['usemakegroups_help'] = '
 ### Génération de groupes Moodle
 
 Le module "Test de magazine" permet de segmenter les participants en plusieurs groupes par leur simple participation au test et la catégorie de proposition qu\'ils vont choisir par leur réponses.
 
 Le module permet d\'activer la fonction de génération de groupes qui définit des groupes Moodle de cours `partir de ces résultats.
 
-Le test peut ne pas être complet et les groupes seront générés avec les réponses disponibles. Par contre, il n\'est pas possible de générer les groupes s\'il existe déj`des groupes définis dans le cours. Vous devrez donc détruire les groupes après une première tentative si vous désirez `nouveau générer les groupes `partir de nouveaux résultats.';
-$string['allowreplay_help'] = '## Test type "Magazine"
+Le test peut ne pas être complet et les groupes seront générés avec les réponses disponibles. Par contre, il n\'est pas possible de générer les groupes s\'il existe déj`des groupes définis dans le cours. Vous devrez donc détruire les groupes après une première tentative si vous désirez `nouveau générer les groupes `partir de nouveaux résultats.
+';
 
+$string['allowreplay_help'] = '
 ### Autoriser plusieurs tentatives
 
-Ce paramètre permet de commuter la possibilité de rejouer le test au niveau de l\'instance. Les utilisateurs doivent en plus disposer de la capacité "Rejouer le test" dans leur profil pour pouvoir exécuter le test `nouveau.';
+Ce paramètre permet de commuter la possibilité de rejouer le test au niveau de l\'instance. Les utilisateurs doivent en plus disposer de la capacité "Rejouer le test" dans leur profil pour pouvoir exécuter le test `nouveau.
+';
 
 $string['you_have_to_create_categories'] = 'Vous devez créer au moins une catégorie de réponses avant de pouvoir créer une question.';
 $string['question_text'] = 'Texte de la question';

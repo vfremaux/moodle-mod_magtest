@@ -21,7 +21,7 @@ if (!defined('MOODLE_INTERNAL')) {
 
 /******************************************* save answers ***********************/
 if ($action == 'save'){
-	if ($magtest->singlechoice){
+	if ($magtest->singlechoice) {
 		// on single choice, just record selected questions without answers
 		$qids = required_param_array('qids', PARAM_INT);
 		$qidslist = implode("','", $qids);
@@ -29,11 +29,11 @@ if ($action == 'save'){
 		$DB->delete_records_select('magtest_useranswer', $select, array($magtest->id));
 				
 		$inputs = optional_param_array('answers', array(), PARAM_INT);
-		foreach($qids as $qid){
+		foreach ($qids as $qid) {
             $useranswer = new StdClass();
             $useranswer->magtestid = $magtest->id;
             $useranswer->userid = $USER->id;
-            if (in_array($qid, $inputs)){
+            if (in_array($qid, $inputs)) {
 	            $useranswer->answerid = 1;
 	        } else {
 	            $useranswer->answerid = 0;
@@ -44,7 +44,7 @@ if ($action == 'save'){
 		}
 	} else {
 	    $inputkeys = preg_grep("/^answer/", array_keys($_POST));
-	    foreach($inputkeys as $akey){
+	    foreach ($inputkeys as $akey) {
 	        if (preg_match("/^answer(\\d+)/", $akey, $matches)){
 	            $questionid = $matches[1];
 	            $useranswer = new StdClass();
@@ -53,7 +53,7 @@ if ($action == 'save'){
 	            $useranswer->answerid = required_param($akey, PARAM_INT);
 	            $useranswer->questionid = $questionid;
 	            $useranswer->timeanswered = time();
-	            if ($old = $DB->get_record('magtest_useranswer', array('userid' => $USER->id, 'magtestid' => $magtest->id, 'questionid' => $questionid))){
+	            if ($old = $DB->get_record('magtest_useranswer', array('userid' => $USER->id, 'magtestid' => $magtest->id, 'questionid' => $questionid))) {
 	                $useranswer->id = $old->id;
 	                $DB->update_record('magtest_useranswer', $useranswer);
 	            } else {
@@ -64,8 +64,8 @@ if ($action == 'save'){
 	}
 }
 /******************************************* reset ***********************/
-if ($action == 'reset'){
-    if ($magtest->allowreplay and has_capability('mod/magtest:multipleattempts', $context)){ // protect again here
+if ($action == 'reset') {
+    if ($magtest->allowreplay and has_capability('mod/magtest:multipleattempts', $context)) { // protect again here
         $DB->delete_records('magtest_useranswer', array('magtestid' => $magtest->id, 'userid' => $USER->id));
     }
 }

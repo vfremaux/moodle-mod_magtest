@@ -136,7 +136,7 @@ function magtest_get_useranswers($magtestid, $forusers = null) {
 * get the next unanswered page of questions for a given user
 *
 */
-function magtest_get_next_questionset(&$magtest, $currentpage){
+function magtest_get_next_questionset(&$magtest, $currentpage) {
     global $CFG, $USER, $DB;
     
     // if all questions have answers, test is finished (no next page)
@@ -233,11 +233,11 @@ function magtest_compile_results(&$magtest, &$users, &$categories, &$max_cat){
     $questions = magtest_get_questions($magtest->id);
     $count_cat = array();    
 
-    foreach($usersanswers as $useranswer) {
-    	if ($magtest->singlechoice){
+    foreach ($usersanswers as $useranswer) {
+    	if ($magtest->singlechoice) {
     		$question = $questions[$useranswer->questionid];
-    		foreach($question->answers as $answer){
-    			if ($useranswer->answerid == 1){
+    		foreach($question->answers as $answer) {
+    			if ($useranswer->answerid == 1) {
 			        $cat = $categories[$answer->categoryid];
 	            	$count_cat[$useranswer->userid][$cat->id] = 0 + @$count_cat[$useranswer->userid][$cat->id] + $answer->weight ;
 	            }

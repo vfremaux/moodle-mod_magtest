@@ -38,7 +38,8 @@ class backup_magtest_activity_structure_step extends backup_activity_structure_s
 
         // Define each element separated
         $magtest = new backup_nested_element('magtest', array('id'), array(
-			'name', 'intro', 'introformat', 'starttime', 'starttimeenable', 'endtime', 'endtimeenable', 'timecreated', 'result', 'weighted', 'usemakegroups', 'pagesize', 'allowreplay'));
+			'name', 'intro', 'introformat', 'starttime', 'starttimeenable', 'endtime', 'endtimeenable',
+            'timecreated', 'result', 'weighted', 'usemakegroups', 'pagesize', 'allowreplay'));
 
         $answers = new backup_nested_element('answers');
 
