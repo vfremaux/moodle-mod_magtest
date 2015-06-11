@@ -1,29 +1,43 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-include_once $CFG->libdir.'/formslib.php';
-include_once $CFG->dirroot.'/mod/magtest/locallib.php';
+require_once($CFG->libdir.'/formslib.php');
+require_once($CFG->dirroot.'/mod/magtest/locallib.php');
 
 /**
-* Form to add or update categories
-*
-*/
+ * Form to add or update categories
+ *
+ */
 
 class Category_Form extends moodleform {
 
-    var $cmd;
-    var $magtest;
-    var $howmany;
-    
+    protected $cmd;
+    protected $magtest;
+    protected $howmany;
+
     function __construct(&$magtest, $cmd, $howmany, $action) {
         $this->cmd = $cmd;
         $this->magtest = $magtest;
         $this->howmany = $howmany;
         parent::__construct($action);
     }
-    
+
     function definition() {
         global $CFG,$catid,$DB,$id;
-        
+
         $mform = $this->_form;
 
         $mform->addElement('header', 'header0', get_string($this->cmd.'categories', 'magtest'));
@@ -38,14 +52,16 @@ class Category_Form extends moodleform {
         $mform->addElement('hidden', 'what');
         $mform->setDefault('what', 'do'.$this->cmd);
         $mform->setType('what', PARAM_TEXT);
-        
+
+        $mod_context = context_module::instance($id);
+        $fileoptions = array('maxfiles' => EDITOR_UNLIMITED_FILES, 'noclean' => true, 'context' =>  $mod_context);
+
         if ($this->cmd == 'add') {
             $mform->addElement('hidden', 'cmd', 'add');
             $mform->setType('cmd', PARAM_TEXT);
 
             $categories = magtest_get_categories($this->magtest->id);
             $categoryids = array_keys($categories);
-
             for ($i = 0 ; $i < $this->howmany ; $i++) {
                 $num = $i+1;
 
@@ -58,14 +74,10 @@ class Category_Form extends moodleform {
 
                 $mform->addElement('selectgroups','catsymbol_'.$num, get_string('symbol','mod_magtest'),$symboloptions);
 
-                $mod_context = context_module::instance($id); 
-                $catdesc_editor = $mform->addElement('editor', 'catdescription_'.$num, get_string('description'),null,array('maxfiles' => EDITOR_UNLIMITED_FILES,
-                            'noclean' => true, 'context' =>  $mod_context));
+                $catdesc_editor = $mform->addElement('editor', 'catdescription_'.$num, get_string('description'), null, $fileoptions);
+                $catresult_editor  = $mform->addElement('editor', 'catresult_'.$num, get_string('categoryresult', 'magtest'), null, $fileoptions);
 
-                $catresult_editor  = $mform->addElement('editor', 'catresult_'.$num, get_string('categoryresult', 'magtest'),null,array('maxfiles' => EDITOR_UNLIMITED_FILES,
-                            'noclean' => true, 'context' =>  $mod_context));
-
-                if ($this->magtest->usemakegroups){
+                if ($this->magtest->usemakegroups) {
                     $mform->addElement('text', 'outputgroupname_'.$num, get_string('outputgroupname', 'magtest'), '', array('size' => '128', 'maxlength' => '255'));
                     $mform->setType('outputgroupname_'.$num, PARAM_CLEANHTML);
                     $mform->addElement('text', 'outputgroupdesc_'.$num, get_string('outputgroupdesc', 'magtest'), '', array('size' => '255', 'maxlength' => '255'));
@@ -97,14 +109,10 @@ class Category_Form extends moodleform {
             $selectgroup = $mform->addElement('selectgroups', 'symbol', get_string('symbol', 'mod_magtest'), $symboloptions);
             $selectgroup->setValue($category->symbol);
 
-            $mod_context = context_module::instance($id); 
-
-            $catdesc_editor = $mform->addElement('editor', 'catdescription', get_string('description'), null, array('maxfiles' => EDITOR_UNLIMITED_FILES,
-                        'noclean' => true, 'context' =>  $mod_context));
+            $catdesc_editor = $mform->addElement('editor', 'catdescription', get_string('description'), null, $fileoptions);
             $catdesc_editor->setValue(array('text' => $category->description));
 
-            $catresult_editor  = $mform->addElement('editor', 'catresult', get_string('categoryresult', 'magtest'), null, array('maxfiles' => EDITOR_UNLIMITED_FILES,
-                        'noclean' => true, 'context' =>  $mod_context));
+            $catresult_editor  = $mform->addElement('editor', 'catresult', get_string('categoryresult', 'magtest'), null, $fileoptions);
             $catresult_editor->setValue(array('text' => $category->result));
 
             if ($this->magtest->usemakegroups) {
@@ -114,6 +122,7 @@ class Category_Form extends moodleform {
                 $mform->setType('outputgroupdesc', PARAM_CLEANHTML);
             }
         }
+
         $this->add_action_buttons();
     }
 }

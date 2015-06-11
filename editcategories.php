@@ -1,4 +1,18 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 require('../../config.php');
 require_once($CFG->dirroot.'/mod/magtest/forms/addcategories_form.php');
@@ -23,19 +37,21 @@ if ($id) {
     }
 }
 
+// Security.
+
 require_course_login($course->id, true, $cm);
 
-$url = $CFG->wwwroot.'/mod/magtest/editcategories.php?id='.$id;
-$editurl = $CFG->wwwroot.'/mod/magtest/view.php?id='.$id.'&amp;view=categories';
+$url = new moodle_url('/mod/magtest/editcategories.php', array('id' => $id));
+$editurl = new moodle_url('/mod/magtest/view.php', array('id' => $id, 'view' => 'categories'));
 
-if($catid <= 0) { 
-	$form = new Category_Form($magtest, 'add', $howmany, $url);
+if ($catid <= 0) {
+    $form = new Category_Form($magtest, 'add', $howmany, $url);
 } else {
-	$form = new Category_Form($magtest, 'update', $howmany, $url);       
+    $form = new Category_Form($magtest, 'update', $howmany, $url);
 }
 
-if ($form->is_cancelled()){
-	redirect($CFG->wwwroot.'/mod/magtest/view.php?id='.$id);
+if ($form->is_cancelled()) {
+    redirect(moodle_url('/mod/magtest/view.php', array('id' => $id)));
 }
 
 $PAGE->set_title("$course->shortname: $magtest->name");
@@ -46,9 +62,8 @@ $PAGE->set_focuscontrol('');
 $PAGE->set_cacheable(true);
 $PAGE->set_url($url);
 $PAGE->set_button($OUTPUT->update_module_button($cm->id, 'magtest'));
-$PAGE->set_headingmenu(navmenu($course, $cm));
 
-if ($form->is_cancelled()){
+if ($form->is_cancelled()) {
     redirect($editurl);
 }
 
@@ -59,7 +74,7 @@ if ($data = $form->get_data()) {
 
         $count = $data->howmany;
 
-        for ($i = 1; $i <= $count ;$i++) {
+        for ($i = 1 ; $i <= $count ; $i++) {
 
             $cat = new StdClass();
 
@@ -67,18 +82,18 @@ if ($data = $form->get_data()) {
             $cat->name = $data->{$var};
 
             if ($cat->name == '' || empty($cat->name)) {
-                //unfilled category, ignore it .
+                // Unfilled category, ignore it.
                 continue;
             }
 
             $var = 'catsymbol_'.$i;
-            $cat->symbol = $data->{$var};//$data->catsymbol[$var];
+            $cat->symbol = $data->{$var};
 
             $var = 'catdescription_'.$i;
-            $cat->description = $data->{$var}['text'];   
+            $cat->description = $data->{$var}['text'];
 
             $var = 'catdescriptionformat_'.$i;
-            $cat->descriptionformat = 1; //$data->{$var}['format'];   
+            $cat->descriptionformat = 1;
 
             $var = 'catresult_'.$i;
             $cat->result = $data->{$var}['text'];
@@ -89,25 +104,26 @@ if ($data = $form->get_data()) {
             $var = 'outputgroupdesc_'.$i;
             $cat->outputgroupdesc = @$data->{$var};
 
-            $catid = magtest::addCategory($magtest->id, $cat) ;
+            $catid = magtest::addCategory($magtest->id, $cat);
 
             if (!$catid) {
                  print_error('erroraddcategory', 'magtest', $editurl);
             }
         }
     } else {
-       //update category 
-       $category = $DB->get_record('magtest_category', array('id' => $catid));
-       $category->name = $data->catname ; 
-       $category->symbol = $data->symbol ; 
-       $category->description = $data->catdescription['text'] ; 
-       $category->result = $data->catresult['text'] ; 
-       if ($magtest->usemakegroups){
-           $category->outputgroupname = $data->outputgroupname ; 
-           $category->outputgroupdesc = $data->outputgroupdesc ; 
-       }
+        // Update category.
+        $category = $DB->get_record('magtest_category', array('id' => $catid));
+        $category->name = $data->catname;
+        $category->symbol = $data->symbol;
+        $category->description = $data->catdescription['text'];
+        $category->result = $data->catresult['text'];
 
-       $DB->update_record('magtest_category', $category);
+        if ($magtest->usemakegroups) {
+            $category->outputgroupname = $data->outputgroupname;
+            $category->outputgroupdesc = $data->outputgroupdesc;
+        }
+
+        $DB->update_record('magtest_category', $category);
     }
 
     redirect($editurl);

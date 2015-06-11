@@ -1,11 +1,25 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Prints results of the test for the user
- * 
+ *
  * @package    mod-magtest
  * @category   mod
- * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
+ * @author     Valery Fremaux <valery.fremaux@gmail.com>
  * @contributors   Etienne Roze
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
  * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
@@ -20,9 +34,9 @@ $useranswers = magtest_get_useranswers($magtest->id, $USER->id);
 if (!$useranswers) {
     echo '<center>';
     echo $OUTPUT->notification(get_string('nouseranswer','magtest'));
-    echo '<br/>';    
-    if (!$magtest->endtimeenable || time() < $magtest->endtime){
-        if ($magtest->allowreplay && has_capability('mod/magtest:multipleattempts', $context)){
+    echo '<br/>';
+    if (!$magtest->endtimeenable || time() < $magtest->endtime) {
+        if ($magtest->allowreplay && has_capability('mod/magtest:multipleattempts', $context)) {
             $options['id'] = $cm->id;
             $options['view'] = 'doit';
             $options['what'] = 'reset';
@@ -43,21 +57,21 @@ $questions = magtest_get_questions($magtest->id);
 // Prepare information relative to the categories in the final table.
 
 foreach($categories as $cat) {
-  $tab[$cat->id] = 0; 
+    $tab[$cat->id] = 0;
 }
 
-// accumulation of the nb of answer in each category
+// Accumulation of the nb of answer in each category.
 
 foreach ($useranswers as $useranswer) {
 
-	if ($magtest->singlechoice){
+    if ($magtest->singlechoice) {
         $question = $questions[$useranswer->questionid];
-    	foreach ($question->answers as $answer) {
-    		if ($useranswer->answerid) {
-	        	$catid = $categories[$answer->categoryid]->id;
-	            $tab[$catid] = 0 + @$tab[$catid] + $answer->weight;
-	        }
-    	}
+        foreach ($question->answers as $answer) {
+            if ($useranswer->answerid) {
+                $catid = $categories[$answer->categoryid]->id;
+                $tab[$catid] = 0 + @$tab[$catid] + $answer->weight;
+            }
+        }
     } else {
         $question = $questions[$useranswer->questionid];
         $answer = $question->answers[$useranswer->answerid];

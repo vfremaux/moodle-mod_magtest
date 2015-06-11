@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+defined('MOODLE_INTERNAL') or die;
 
 /**
  * Library of functions and constants for module magtest
@@ -59,7 +60,7 @@ function magtest_add_instance($magtest) {
     global $DB;
 
     $magtest->timemodified = time();
-    
+
     if (!empty($magtest->singlechoice)) {
         $magtest->weighted = 1;
     }
@@ -80,13 +81,13 @@ function pix_url() {
  *
  * @param object $instance An object from the form in mod.html
  * @return boolean Success/Fail
- **/
+ */
 function magtest_update_instance($magtest) {
     global $DB;
-    
+
     $oldmode = $DB->get_field('magtest', 'singlechoice', array('id' => $magtest->instance));
 
-    // If changing mode, we need delete all previous user dataas they are NOT relevant any more
+    // If changing mode, we need delete all previous user dataas they are NOT relevant any more.
     // @TODO : add notification in mod_form to alert users...
     if ($oldmode != $magtest->singlechoice) {
         $DB->delete_records('magtest_useranswer', array('magtestid' => $magtest->instance));
@@ -116,7 +117,7 @@ function magtest_update_instance($magtest) {
  *
  * @param int $id Id of the module instance
  * @return boolean Success/Failure
- **/
+ */
 function magtest_delete_instance($id) {
     global $DB;
 
@@ -132,14 +133,15 @@ function magtest_delete_instance($id) {
 
     $result = true;
 
-    # Delete any dependent records here #
+    // Delete any dependent records here.
 
+    $DB->delete_records('magtest', array('id' => "$magtest->id"));
+    $DB->delete_records('magtest_questions', array('magtestid' => "$magtest->id"));
+    $DB->delete_records('magtest_answer', array('magtestid' => "$magtest->id"));
+    $DB->delete_records('magtest_category', array('magtestid' => "$magtest->id"));
+    $DB->delete_records('magtest_useranswer', array('magtestid' => "$magtest->id"));
 
-    if (! $DB->delete_records('magtest', array('id' => "$magtest->id"))) {
-        $result = false;
-    }
-
-    // delete all files attached to this context
+    // Delete all files attached to this context.
     $fs = get_file_storage();
     $fs->delete_area_files($context->id);
 
@@ -155,11 +157,11 @@ function magtest_delete_instance($id) {
  *
  * @return null
  * @todo Finish documenting this function
- **/
+ */
 function magtest_user_outline($course, $user, $mod, $magtest) {
     global $DB;
 
-    if ($answers = $DB->get_records('magtest_useranswer', array('userid' => $user->id))){
+    if ($answers = $DB->get_records('magtest_useranswer', array('userid' => $user->id))) {
         $firstanswer = array_pop($answers);
         $result = new stdClass();
         $result->info = get_string('magtestattempted', 'magtest') . ': ' . userdate($firstanswer->timeanswered);
@@ -176,16 +178,16 @@ function magtest_user_outline($course, $user, $mod, $magtest) {
  *
  * @return boolean
  * @todo Finish documenting this function
- **/
+ */
 function magtest_user_complete($course, $user, $mod, $magtest) {
     global $DB;
 
-    if ($answers = $DB->get_records('magtest_useranswer', array('userid' => $user->id))){
+    if ($answers = $DB->get_records('magtest_useranswer', array('userid' => $user->id))) {
         $firstanswer = array_pop($answers);
         echo get_string('magtestattempted', 'magtest') . ': ' . userdate($firstanswer->timeanswered);
     }
 
-    if ($accesses = $DB->get_records_select('log', " userid = ? AND module = 'magtest' and action = 'view' ", array($user->id))){
+    if ($accesses = $DB->get_records_select('log', " userid = ? AND module = 'magtest' and action = 'view' ", array($user->id))) {
         echo '<br/>';
         echo get_string('magtestaccesses', 'magtest', count($accesses)) ;
     }
@@ -194,29 +196,29 @@ function magtest_user_complete($course, $user, $mod, $magtest) {
 }
 
 /**
- * Given a course and a time, this module should find recent activity 
- * that has occurred in magtest activities and print it out. 
- * Return true if there was output, or false is there was none. 
+ * Given a course and a time, this module should find recent activity
+ * that has occurred in magtest activities and print it out.
+ * Return true if there was output, or false is there was none.
  *
  * @uses $CFG
  * @return boolean
  * @todo Finish documenting this function
- **/
+ */
 function magtest_print_recent_activity($course, $isteacher, $timestart) {
     global $CFG;
 
-    return false;  //  True if anything was printed, otherwise false 
+    return false;  //  True if anything was printed, otherwise false.
 }
 
 /**
  * Function to be run periodically according to the moodle cron
- * This function searches for things that need to be done, such 
+ * This function searches for things that need to be done, such
  * as sending out mail, toggling flags etc ... 
  *
  * @uses $CFG
  * @return boolean
  * @todo Finish documenting this function
- **/
+ */
 function magtest_cron () {
     global $CFG;
 
@@ -224,7 +226,7 @@ function magtest_cron () {
 }
 
 /**
- * Must return an array of grades for a given instance of this module, 
+ * Must return an array of grades for a given instance of this module,
  * indexed by user.  It also returns a maximum allowed grade.
  * 
  * Example:
@@ -235,14 +237,14 @@ function magtest_cron () {
  *
  * @param int $magtestid ID of an instance of this module
  * @return mixed Null or object with an array of grades and with the maximum grade
- **/
+ */
 function magtest_grades($magtestid) {
    return NULL;
 }
 
 /**
  *
- **/
+ */
 function magtest_scale_used_anywhere($scaleid) {
     global $DB;
 
@@ -257,7 +259,7 @@ function magtest_scale_used_anywhere($scaleid) {
  *
  * @param int $magtestid ID of an instance of this module
  * @return mixed boolean/array of students
- **/
+ */
 function magtest_get_participants($magtestid) {
     global $CFG, $DB;
 
@@ -269,9 +271,9 @@ function magtest_get_participants($magtestid) {
             {magtest_useranswer} ua
         WHERE
             u.id = ua.userid AND
-            ua.magtestid = {$magtestid}
+            ua.magtestid = ?
     ";
-    if (!$records = $DB->get_records_sql($sql)){
+    if (!$records = $DB->get_records_sql($sql, array($magtestid))) {
         return false;
     }
     return $records;
@@ -348,7 +350,7 @@ function magtest_reset_course_form_definition(&$mform) {
 function magtest_print_overview($courses, &$htmlarray) {
     global $USER, $CFG, $DB;
 
-    $config = get_config('magtest');
+    $config = get_config('mod_magtest');
 
     if (empty($config->showmymoodle)) {
         return; // Disabled via global config.
@@ -453,8 +455,7 @@ function magtest_print_overview($courses, &$htmlarray) {
 /// starts with magtest_
 
 /**
- * tells a certificate module if the activity has been done or not
- *
+ * tells a magtest module if the activity has been done or not
  */
 function magtest_activity_completed(&$cm, $userid) {
     global $DB;
@@ -495,6 +496,6 @@ function magtest_pluginfile($course, $cm, $context, $filearea, $args, $forcedown
     }
 
     // Finally send the file.
-    send_stored_file($file, 0, 0, false); // download MUST be forced - security!
+    send_stored_file($file, 0, 0, false); // Download MUST be forced - security!
 }
 

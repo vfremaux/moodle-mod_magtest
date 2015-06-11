@@ -1,8 +1,22 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 class magtest_renderer extends core_renderer {
 
-    function __construct() {
+    public function __construct() {
         global $PAGE;
         parent::__construct($PAGE, null);
     }
@@ -34,11 +48,11 @@ class magtest_renderer extends core_renderer {
         
         $this->page->requires->js_init_call('M.util.help_icon.add', array(array('id' => $id, 'url' => $url->out(false))));
 
-        // and finally span
+        // And finally span.
         return html_writer::tag('span', $output, array('class' => 'helplink'));
     }
 
-    function print_magtest_quiz(&$questions, &$categories, $context, $return = true) {
+    public function print_magtest_quiz(&$questions, &$categories, $context, $return = true) {
 
         $str = '';
 
@@ -69,7 +83,7 @@ class magtest_renderer extends core_renderer {
                     $str .= $this->answer_help_icon($answer->id);
                 }
                 $str .= '<br/>';
-                $str . '</td>';
+                $str .= '</td>';
                 $str .= '<td class="magtest-answerline">';
                 $str .= '<input type="radio" name="answer'.$question->id.'" value="'.$answer->id.'" /><br/> ';
                 $str .= '</td>';
@@ -77,7 +91,9 @@ class magtest_renderer extends core_renderer {
             }
         }
 
-        if ($return) return $str;
+        if ($return) {
+            return $str;
+        }
         echo $str;
     }
 
@@ -87,7 +103,7 @@ class magtest_renderer extends core_renderer {
 
         foreach ($questions as $question) {
             $str .= '<tr align="top">';
-              $str .= '<td align="left">';
+            $str .= '<td align="left">';
             $str .= $question->questiontext = file_rewrite_pluginfile_urls($question->questiontext, 'pluginfile.php',$context->id, 'mod_magtest', 'question', 0);
             $question->questiontext = format_string($question->questiontext);    
             $str .= '</td>';
@@ -106,4 +122,3 @@ class magtest_renderer extends core_renderer {
         echo $str;
     }
 }
-

@@ -181,20 +181,20 @@ class moodle1_mod_magtest_handler extends moodle1_mod_handler {
         $this->close_xml_writer();
     }
 
-	/* ELEMENT and elementitem subs */
-	// need wait for all elements an elements item collected into memory structure as nesting change structure occurs
-    public function on_magtest_answers_start() {
+    /* ELEMENT and elementitem subs */
+    // need wait for all elements an elements item collected into memory structure as nesting change structure occurs
+    public function on_answers_start() {
         $this->xmlwriter->begin_tag('answers');
     }
 
-    public function on_magtest_answers_end() {
+    public function on_answers_end() {
         $this->xmlwriter->end_tag('answers');
     }
 
-	// process answer in one single write
-    public function process_magtest_answer($data) {
+    // process answer in one single write
+    public function process_answer($data) {
 
-		$instanceid = $data['id'];
+        $instanceid = $data['id'];
         $cminfo     = $this->get_cminfo($data['magtestid']);
         $moduleid   = $cminfo['id'];
         $contextid  = $this->converter->get_contextid(CONTEXT_MODULE, $moduleid);
@@ -208,33 +208,33 @@ class moodle1_mod_magtest_handler extends moodle1_mod_handler {
 
         $data['answertext'] = moodle1_converter::migrate_referenced_files($data['answertext'], $this->fileman);
 
-    	// process data
+        // process data
 
         $this->write_xml('answer', array('id' => $data['id'], 
-        								   'magtestid' => $data['magtestid'], 
-        								   'questionid' => $data['questionid'], 
-        								   'answertext' => $data['answertext'], 
-        								   'answertextformat' => $data['answertextformat'], 
-        								   'helper' => $data['helper'], 
-        								   'helperformat' => $data['helperformat'], 
-        								   'categoryid' => $data['categoryid'], 
-        								   'weight' => $data['weight']
-        								   ));
+                                           'magtestid' => $data['magtestid'], 
+                                           'questionid' => $data['questionid'], 
+                                           'answertext' => $data['answertext'], 
+                                           'answertextformat' => $data['answertextformat'], 
+                                           'helper' => $data['helper'], 
+                                           'helperformat' => $data['helperformat'], 
+                                           'categoryid' => $data['categoryid'], 
+                                           'weight' => $data['weight']
+                                           ));
     }
 
-	/* QUESTIONS */
-    public function on_magtest_questions_start() {
+    /* QUESTIONS */
+    public function on_questions_start() {
         $this->xmlwriter->begin_tag('questions');
     }
 
-    public function on_magtest_questions_end() {
+    public function on_questions_end() {
         $this->xmlwriter->end_tag('questions');
     }
 
-	// process magtest question in one single write
-    public function process_magtest_question($data) {
+    // process magtest question in one single write
+    public function process_question($data) {
 
-		$instanceid = $data['id'];
+        $instanceid = $data['id'];
         $cminfo     = $this->get_cminfo($data['magtestid']);
         $moduleid   = $cminfo['id'];
         $contextid  = $this->converter->get_contextid(CONTEXT_MODULE, $moduleid);
@@ -249,25 +249,25 @@ class moodle1_mod_magtest_handler extends moodle1_mod_handler {
         $data['questiontext'] = moodle1_converter::migrate_referenced_files($data['questiontext'], $this->fileman);
 
         $this->write_xml('question', array('id' => $data['id'], 
-        								   'magtestid' => $data['magtestid'], 
-        								   'questiontext' => $data['questiontext'], 
-        								   'questionextformat' => $data['questiontextformat'], 
-        								   'sortorder' => $data['sortorder']
-        								   ));
+                                           'magtestid' => $data['magtestid'], 
+                                           'questiontext' => $data['questiontext'], 
+                                           'questionextformat' => $data['questiontextformat'], 
+                                           'sortorder' => $data['sortorder']
+                                           ));
 
     }
 
-	/* USED ELEMENTS */
-    public function on_magtest_categories_start() {
+    /* USED ELEMENTS */
+    public function on_categories_start() {
         $this->xmlwriter->begin_tag('categories');
     }
 
-    public function on_magtest_categories_end() {
+    public function on_categories_end() {
         $this->xmlwriter->end_tag('categories');
     }
 
-	// process usedelement in one single write
-    public function process_magtest_category($data) {
+    // process usedelement in one single write
+    public function process_category($data) {
 
         $cminfo     = $this->get_cminfo($data['magtestid']);
         $moduleid   = $cminfo['id'];
@@ -283,16 +283,15 @@ class moodle1_mod_magtest_handler extends moodle1_mod_handler {
         $data['description'] = moodle1_converter::migrate_referenced_files($data['description'], $this->fileman);
 
         $this->write_xml('category', array('id' => $data['id'], 
-        								   'magtestid' => $data['magtestid'], 
-        								   'name' => $data['name'], 
-        								   'description' => $data['description'], 
-        								   'descriptionformat' => $data['descriptionformat'], 
-        								   'result' => $data['result'],
-        								   'outputgroupname' => $data['outputgroupname'],
-        								   'outputgroupdesc' => $data['outputgroupdesc'],
-        								   'sortorder' => $data['sortorder'],
-        								   'symbol' => $data['symbol']
-        								   ));
+                                           'magtestid' => $data['magtestid'], 
+                                           'name' => $data['name'], 
+                                           'description' => $data['description'], 
+                                           'descriptionformat' => $data['descriptionformat'], 
+                                           'result' => $data['result'],
+                                           'outputgroupname' => $data['outputgroupname'],
+                                           'outputgroupdesc' => $data['outputgroupdesc'],
+                                           'sortorder' => $data['sortorder'],
+                                           'symbol' => $data['symbol']
+                                           ));
     }
-
 }
