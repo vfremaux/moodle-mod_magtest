@@ -14,9 +14,19 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * @package    mod_magtest
+ * @category   mod
+ * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
+ * @contributors   Etienne Roze
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
+ * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
+ * @see        categories.controller.php for associated controller.
+ */
+
 require('../../config.php');
 require_once($CFG->dirroot.'/mod/magtest/forms/addquestions_form.php');
-require_once($CFG->dirroot.'/mod/magtest/class/magtest.class.php');
+require_once($CFG->dirroot.'/mod/magtest/classes/magtest.class.php');
 
 $id = required_param('id', PARAM_INT); // Course module id
 $qid = required_param('qid', PARAM_INT); // Question id.
@@ -38,8 +48,8 @@ require_course_login($course->id, true, $cm);
 
 $mod_context = context_module::instance($id);
 
-$url = $CFG->wwwroot.'/mod/magtest/editquestions.php?id='.$id;
-$editurl = $CFG->wwwroot.'/mod/magtest/view.php?id='.$id.'&amp;view=questions';
+$url = new moodle_url('/mod/magtest/editquestions.php', array('id' => $id));
+$editurl = new moodle_url('/mod/magtest/view.php', array('id' => $id, 'view' => 'questions'));
 
 $PAGE->set_title("$course->shortname: $magtest->name");
 $PAGE->set_heading("$course->fullname");

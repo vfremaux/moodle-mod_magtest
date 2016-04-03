@@ -14,10 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * Controller for "maketest"
  *
- * @package    mod-magtest
+ * @package    mod_magtest
  * @category   mod
  * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
  * @contributors   Etienne Roze
@@ -28,10 +30,6 @@
  * @usecase    save
  * @usecase    reset
  */
-
-if (!defined('MOODLE_INTERNAL')) {
-    die('You cannot access directly to this page');
-}
 
 /* ****************************************** save answers ********************** */
 

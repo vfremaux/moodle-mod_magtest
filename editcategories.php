@@ -14,9 +14,18 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * @package    mod_magtest
+ * @category   mod
+ * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
+ * @contributors   Etienne Roze
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
+ * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
+ * @see        categories.controller.php for associated controller.
+ */
 require('../../config.php');
 require_once($CFG->dirroot.'/mod/magtest/forms/addcategories_form.php');
-require_once($CFG->dirroot.'/mod/magtest/class/magtest.class.php');
+require_once($CFG->dirroot.'/mod/magtest/classes/magtest.class.php');
 
 $id = required_param('id', PARAM_INT);
 $catid = required_param('catid', PARAM_INT);
@@ -51,7 +60,7 @@ if ($catid <= 0) {
 }
 
 if ($form->is_cancelled()) {
-    redirect(moodle_url('/mod/magtest/view.php', array('id' => $id)));
+    redirect(new moodle_url('/mod/magtest/view.php', array('id' => $id)));
 }
 
 $PAGE->set_title("$course->shortname: $magtest->name");

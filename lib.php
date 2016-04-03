@@ -13,15 +13,20 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-defined('MOODLE_INTERNAL') or die;
+
+defined('MOODLE_INTERNAL') or die();
 
 /**
  * Library of functions and constants for module magtest
  *
- * @author Valery Fremaux (valery.fremaux@gmail.com)
- * @package mod-magtest
- * @category mod
- **/
+ * @package    mod_magtest
+ * @category   mod
+ * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
+ * @contributors   Etienne Roze
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
+ * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
+ * @see        categories.controller.php for associated controller.
+ */
 
 define('MAGTEST_RESETFORM_RESET', 'magtest_reset_data_');
 
@@ -89,7 +94,7 @@ function magtest_update_instance($magtest) {
 
     // If changing mode, we need delete all previous user dataas they are NOT relevant any more.
     // @TODO : add notification in mod_form to alert users...
-    if ($oldmode != $magtest->singlechoice) {
+    if ($oldmode != @$magtest->singlechoice) {
         $DB->delete_records('magtest_useranswer', array('magtestid' => $magtest->instance));
     }
     

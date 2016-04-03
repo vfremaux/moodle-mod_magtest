@@ -208,7 +208,7 @@ $PAGE->set_heading("$course->fullname");
 $PAGE->navbar->add(get_string($view, 'magtest'));
 $PAGE->set_focuscontrol('');
 $PAGE->set_cacheable(true);
-$PAGE->set_url($CFG->wwwroot . '/mod/magtest/view.php?id=' . $id);
+$PAGE->set_url(new moodle_url('/mod/magtest/view.php', array('id' => $id)));
 $PAGE->set_button($OUTPUT->update_module_button($cm->id, 'magtest'));
 
 echo $OUTPUT->header();

@@ -14,10 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * Allows answering to the test, question by question
  *
- * @package    mod-magtest
+ * @package    mod_magtest
  * @category   mod
  * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
  * @contributors   Etienne Roze
@@ -26,12 +28,7 @@
  * @see        preview.controller.php for associated controller.
  */
 
-if (!defined('MOODLE_INTERNAL')) {
-    die('You cannot access directly to this page');
-}
-
-include_once 'renderer.php';
-$MAGTESTOUTPUT = new magtest_renderer();
+$renderer = $PAGE->get_renderer('mod_magtest');
 
 if ($magtest->starttimeenable && time() <= $magtest->starttime) {
     echo '<center>';
@@ -95,67 +92,6 @@ if (!empty($magtest->description) && $currentpage == 1) {
     echo '<br/>';
     echo $OUTPUT->box(format_string($magtest->description));
 }
-?>
 
-<form name="maketest" method="post" action="view.php">
-<input type="hidden" name="id" value="<?php p($cm->id) ?>" />
-<input type="hidden" name="view" value="doit" />
-<input type="hidden" name="magtestid" value="<?php echo $magtest->id ?>" />
-<input type="hidden" name="what" value="" />
-<input type="hidden" name="qpage" value="<?php echo ($currentpage + 1) ?>" />
-<table width="100%" cellspacing="10" cellpadding="10">
-<?php
-if (empty($magtest->singlechoice)) {
-    echo $MAGTESTOUTPUT->print_magtest_quiz($nextset, $categories, $context);
-} else {
-    echo $MAGTESTOUTPUT->print_magtest_singlechoice($nextset, $context);
-}
-?>
-<tr align="top">
-    <td colspan="3" align="center">
-        <input type="button" name="go_btn" value="<?php print_string('save', 'magtest') ?>" onclick="if (checkanswers()){document.forms['maketest'].what.value = 'save'; document.forms['maketest'].submit();} return true;" />
-<?php
-if (!$magtest->endtimeenable || time() < $magtest->endtime) {
-    if ($magtest->allowreplay && has_capability('mod/magtest:multipleattempts', $context)) {
-?>
-        <input type="button" name="reset_btn" value="<?php print_string('reset', 'magtest') ?>" onclick="document.forms['maketest'].what.value = 'reset'; document.forms['maketest'].submit(); return true;" />
-<?php
-    }
-}
-?>
+echo $renderer->make_test($magtest, $cm, $context, $nextset, $categories);
 
-<input type="button" name="backtocourse_btn" value="<?php print_string('backtocourse', 'magtest') ?>" onclick="document.location.href = '<?php echo $CFG->wwwroot.'/course/view.php?id='.$course->id ?>'; return true;" />
-
-    </td>
-</tr>
-</table>
-</form>
-<?php if (!$magtest->singlechoice){ ?>
-<script type="text/javascript">
-function checkanswers() {
-    var checkids = [<?php echo implode(',', array_keys($nextset)) ?>];
-    for(i = 0 ; i < checkids.length ; i++) {
-        rad_val = '';
-        for (var j=0; j < document.forms['maketest'].elements['answer' + checkids[i]].length; j++){
-            if (document.forms['maketest'].elements['answer' + checkids[i]][j].checked){
-                rad_val = document.forms['maketest'].elements['answer' + checkids[i]].value;
-            }
-        }
-        if (rad_val == '') {
-            alert('<?php echo str_replace("'", "\\'", get_string('pagenotcomplete', 'magtest')) ?>');
-            return false; 
-        }
-    }
-    return true;
-}
-</script>
-<?php
-} else {
-?>
-<script type="text/javascript">
-function checkanswers(){
-    return true;
-}
-</script>
-<?php 
-}

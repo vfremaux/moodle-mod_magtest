@@ -17,15 +17,19 @@
 /**
  * This page lists all the instances of magtest in a particular course
  *
- * @author 
- * @package mod-magtest
- * @category mod
- **/
+ * @package    mod_magtest
+ * @category   mod
+ * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
+ * @contributors   Etienne Roze
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
+ * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
+ * @see        categories.controller.php for associated controller.
+ */
 
 // Replace magtest with the name of your module.
 
-require_once("../../config.php");
-require_once('lib.php');
+require('../../config.php');
+require_once($CFG->dirroot.'/mod/magtest/lib.php');
 
 $id = required_param('id', PARAM_INT);   // Course ID.
 
@@ -35,6 +39,8 @@ $PAGE->set_url($url);
 if (! $course = $DB->get_record('course', array('id' => $id))) {
     print_error('coursemisconf');
 }
+
+// Security.
 
 require_login($course->id);
 
@@ -47,7 +53,8 @@ $strmagtest  = get_string('modulename', 'magtest');
 
 // Print the header.
 if ($course->category) {
-    $navigation = "<a href=\"../../course/view.php?id=$course->id\">$course->shortname</a> ->";
+    $courseurl = new moodle_url('/course/view.php', array('id' => $course->id));
+    $navigation = '<a href="'.$courseurl.'">'.$course->shortname.'</a> ->';
 } else {
     $navigation = '';
 }

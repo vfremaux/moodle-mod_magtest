@@ -14,11 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * Controller for "categories" list
  * Keep category global use case and defer add and update to moodle form sidepath
  *
- * @package    mod-magtest
+ * @package    mod_magtest
  * @category   mod
  * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
  * @contributors   Etienne Roze
@@ -30,10 +32,6 @@
  * @usecase    lowercategory
  */
 require_once $CFG->dirroot.'/mod/magtest/listlib.php';
-
-if (!defined('MOODLE_INTERNAL')) {
-    die('You cannot access directly to this page');
-}
 
 /* ****************************************** delete a category ********************** */
 

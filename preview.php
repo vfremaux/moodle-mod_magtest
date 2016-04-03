@@ -14,10 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * Allows previewing the test before playing it
  *
- * @package    mod-magtest
+ * @package    mod_magtest
  * @category   mod
  * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
  * @contributors   Etienne Roze
@@ -25,16 +27,11 @@
  * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
  */
 
-if (!defined('MOODLE_INTERNAL')) {
-    die('You cannot access directly to this page');
-}
-
 if (!has_capability('mod/magtest:manage', $context)) {
     die('You cannot see this page with your role');
 }
 
-include_once($CFG->dirroot.'/mod/magtest/renderer.php');
-$MAGTESTOUTPUT = new magtest_renderer();
+$renderer = $PAGE->get_renderer('mod_magtest');
 
 echo $OUTPUT->heading(get_string('preview', 'magtest'));
 
@@ -86,7 +83,7 @@ if ($questions) {
                     echo ' ['.$answer->weight.'] ';
                 }
                 if (!empty($answer->helper)) {
-                    echo $MAGTESTOUTPUT->answer_help_icon($answer->id);
+                    echo $renderer->answer_help_icon($answer->id);
                 }
                 echo '<br/>';
             }

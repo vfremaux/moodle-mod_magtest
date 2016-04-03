@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * Controller for question management
  * @package mod-magtest
@@ -24,10 +26,6 @@
  * @usecase down
  * @usecase delete
  */
-
-if (!defined('MOODLE_INTERNAL')) {
-    die('You cannot access directly to this page');
-}
 
 require_once($CFG->dirroot.'/mod/magtest/listlib.php');
 
