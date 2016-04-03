@@ -85,7 +85,7 @@ foreach ($categories as $category) {
         $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
         $commands .= '&nbsp;<a href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/up').'"></a>';
     } else {
-        $commands.='&nbsp;<img src="' . $OUTPUT->pix_url('up_shadow', 'magtest') . '">';
+        $commands.='&nbsp;<img src="'.$OUTPUT->pix_url('up_shadow', 'magtest').'">';
     }
 
     if ($category->sortorder < count($categories)) {

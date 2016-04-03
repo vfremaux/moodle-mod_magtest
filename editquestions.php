@@ -38,8 +38,8 @@ require_course_login($course->id, true, $cm);
 
 $mod_context = context_module::instance($id);
 
-$url = $CFG->wwwroot.'/mod/magtest/editquestions.php?id='.$id;
-$editurl = $CFG->wwwroot.'/mod/magtest/view.php?id='.$id.'&amp;view=questions';
+$url = new moodle_url('/mod/magtest/editquestions.php', array('id' => $id));
+$editurl = new moodle_url('/mod/magtest/view.php', array('id' => $id, 'view' => 'questions'));
 
 $PAGE->set_title("$course->shortname: $magtest->name");
 $PAGE->set_heading("$course->fullname");

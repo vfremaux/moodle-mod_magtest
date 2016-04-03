@@ -83,7 +83,7 @@ $nb_total = 0;
 foreach ($usersanswers as $useranswer) {
     if ($magtest->singlechoice) {
         $question = $questions[$useranswer->questionid];
-        foreach($question->answers as $answer) {
+        foreach ($question->answers as $answer) {
             // Aggregate scores for each cat on each user.
             $cat = $categories[$answer->categoryid];
             $count_cat[$useranswer->userid][$cat->id] = 0 + @$count_cat[$useranswer->userid][$cat->id] + $answer->weight;
@@ -99,7 +99,7 @@ foreach ($usersanswers as $useranswer) {
 
 // Get max for each user.
 
-foreach($users as $user) {
+foreach ($users as $user) {
     if (array_key_exists($user->id, $missings)) {
         continue;
     }
@@ -158,11 +158,12 @@ if (!empty($missings)) {
     $table->align = array('left');
     $table->size = array('100%');
     $table->width = '80%';
-    foreach($missings as $userid => $user) {
-        $userlink = "<a href=\"{$CFG->wwwroot}/user/view.php?id={$userid}\">".fullname($user).'</a>';
+    foreach ($missings as $userid => $user) {
+        $userurl = new moodle_url('/user/view.php', array('id' => $userid));
+        $userlink = '<a href="'.$userurl.'">'.fullname($user).'</a>';
         $username = $OUTPUT->user_picture($user).' '.$userlink;
         $table->data[] = array($username);
     }
     echo html_writer::table($table);
 }
-echo '</center>';          
+echo '</center>';

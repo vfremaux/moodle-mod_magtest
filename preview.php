@@ -33,8 +33,7 @@ if (!has_capability('mod/magtest:manage', $context)) {
     die('You cannot see this page with your role');
 }
 
-include_once($CFG->dirroot.'/mod/magtest/renderer.php');
-$MAGTESTOUTPUT = new magtest_renderer();
+$renderer = get_renderer('mod_magtest');
 
 echo $OUTPUT->heading(get_string('preview', 'magtest'));
 
@@ -86,7 +85,7 @@ if ($questions) {
                     echo ' ['.$answer->weight.'] ';
                 }
                 if (!empty($answer->helper)) {
-                    echo $MAGTESTOUTPUT->answer_help_icon($answer->id);
+                    echo $renderer->answer_help_icon($answer->id);
                 }
                 echo '<br/>';
             }
