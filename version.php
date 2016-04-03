@@ -9,10 +9,10 @@
  **/
 
 $module->version  = 2015053000;  // The current module version (Date: YYYYMMDDXX)
-$module->requires = 2012120304;  // Requires this Moodle version
+$module->requires = 2014110400;  // Requires this Moodle version
 $module->cron     = 0;           // Period for cron to check this module (secs)
 $module->component = 'mod_magtest';   // Full name of the plugin (used for diagnostics)
 $module->maturity = MATURITY_RC;
-$module->release = '2.7.0 (Build 2014012802)';
+$module->release = '2.8.0 (Build 2014012802)';
 
 
