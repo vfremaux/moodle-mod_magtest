@@ -21,7 +21,8 @@
  * @author Valery Fremaux
  * @version $Id: version.php,v 1.2 2012-11-01 18:05:14 vf Exp $
  * @package mod_magtest
- **/
+ * @category mod
+ */
 
 defined('MOODLE_INTERNAL') || die();
 
