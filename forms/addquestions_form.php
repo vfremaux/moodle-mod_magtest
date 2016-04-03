@@ -14,6 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+defined('MOODLE_INTERNAL') || die();
+
+/**
+ * @package    mod_magtest
+ * @category   mod
+ * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
+ * @contributors   Etienne Roze
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
+ * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
+ */
+
 require_once($CFG->libdir.'/formslib.php');
 require_once($CFG->dirroot.'/mod/magtest/locallib.php');
 
@@ -82,15 +93,18 @@ class Question_Form extends moodleform {
             $i = 1;
             foreach ($cats as $cat) {
                 $mform->addElement('header', 'header'.$cat->id, get_string('answer', 'magtest', $i));
+                $mform->setExpanded('header'.$cat->id);
 
                 $mform->addElement('hidden', 'cats['. $cat->id.']', $cat->id);
                 $mform->setType('cats['. $cat->id.']', PARAM_INT);
 
+                $question_answer_text = get_string('category', 'mod_magtest')." '".$cat->name."' answer";
                 if (empty($this->magtest->singlechoice)) {
-                    $question_answer_text = get_string('category', 'mod_magtest')." '".$cat->name."' answer";
                     $question_editor = $mform->addElement('editor', 'questionanswer'.$cat->id.'_editor',$question_answer_text, null, $fileoptions);
                       $mform->addRule('questionanswer'.$cat->id.'_editor', null, 'required', null, 'client');
-                  }
+                } else {
+                    $mform->addElement('static', 'questionanswer'.$cat->id, $question_answer_text, get_string('singlechoicemode', 'magtest'));
+                }
 
                 if ($this->magtest->weighted) {
                     $weight = 1 ;

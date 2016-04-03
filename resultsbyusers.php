@@ -14,10 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * Prints results of the test for the user
  * 
- * @package    mod-magtest
+ * @package    mod_magtest
  * @category   mod
  * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
  * @contributors   Etienne Roze
@@ -29,10 +31,6 @@ require_once($CFG->libdir.'/tablelib.php');
 
 if ($action) {
     $controller = 'results.controller.php';
-}
-
-if (!defined('MOODLE_INTERNAL')) {
-    die('You cannot access directly to this page');
 }
 
 // Setup group state regarding the user.

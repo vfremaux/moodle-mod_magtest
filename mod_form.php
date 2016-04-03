@@ -14,10 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * This view allows checking deck states
  *
- * @package mod-magtest
+ * @package mod_magtest
  * @category mod
  * @author Valery Fremaux
  * @contributors Etienne Roze

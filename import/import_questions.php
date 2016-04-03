@@ -15,7 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package magtest
+ * @package mod_magtest
+ * @category mod
  * @author Valery Fremaux
  * @date 30/01/2014
  *
@@ -49,9 +50,7 @@ if (!$magtest = $DB->get_record('magtest', array('id' => $cm->instance))) {
 $magtest->cmid = $cm->id;
 
 // security.
-
 $context = context_module::instance($cm->id);
-
 require_course_login($course->id, false, $cm);
 require_capability('mod/magtest:manage', $context);
 

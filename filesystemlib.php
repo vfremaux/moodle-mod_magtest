@@ -9,7 +9,7 @@
  * @package extralibs
  * @category third-party libs
  * @date 2007/11/04
- *
+ * DEPRECTATED
  */
 
 //avoids reloading the lib when keeped in third party plugin

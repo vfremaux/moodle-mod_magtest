@@ -14,10 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * Allows managing categories
  *
- * @package    mod-magtest
+ * @package    mod_magtest
  * @category   mod
  * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
  * @contributors   Etienne Roze
@@ -26,12 +28,8 @@
  * @see        categories.controller.php for associated controller.
  */
 
-if (!defined('MOODLE_INTERNAL')) {
-    die('You cannot access directly to this page');
-}
-
 if ($action) {
-    require 'categories.controller.php';
+    require $CFG->dirroot.'/mod/magtest/categories.controller.php';
 }
 
 $categories = magtest_get_categories($magtest->id);

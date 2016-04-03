@@ -14,10 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * Allows answering to the test, question by question
  *
- * @package    mod-magtest
+ * @package    mod_magtest
  * @category   mod
  * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
  * @contributors   Etienne Roze
@@ -25,10 +27,6 @@
  * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
  * @see        preview.controller.php for associated controller.
  */
-
-if (!defined('MOODLE_INTERNAL')) {
-    die('You cannot access directly to this page');
-}
 
 $renderer = $PAGE->get_renderer('mod_magtest');
 

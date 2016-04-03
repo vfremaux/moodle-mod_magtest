@@ -14,6 +14,18 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+defined('MOODLE_INTERNAL') || die();
+
+/**
+ * @package    mod_magtest
+ * @category   mod
+ * @author     Valery Fremaux <valery.fremaux@gmail.com>
+ * @contributors   Etienne Roze
+ * @contributors   Wafa Adham for version 2
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
+ * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
+ */
+
 class mod_magtest_renderer extends plugin_renderer_base {
 
     public function __construct() {
@@ -39,7 +51,7 @@ class mod_magtest_renderer extends plugin_renderer_base {
         $output = html_writer::empty_tag('img', $attributes);
 
         // now create the link around it - we need https on loginhttps pages
-        $url = new moodle_url($CFG->httpswwwroot.'/mod/magtest/help.php', array('answerid' => $answerid));
+        $url = new moodle_url('/mod/magtest/help.php', array('answerid' => $answerid));
 
         $attributes = array('href' => $url, 'title' => $title);
         $id = html_writer::random_id('helpicon');
@@ -117,6 +129,10 @@ class mod_magtest_renderer extends plugin_renderer_base {
     }
 
     function make_test(&$magtest, &$cm, &$context, &$nextset, &$categories) {
+        global $COURSE;
+
+        $currentpage = optional_param('qpage', 0, PARAM_INT);
+
         $str = '';
         $str .= '<form name="maketest" method="post" action="view.php">';
         $str .= '<input type="hidden" name="id" value="'.$cm->id.'" />';
@@ -127,9 +143,9 @@ class mod_magtest_renderer extends plugin_renderer_base {
         $str .= '<table width="100%" cellspacing="10" cellpadding="10">';
 
         if (empty($magtest->singlechoice)) {
-            $str .= $renderer->print_magtest_quiz($nextset, $categories, $context);
+            $str .= $this->print_magtest_quiz($nextset, $categories, $context);
         } else {
-            $str .= $renderer->print_magtest_singlechoice($nextset, $context);
+            $str .= $this->print_magtest_singlechoice($nextset, $context);
         }
 
         $str .= '<tr align="top">';
@@ -140,7 +156,7 @@ class mod_magtest_renderer extends plugin_renderer_base {
                 echo '<input type="button" name="reset_btn" value="'.get_string('reset', 'magtest').'" onclick="document.forms[\'maketest\'].what.value = \'reset\'; document.forms[\'maketest\'].submit(); return true;" />';
             }
         }
-        $courseurl = new moodle_url('/course/view.php', array('id' => $course->id));
+        $courseurl = new moodle_url('/course/view.php', array('id' => $COURSE->id));
         $str .= '<input type="button" name="backtocourse_btn" value="'.get_string('backtocourse', 'magtest') .'" onclick="document.location.href = \''.$courseurl.'\'; return true;" />';
         $str .= '</td>';
         $str .= '</tr>';

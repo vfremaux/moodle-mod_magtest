@@ -14,10 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * Allows managing question set
  *
- * @package    mod-magtest
+ * @package    mod_magtest
  * @category   mod
  * @author     Valery Fremaux <valery.fremaux@gmail.com>
  * @contributors   Etienne Roze
@@ -26,12 +28,6 @@
  * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
  * @see        questions.controller.php for associated controller.
  */
-
-// Check preconditions.
-
-if (!defined('MOODLE_INTERNAL')) {
-    die('Internal call only');
-}
 
 // Invoke controller.
 if ($action) {
@@ -65,7 +61,7 @@ if (!empty($questions)) {
         }
         $order = $question->sortorder;
         $commands = '<div class="questioncommands">';
-        $cdmurl = new moodle_url('/mod/magtest/editquestions.php', array('id' => $cm->id, 'qid' => $question->id));
+        $cmdurl = new moodle_url('/mod/magtest/editquestions.php', array('id' => $cm->id, 'qid' => $question->id));
         $commands .= '<a href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/edit').'"></a>';
         $cmdurl = new moodle_url('/mod/magtest/view.php', array('id' => $cm->id, 'view' => 'questions', 'what' => 'delete', 'qid' => $question->id));
         $commands .= '&nbsp;<a id="delete" href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/delete').'"></a>';
