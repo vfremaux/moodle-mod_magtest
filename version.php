@@ -31,6 +31,6 @@ $plugin->requires = 2014110400;  // Requires this Moodle version
 $plugin->cron     = 0;           // Period for cron to check this module (secs)
 $plugin->component = 'mod_magtest';   // Full name of the plugin (used for diagnostics)
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = '2.8.0 (Build 2014012802)';
+$plugin->release = '2.9.0 (Build 2014012802)';
 
 
