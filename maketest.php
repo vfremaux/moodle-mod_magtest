@@ -54,6 +54,10 @@ if ($replay && $magtest->allowreplay) {
 
 // Run controller.
 
+if ($action) {
+    require($CFG->dirroot.'/mod/magtest/maketest.controller.php');
+}
+
 $nextset = magtest_get_next_questionset($magtest, $currentpage);
 
 if ($magtest->pagesize) {
@@ -67,12 +71,6 @@ if (!$nextset) {
     echo $OUTPUT->notification(get_string('testfinish','magtest'));
     include($CFG->dirroot.'/mod/magtest/testfinished.php');
     return;
-}
-
-// Run controller.
-
-if ($action) {
-    require($CFG->dirroot.'/mod/magtest/maketest.controller.php');
 }
 
 // Keep this after test finished test, to allow students that have 
