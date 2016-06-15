@@ -141,7 +141,7 @@ function magtest_delete_instance($id) {
     // Delete any dependent records here.
 
     $DB->delete_records('magtest', array('id' => "$magtest->id"));
-    $DB->delete_records('magtest_questions', array('magtestid' => "$magtest->id"));
+    $DB->delete_records('magtest_question', array('magtestid' => "$magtest->id"));
     $DB->delete_records('magtest_answer', array('magtestid' => "$magtest->id"));
     $DB->delete_records('magtest_category', array('magtestid' => "$magtest->id"));
     $DB->delete_records('magtest_useranswer', array('magtestid' => "$magtest->id"));
@@ -488,7 +488,7 @@ function magtest_pluginfile($course, $cm, $context, $filearea, $args, $forcedown
 
     $itemid = (int)array_shift($args);
 
-    if (!$magtest = $DB->get_record('magtest', array('id'=>$cm->instance))) {
+    if (!$magtest = $DB->get_record('magtest', array('id' => $cm->instance))) {
         return false;
     }
 
@@ -504,3 +504,25 @@ function magtest_pluginfile($course, $cm, $context, $filearea, $args, $forcedown
     send_stored_file($file, 0, 0, false); // Download MUST be forced - security!
 }
 
+/**
+ * This function allows the tool_dbcleaner to register integrity checks
+ */
+function magtest_dbcleaner_add_keys() {
+    global $DB;
+
+    $magtestmoduleid = $DB->get_field('modules', 'id', array('name' => 'magtest'));
+
+    $keys = array(
+        array('magtest', 'course', 'course', 'id', ''),
+        array('learningtimecheck', 'id', 'course_modules', 'instance', ' module = '.$magtestmoduleid.' '),
+        array('magtest_category', 'magtestid', 'magtest', 'id', ''),
+        array('magtest_answer', 'magtestid', 'magtest', 'id', ''),
+        array('magtest_answer', 'categoryid', 'magtest_category', 'id', ''),
+        array('magtest_question', 'magtestid', 'magtest', 'id', ''),
+        array('magtest_useranswer', 'magtestid', 'magtest', 'id', ''),
+        array('magtest_useranswer', 'answerid', 'magtest', 'id', ''),
+        array('magtest_useranswer', 'userid', 'user', 'id', ''),
+    );
+
+    return $keys;
+}
