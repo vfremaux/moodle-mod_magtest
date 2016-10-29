@@ -75,7 +75,7 @@ if (!empty($questions)) {
             $cmdurl = new moodle_url('/mod/magtest/view.php', array('id' => $cm->id, 'view' => 'questions', 'what' => 'down', 'qid' => $question->id));
             $commands .= '&nbsp;<a href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/down').'"></a>';
         } else {
-            $commands .= '&nbsp;<img src="'.pix_url('down_shadow', 'magtest').'">';
+            $commands .= '&nbsp;<img src="'.$OUTPUT->pix_url('down_shadow', 'magtest').'">';
         }
         $commands .='</div>';
         $validanswercount = 0;
