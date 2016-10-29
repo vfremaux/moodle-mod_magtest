@@ -15,21 +15,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Code fragment to define the version of magtest
- * This fragment is called by moodle_needs_upgrading() and /admin/index.php
+ * Version details
  *
- * @author Valery Fremaux
  * @package mod_magtest
  * @category mod
+ * @author      Valery Fremaux <valery.fremaux@gmail.com>
+ * @author      Etienne Roze
+ * @copyright   2007 onwards Valery Fremaux (http://www.mylearningfactory.com)
+ * @licence http://www.gnu.org/copyleft/gpl.html GNU Public Licence
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2016060100;  // The current module version (Date: YYYYMMDDXX)
-$plugin->requires = 2014110400;  // Requires this Moodle version
-$plugin->cron     = 0;           // Period for cron to check this module (secs)
-$plugin->component = 'mod_magtest';   // Full name of the plugin (used for diagnostics)
+$plugin->version  = 2016060100;  // The current module version (Date: YYYYMMDDXX).
+$plugin->requires = 2014110400;  // Requires this Moodle version.
+$plugin->component = 'mod_magtest';   // Full name of the plugin (used for diagnostics).
 $plugin->maturity = MATURITY_RC;
 $plugin->release = '2.8.0 (Build 2016060100)';
 
-
+// Non moodle attributes.
+$plugin->codeincrement = '2.8.0000';

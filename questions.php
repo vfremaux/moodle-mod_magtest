@@ -42,7 +42,7 @@ if ( $nb_cat < 2) {
 
 $categories = magtest_get_categories($magtest->id);
 $categorycount = count($categories);
-$questions = magtest_get_questions($magtest->id);    
+$questions = magtest_get_questions($magtest->id);
 $orderstr = get_string('sortorder', 'magtest');
 $questionstr = get_string('question', 'magtest');
 $answersstr = get_string('answerweights', 'magtest');
@@ -75,7 +75,7 @@ if (!empty($questions)) {
             $cmdurl = new moodle_url('/mod/magtest/view.php', array('id' => $cm->id, 'view' => 'questions', 'what' => 'down', 'qid' => $question->id));
             $commands .= '&nbsp;<a href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/down').'"></a>';
         } else {
-            $commands .= '&nbsp;<img src="'.pix_url('down_shadow', 'magtest').'">';
+            $commands .= '&nbsp;<img src="'.$OUTPUT->pix_url('down_shadow', 'magtest').'">';
         }
         $commands .='</div>';
         $validanswercount = 0;
