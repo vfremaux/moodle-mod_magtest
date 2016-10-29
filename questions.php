@@ -42,7 +42,7 @@ if ( $nb_cat < 2) {
 
 $categories = magtest_get_categories($magtest->id);
 $categorycount = count($categories);
-$questions = magtest_get_questions($magtest->id);
+$questions = magtest_get_questions($magtest->id);    
 $orderstr = get_string('sortorder', 'magtest');
 $questionstr = get_string('question', 'magtest');
 $answersstr = get_string('answerweights', 'magtest');

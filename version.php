@@ -15,23 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details
+ * Version details.
  *
- * @package mod_magtest
- * @category mod
- * @author      Valery Fremaux <valery.fremaux@gmail.com>
- * @author      Etienne Roze
- * @copyright   2007 onwards Valery Fremaux (http://www.mylearningfactory.com)
- * @licence http://www.gnu.org/copyleft/gpl.html GNU Public Licence
+ * @package     mod_magtest
+ * @category    mod
+ * @author      Valery Fremaux (valery.fremaux@gmeil.com)
+ * @copyright   2011 onwards Valery Fremaux (valery.fremaux@gmeil.com)
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2016060100;  // The current module version (Date: YYYYMMDDXX).
-$plugin->requires = 2014110400;  // Requires this Moodle version.
-$plugin->component = 'mod_magtest';   // Full name of the plugin (used for diagnostics).
-$plugin->maturity = MATURITY_RC;
-$plugin->release = '2.8.0 (Build 2016060100)';
+$plugin->version  = 2016060100;  // The current module version (Date: YYYYMMDDXX)
+$plugin->requires = 2015050500;  // Requires this Moodle version
+$plugin->component = 'mod_magtest';   // Full name of the plugin (used for diagnostics)
+$plugin->maturity = MATURITY_STABLE;
+$plugin->release = '2.9.0 (Build 2016060100)';
 
 // Non moodle attributes.
-$plugin->codeincrement = '2.8.0000';
+$plugin->codeincrement = '2.9.0000';
