@@ -33,4 +33,5 @@ $plugin->component = 'mod_magtest';   // Full name of the plugin (used for diagn
 $plugin->maturity = MATURITY_STABLE;
 $plugin->release = '2.7.0 (Build 2016060100)';
 
-
+// non moodle attributes
+$plugin->codeincrement = '2.7.0000';
