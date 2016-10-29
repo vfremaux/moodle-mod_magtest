@@ -40,15 +40,10 @@ class mod_magtest_mod_form extends moodleform_mod {
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
         $mform->addElement('text', 'name', get_string('name'), array('size'=>'64'));
-        if (!empty($CFG->formatstringstriptags)) {
-            $mform->setType('name', PARAM_TEXT);
-        } else {
-            $mform->setType('name', PARAM_CLEANHTML);
-        }
+        $mform->setType('name', PARAM_CLEANHTML);
         $mform->addRule('name', null, 'required', null, 'client');
-        $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
 
-        $this->standard_intro_elements();
+        $this->add_intro_editor(true, get_string('intro', 'magtest'));
 
         $startdatearray[] = &$mform->createElement('date_time_selector', 'starttime', '');
         $startdatearray[] = &$mform->createElement('checkbox', 'starttimeenable', '');
