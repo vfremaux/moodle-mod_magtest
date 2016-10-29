@@ -17,20 +17,19 @@
 /**
  * Version details.
  *
- * @package     mod_magtest
- * @category    mod
- * @author      Valery Fremaux (valery.fremaux@gmeil.com)
- * @copyright   2011 onwards Valery Fremaux (valery.fremaux@gmeil.com)
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package mod_magtest
+ * @category mod
+ * @author Valery Fremaux
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->version  = 2016060100;  // The current module version (Date: YYYYMMDDXX)
-$plugin->requires = 2015050500;  // Requires this Moodle version
+$plugin->requires = 2015111100;  // Requires this Moodle version
 $plugin->component = 'mod_magtest';   // Full name of the plugin (used for diagnostics)
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = '2.9.0 (Build 2016060100)';
+$plugin->release = '3.0.0 (Build 2016060100)';
 
-// Non moodle attributes.
-$plugin->codeincrement = '2.9.0000';
+// Non Moodle attributes.
+$plugin->codeincrement = '3.0.0000';
+
