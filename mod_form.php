@@ -38,7 +38,6 @@ class mod_magtest_mod_form extends moodleform_mod {
         $mform =& $this->_form;
 
         $mform->addElement('header', 'general', get_string('general', 'form'));
-
         $mform->addElement('text', 'name', get_string('name'), array('size'=>'64'));
         $mform->setType('name', PARAM_CLEANHTML);
         $mform->addRule('name', null, 'required', null, 'client');
