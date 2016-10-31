@@ -14,16 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
- * @package    mod_magtest
- * @category   mod
- * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
- * @contributors   Etienne Roze
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
- * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
+ * @package     mod_magtest
+ * @category    mod
+ * @author      Valery Fremaux <valery.fremaux@club-internet.fr>
+ * @author      Etienne Roze
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL
+ * @copyright   (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
  */
+defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir.'/formslib.php');
 
@@ -43,7 +42,8 @@ class ImportQuestionsForm extends moodleform {
 
         $mform->addElement('filepicker', 'inputs', get_string('importfile', 'magtest'), $fileoptions);
 
-        $mform->addElement('checkbox', 'clearalldata', get_string('clearalldata', 'magtest'), get_string('clearalladvice', 'magtest'));
+        $label = get_string('clearalldata', 'magtest');
+        $mform->addElement('checkbox', 'clearalldata', $label, get_string('clearalladvice', 'magtest'));
 
         $this->add_action_buttons();
 

@@ -17,12 +17,13 @@
 /**
  * The mod_magtest entry created event.
  *
- * @package    mod_magtest
- * @copyright  2014 Marina Glancy
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     mod_magtest
+ * @category    mod
+ * @copyright   2014 Marina Glancy
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 namespace mod_magtest\event;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**

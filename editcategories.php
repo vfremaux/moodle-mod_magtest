@@ -77,7 +77,7 @@ if ($form->is_cancelled()) {
 }
 
 if ($data = $form->get_data()) {
-    $cmd = $data->cmd ; 
+    $cmd = $data->cmd;
 
     if ($cmd == 'add') {
 
@@ -136,7 +136,7 @@ if ($data = $form->get_data()) {
     }
 
     redirect($editurl);
-    exit;
+    die();
 }
  
 if ($catid >= 0) {

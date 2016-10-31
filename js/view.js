@@ -1,28 +1,27 @@
-$(document).ready(function(){
+/**
+ *
+ */
+// jshint unused:false, undef:false
 
-    //confirm delete action 
-    $('.questioncommands #delete').click(function(event){
-       
+$(document).ready(function() {
+
+    // Confirm delete action.
+    $('.questioncommands #delete').click(function(event) {
+
        event.preventDefault(); 
        var result = confirm("Are you sure you want to delete this question?"); 
-       if(result)
-       {
+       if (result) {
            window.location = $(this).attr('href');
        }
-        
     });
-    
-        //confirm delete action 
-    $('.categorycommands #delete').click(function(event){
-       
+
+    // Confirm delete action.
+    $('.categorycommands #delete').click(function(event) {
+
        event.preventDefault(); 
        var result = confirm("Are you sure you want to delete this category?"); 
-       if(result)
-       {
+       if (result) {
            window.location = $(this).attr('href');
        }
-        
     });
-    
-    
 });

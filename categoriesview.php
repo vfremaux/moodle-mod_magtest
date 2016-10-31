@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * @package    mod_magtest
  * @category   mod
@@ -25,6 +23,8 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
  * @see        categories.controller.php for associated controller.
  */
+defined('MOODLE_INTERNAL') || die();
+
 require_once($CFG->libdir.'/formslib.php');
 
 class magtest_categories_form extends moodleform {
@@ -34,13 +34,11 @@ class magtest_categories_form extends moodleform {
     }
 
     public function definition() {
-        global $CFG, $COURSE, $cm, $magtest;
-
-        $magtestid = $this->_customdata['id'];
+        return;
     }
 
     public function definition_after_data() {
-        global $CFG, $COURSE, $cm, $magtest;
+        global $cm, $magtest;
 
         $magtestid = $this->_customdata['id'];
         $mform = &$this->_form;
@@ -60,21 +58,20 @@ class magtest_categories_form extends moodleform {
                 $newcategory->categorytext = '';
                 $newcategory->magtestid = $magtest->id;
                 $DB->insert_record('magtest_category', $newcategory);
-            } elseif (!strcmp($mform->_submitValues['submitbutton'], get_string('delcategory', 'magtest'))) {
-                $max_cat = $DB->get_record_select('magtest_category',' categorytext = \'\' and categoryshortname = \'\' and magtestid = '. $magtestid, 'max(id) as m ');
+            } else if (!strcmp($mform->_submitValues['submitbutton'], get_string('delcategory', 'magtest'))) {
+                $select = ' categorytext = \'\' and categoryshortname = \'\' and magtestid = ';
+                $maxcat = $DB->get_record_select('magtest_category',$select. $magtestid, 'max(id) as m ');
 
-                if (isset($max_cat->m)) {
+                if (isset($maxcat->m)) {
                     // Does a question exist in this category ? If not we can delete it.
-                    if (!$DB->record_exists('magtest_question', array('categoryid' => $max_cat->m))) {
-                        $DB->delete_records_select('magtest_category', 'magtestid = ' . $magtestid . ' and id = ' . $max_cat->m);
+                    if (!$DB->record_exists('magtest_question', array('categoryid' => $maxcat->m))) {
+                        $DB->delete_records_select('magtest_category', 'magtestid = ' . $magtestid . ' and id = ' . $maxcat->m);
                     }
                 }
             }
         }
 
         $categories = get_magtest_categories($magtestid);
-
-        //-------------------------------------------------------------------------------
 
         $mform->addElement('header', 'general', get_string('categories', 'magtest'));
         $mform->addElement('hidden', 'id', $cm->id);
@@ -85,12 +82,17 @@ class magtest_categories_form extends moodleform {
             foreach ($categories as $category) {
                 $i++;
                 $mform->addElement('hidden', 'category['.$category->id.'][id]', $category->id);
-                $mform->addElement('text','category['.$category->id.'][categoryshortname]',get_string('categoryshortname', 'magtest') . " $i",array('size' => '10'));
-                $mform->setType('category['.$category->id.'][categoryshortname]', PARAM_CLEANHTML);
-                $mform->setDefault('category['.$category->id.'][categoryshortname]', $category->categoryshortname);
-                $mform->addElement('text','category['.$category->id.'][categorytext]',get_string('category', 'magtest') . " $i",array('size' => '64'));
-                $mform->setType('category['.$category->id.'][categorytext]', PARAM_CLEANHTML);
-                $mform->setDefault('category['.$category->id.'][categorytext]', $category->categorytext);
+                $key = 'category['.$category->id.'][categoryshortname]';
+                $label = get_string('categoryshortname', 'magtest') . " $i";
+                $mform->addElement('text', $key, $label, array('size' => '10'));
+                $mform->setType($key, PARAM_CLEANHTML);
+                $mform->setDefault($key, $category->categoryshortname);
+
+                $key = 'category['.$category->id.'][categorytext]';
+                $label = get_string('category', 'magtest') . " $i";
+                $mform->addElement('text', $key, $label, array('size' => '64'));
+                $mform->setType($key, PARAM_CLEANHTML);
+                $mform->setDefault($key, $category->categorytext);
             }
 
             $buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('save'));
