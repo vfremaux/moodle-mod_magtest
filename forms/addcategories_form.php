@@ -14,23 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * @package    mod_magtest
  * @category   mod
@@ -39,6 +22,7 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
  * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
  */
+defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir.'/formslib.php');
 require_once($CFG->dirroot.'/mod/magtest/locallib.php');
@@ -54,14 +38,14 @@ class Category_Form extends moodleform {
     protected $magtest;
     protected $howmany;
 
-    function __construct(&$magtest, $cmd, $howmany, $action) {
+    public function __construct(&$magtest, $cmd, $howmany, $action) {
         $this->cmd = $cmd;
         $this->magtest = $magtest;
         $this->howmany = $howmany;
         parent::__construct($action);
     }
 
-    function definition() {
+    public function definition() {
         global $CFG,$catid,$DB,$id;
 
         $mform = $this->_form;
@@ -88,17 +72,17 @@ class Category_Form extends moodleform {
 
             $categories = magtest_get_categories($this->magtest->id);
             $categoryids = array_keys($categories);
-            for ($i = 0 ; $i < $this->howmany ; $i++) {
-                $num = $i+1;
+            for ($i = 0; $i < $this->howmany; $i++) {
+                $num = $i + 1;
 
-                $mform->addElement('static', 'header_'.$num, '<h2>'.get_string('category', 'magtest')." ".$num.'</h2>');
+                $mform->addElement('static', 'header_'.$num, '<h2>'.get_string('category', 'magtest').' '.$num.'</h2>');
 
                 $mform->addElement('text', 'catname_'.$num, get_string('name'), '', array('size' => '120', 'maxlength' => '255'));
                 $mform->setType('catname_'.$num, PARAM_CLEANHTML);
 
                 $symboloptions = magtest_get_symbols($magtest, $renderingpathbase);
 
-                $mform->addElement('selectgroups','catsymbol_'.$num, get_string('symbol','mod_magtest'),$symboloptions);
+                $mform->addElement('selectgroups','catsymbol_'.$num, get_string('symbol','mod_magtest'), $symboloptions);
 
                 $catdesc_editor = $mform->addElement('editor', 'catdescription_'.$num, get_string('description'), null, $fileoptions);
                 $catresult_editor  = $mform->addElement('editor', 'catresult_'.$num, get_string('categoryresult', 'magtest'), null, $fileoptions);
@@ -142,9 +126,11 @@ class Category_Form extends moodleform {
             $catresult_editor->setValue(array('text' => $category->result));
 
             if ($this->magtest->usemakegroups) {
-                $mform->addElement('text', 'outputgroupname', get_string('outputgroupname', 'magtest'), '', array('size' => '128', 'maxlength' => '255'));
+                $label= get_string('outputgroupname', 'magtest');
+                $mform->addElement('text', 'outputgroupname', $label, '', array('size' => '128', 'maxlength' => '255'));
                 $mform->setType('outputgroupname', PARAM_CLEANHTML);
-                $mform->addElement('text', 'outputgroupdesc', get_string('outputgroupdesc', 'magtest'), '', array('size' => '255', 'maxlength' => '255'));
+                $label = get_string('outputgroupdesc', 'magtest');
+                $mform->addElement('text', 'outputgroupdesc', $label, '', array('size' => '255', 'maxlength' => '255'));
                 $mform->setType('outputgroupdesc', PARAM_CLEANHTML);
             }
         }

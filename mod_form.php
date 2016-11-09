@@ -14,26 +14,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * This view allows checking deck states
  *
- * @package mod_magtest
- * @category mod
- * @author Valery Fremaux
- * @contributors Etienne Roze
- * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
+ * @package     mod_magtest
+ * @category    mod
+ * @author      Valery Fremaux <valery.Fremaux@gmail.com>
+ * @author      Etienne Roze
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU Public License
  */
+defined('MOODLE_INTERNAL') || die();
+
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
 
 /**
-* overrides moodleform for test setup
-*/
+ * overrides moodleform for test setup
+ */
 class mod_magtest_mod_form extends moodleform_mod {
 
     public function definition() {
-        global $CFG, $COURSE;
 
         $mform =& $this->_form;
 

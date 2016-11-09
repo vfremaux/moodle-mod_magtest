@@ -17,13 +17,13 @@
 /**
  * This page lists all the instances of magtest in a particular course
  *
- * @package    mod_magtest
- * @category   mod
- * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
- * @contributors   Etienne Roze
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
- * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
- * @see        categories.controller.php for associated controller.
+ * @package     mod_magtest
+ * @category    mod
+ * @author      Valery Fremaux <valery.fremaux@club-internet.fr>
+ * @author      Etienne Roze
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL
+ * @copyright   (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
+ * @see         categories.controller.php for associated controller.
  */
 
 // Replace magtest with the name of your module.
@@ -31,7 +31,7 @@
 require('../../config.php');
 require_once($CFG->dirroot.'/mod/magtest/lib.php');
 
-$id = required_param('id', PARAM_INT);   // Course ID.
+$id = required_param('id', PARAM_INT); // Course ID.
 
 $url = new moodle_url('/mod/magtest/index.php', array('id' => $id));
 $PAGE->set_url($url);
@@ -61,16 +61,14 @@ if ($course->category) {
 
 $PAGE->set_title("$course->shortname: $strmagtests");
 $PAGE->set_heading("$course->fullname");
-$PAGE->set_focuscontrol("");
 $PAGE->set_cacheable(true);
-$PAGE->set_button("");
 
 echo $OUTPUT->header();
 
 // Get all the appropriate data.
 
-if (! $magtests = get_all_instances_in_course('magtest', $course)) {
-    notice("There are no magtests", "../../course/view.php?id=$course->id");
+if (!$magtests = get_all_instances_in_course('magtest', $course)) {
+    echo $OUTPUT->notification("There are no magtests", '', new moodle_url('course/view.php', array('id' => $course->id)));
     die;
 }
 
@@ -95,22 +93,23 @@ if ($course->format == 'weeks') {
 
 foreach ($magtests as $magtest) {
     $magtestname = format_string($magtest->name);
+    $cmurl = new moodle_url('/mod/magtest/view.php', array('id' => $magtest->coursemodule));
     if (!$magtest->visible) {
-        //Show dimmed if the mod is hidden
-        $link = "<a class=\"dimmed\" href=\"view.php?id=$magtest->coursemodule\">$magtestname</a>";
+        // Show dimmed if the mod is hidden.
+        $link = '<a class="dimmed" href="'.$cmurl.'">'.$magtestname.'</a>';
     } else {
-        //Show normal if the mod is visible
-        $link = "<a href=\"view.php?id=$magtest->coursemodule\">$magtest->name</a>";
+        // Show normal if the mod is visible.
+        $link = '<a href="'.$cmurl.'">'.$magtest->name.'</a>';
     }
 
-    if ($course->format == "weeks" or $course->format == "topics") {
+    if (($course->format == 'weeks') || ($course->format == 'topics')) {
         $table->data[] = array ($magtest->section, $link);
     } else {
         $table->data[] = array ($link);
     }
 }
 
-echo "<br />";
+echo '<br />';
 
 echo html_writer::table($table);
 

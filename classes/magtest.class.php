@@ -14,16 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
- * @package    mod_magtest
- * @category   mod
- * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
- * @contributors   Etienne Roze
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
- * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
+ * @package     mod_magtest
+ * @category    mod
+ * @author      Valery Fremaux <valery.fremaux@club-internet.fr>
+ * @author      Etienne Roze
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL
+ * @copyright   (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
  */
+defined('MOODLE_INTERNAL') || die();
 
 class MagTest {
 
@@ -38,14 +37,14 @@ class MagTest {
      * @param mixed $sortorder
      * @param mixed $symbol
      */
-    public static function addCategory($magtestid, $magtest_rec) {
+    public static function addCategory($magtestid, $magtestrec) {
         global $DB;
 
         $lastorder = $DB->get_field('magtest_category', 'MAX(sortorder)', array('magtestid' => $magtestid));
-        $magtest_rec->magtestid = $magtestid ;
+        $magtest_rec->magtestid = $magtestid;
         $magtest_rec->sortorder = ++$lastorder;
 
-        $newid = $DB->insert_record('magtest_category', $magtest_rec);
+        $newid = $DB->insert_record('magtest_category', $magtestrec);
         return $newid ;
     }
 
@@ -55,8 +54,9 @@ class MagTest {
     * @param mixed $catid
     */
    public static function deleteCategory($catid) {
-       global $DB;  
-       $DB->delete_records('magtest_category',array('id'=>$catid));
+       global $DB;
+
+       $DB->delete_records('magtest_category', array('id' => $catid));
    }
 
     /**
@@ -70,21 +70,20 @@ class MagTest {
      * @param mixed $sortorder
      * @param mixed $symbol
      */
-    public static function updateCategory($catid,$name,$descriptionformat,$description,$result,$sortorder,$symbol) {
+    public static function updateCategory($catid, $name, $descriptionformat, $description, $result, $sortorder, $symbol) {
         global $DB;
 
         $magtest_rec = new stdClass();
-        $magtest_rec->id =$catid ;
-        $magtest_rec->magtestid =$magtestid ;
+        $magtest_rec->id = $catid ;
+        $magtest_rec->magtestid = $magtestid ;
         $magtest_rec->name = $name ;
         $magtest_rec->description = $description;
         $magtest_rec->descriptionformat = $descriptionformat;
         $magtest_rec->result = $result;
         $magtest_rec->sortorder = $sortorder;
         $magtest_rec->symbol = $symbol;
-        
-        $newid = $DB->update_record('magtest_category',$magtest_rec);
+
+        $newid = $DB->update_record('magtest_category', $magtest_rec);
         return $newid ;
     }
-
 }

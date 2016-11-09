@@ -15,32 +15,31 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package mod_magtest
- * @category mod
- * @author Valery Fremaux
- * @date 30/01/2014
+ * @package     mod_magtest
+ * @category    mod
+ * @author      Valery Fremaux <valery.fremaux@gmail.com>
  *
- * This page shows view for importing questions. 
+ * This page shows view for importing questions.
  * Inputs can be imported uploading a text file with one question per line
  * empty lines are ignored, so are lines starting with !, / or #
  */
 
 require_once('../../../config.php');
 
-require_once $CFG->dirroot.'/mod/magtest/forms/import_questions_form.php';
+require_once($CFG->dirroot.'/mod/magtest/forms/import_questions_form.php');
 require_once($CFG->dirroot."/mod/magtest/lib.php");
 require_once($CFG->dirroot."/mod/magtest/locallib.php");
 
-$id = required_param('id', PARAM_INT); // Course Module ID
+$id = required_param('id', PARAM_INT); // Course Module ID.
 $action = optional_param('what', '', PARAM_TEXT);
 
-$url = new moodle_url($CFG->wwwroot.'/mod/magtest/import/import_questions.php', array('id' => $id));
+$url = new moodle_url('/mod/magtest/import/import_questions.php', array('id' => $id));
 $PAGE->set_url($url);
 
-if (! $cm = get_coursemodule_from_id('magtest', $id)) {
+if (!$cm = get_coursemodule_from_id('magtest', $id)) {
     print_error('invalidcoursemodule');
 }
-if (! $course = $DB->get_record('course', array('id' => $cm->course))) {
+if (!$course = $DB->get_record('course', array('id' => $cm->course))) {
     print_error('coursemisconf');
 }
 if (!$magtest = $DB->get_record('magtest', array('id' => $cm->instance))) {
@@ -50,6 +49,7 @@ if (!$magtest = $DB->get_record('magtest', array('id' => $cm->instance))) {
 $magtest->cmid = $cm->id;
 
 // security.
+
 $context = context_module::instance($cm->id);
 require_course_login($course->id, false, $cm);
 require_capability('mod/magtest:manage', $context);
@@ -63,20 +63,22 @@ $categories = magtest_get_categories($magtest->id);
 $out = '';
 
 if ($form->is_cancelled()) {
-    redirect($CFG->wwwroot.'/mod/magtest/view.php?id='.$id);
+    redirect(new moodle_url('/mod/magtest/view.php', array('id' => $id)));
 }
+
 if ($data = $form->get_data()) {
-    // TODO : process the file
+    // TODO : process the file.
     $fs = get_file_storage();
 
     $draftitemid = $data->inputs;
     $usercontext = context_user::instance($USER->id);
+
     if (!$fs->is_area_empty($usercontext->id, 'user', 'draft', $draftitemid)) {
         $submittedfiles = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid);
         $submittedfile = array_pop($submittedfiles);
         $content = $submittedfile->get_content();
         $lines = explode("\n", $content);
-        
+
         if (!empty($data->clearalldata)) {
             $DB->delete_records('magtest_question', array('magtestid' => $magtest->id));
             $DB->delete_records('magtest_useranswer', array('magtestid' => $magtest->id));
@@ -98,7 +100,7 @@ if ($data = $form->get_data()) {
             }
 
             $linedata = explode(';', $l);
-            
+
             if ($magtest->singlechoice) {
                 if (count($linedata) != count($categories) + 1) {
                     $out = "Bad line count... ignore line $i<br/>";
@@ -119,8 +121,8 @@ if ($data = $form->get_data()) {
             $question->id = $DB->insert_record('magtest_question', $question);
 
             if ($magtest->singlechoice) {
-                $j = 1; 
-                foreach($categories as $cat) {
+                $j = 1;
+                foreach ($categories as $cat) {
                     $answer = new StdClass();
                     $answer->magtestid = $magtest->id;
                     $answer->categoryid = $cat->id;
@@ -152,10 +154,10 @@ if ($data = $form->get_data()) {
         }
     }
 
-    redirect($CFG->wwwroot.'/mod/magtest/view.php?id='.$id);
+    redirect(new moodle_url('/mod/magtest/view.php', array('id' => $id)));
 }
 
-/// Prepare header.
+// Prepare header.
 
 $strmagtest = get_string('pluginname', 'magtest');
 

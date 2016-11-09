@@ -14,43 +14,40 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
- * @package    mod_magtest
- * @category   mod
- * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
- * @contributors   Etienne Roze
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
- * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
+ * @package     mod_magtest
+ * @category    mod
+ * @author      Valery Fremaux <valery.fremaux@club-internet.fr>
+ * @author      Etienne Roze
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL
+ * @copyright   (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
  */
+defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir.'/formslib.php');
 require_once($CFG->dirroot.'/mod/magtest/locallib.php');
 
 /**
  * Form to add or update categories
- *
  */
-
 class Question_Form extends moodleform {
 
     protected $cmd;
     protected $magtest;
     protected $howmany;
 
-    function __construct(&$magtest, $cmd, $howmany, $action) {
+    public function __construct(&$magtest, $cmd, $howmany, $action) {
         $this->cmd = $cmd;
         $this->magtest = $magtest;
         $this->howmany = $howmany;
         parent::__construct($action);
     }
 
-    function definition() {
+    public function definition() {
        global $DB, $CFG, $cm, $qid, $id;
 
         $mform = $this->_form;
-        $mod_context = context_module::instance($id); 
+        $modcontext = context_module::instance($id); 
 
         $mform->addElement('header', 'header0', get_string($this->cmd.'question', 'magtest'));
 
@@ -66,8 +63,12 @@ class Question_Form extends moodleform {
         $mform->setType('what', PARAM_ALPHA);
 
         $maxbytes = 1024 *1024 * 100 ;
-        $questionoptions = array('trusttext' => true, 'subdirs' => false,'maxfiles' => 100, 'maxbytes' => $maxbytes, 'context' => $mod_context);
-        $fileoptions = array('maxfiles' => EDITOR_UNLIMITED_FILES, 'noclean' => true, 'context' =>  $mod_context);
+        $questionoptions = array('trusttext' => true,
+                                 'subdirs' => false,
+                                 'maxfiles' => 100,
+                                 'maxbytes' => $maxbytes,
+                                 'context' => $modcontext);
+        $fileoptions = array('maxfiles' => EDITOR_UNLIMITED_FILES, 'noclean' => true, 'context' =>  $modcontext);
 
         if (!empty($qid) && $qid != -1) {
             $question = magtest_get_question($qid);
@@ -77,7 +78,7 @@ class Question_Form extends moodleform {
                 $answers[$ans->categoryid] = $ans->answertext;
             }
         }
-       
+
         $mform->addElement('hidden', 'magtestid', $this->magtest->id);
         $mform->setType('magtestid', PARAM_INT); 
 
@@ -86,7 +87,7 @@ class Question_Form extends moodleform {
             $mform->setType('cmd', PARAM_ALPHA);
 
             $mform->addElement('editor', 'questiontext_editor', get_string('question_text', 'magtest'), null, $fileoptions);
-            //Insert hte question.
+            //Insert the question.
             //Get the categories.
             $cats = $DB->get_records('magtest_category',array('magtestid' => $this->magtest->id));
 
@@ -107,12 +108,12 @@ class Question_Form extends moodleform {
                 }
 
                 if ($this->magtest->weighted) {
-                    $weight = 1 ;
+                    $weight = 1;
                     $mform->addElement('text', 'weight'.$cat->id, get_string('weight', 'magtest'), $weight);
                     $mform->setType('weight'.$cat->id, PARAM_INT);   
                 }
 
-                if (empty($this->magtest->singlechoice)){
+                if (empty($this->magtest->singlechoice)) {
                     $helper_text = get_string('helpertext', 'mod_magtest', $cat->name);
                     $helper_editor = $mform->addElement('editor', 'helper'.$cat->id.'_editor', $helper_text, null, $fileoptions);
                 }
@@ -126,24 +127,32 @@ class Question_Form extends moodleform {
             $mform->addElement('hidden', 'qid', $question->id); 
             $mform->setType('gid', PARAM_INT);
 
-            $questiontext_editor = $mform->addElement('editor', 'questiontext_editor', get_string('question_text', 'magtest'), null, $fileoptions);
+            $label = get_string('question_text', 'magtest');
+            $questiontext_editor = $mform->addElement('editor', 'questiontext_editor', $label, null, $fileoptions);
 
-            $question = file_prepare_standard_editor($question, 'questiontext', $questionoptions, $mod_context, 'mod_magtest', 'question', 0);
-            // Insert hte question.
-            //Get the categories.
+            $question = file_prepare_standard_editor($question, 'questiontext', $questionoptions, $modcontext,
+                                                     'mod_magtest', 'question', 0);
+            // Insert the question.
+            // Get the categories.
             $categories = $DB->get_records('magtest_category',array('magtestid' => $this->magtest->id));
             $mform->addElement('header', 'header1', get_string('answers', 'magtest'));
             foreach ($categories as $cat) {
                 $mform->addElement('hidden', 'cats['. $cat->id.']', $cat->id); 
                 $mform->setType('cats['. $cat->id.']', PARAM_INT);
-                $question_answer_text = get_string('category', 'magtest')." '".$cat->name."' answer";
+                $questionanswertext = get_string('category', 'magtest')." '".$cat->name."' answer";
 
                 // Get cat answer if exists.
-                $answer = $DB->get_record_select('magtest_answer', ' magtestid = ? and categoryid = ? and questionid = ? ', array($this->magtest->id, $cat->id, $question->id));
+                $select = '
+                    magtestid = ? AND
+                    categoryid = ? AND
+                    questionid = ?
+                ';
+                $answer = $DB->get_record_select('magtest_answer', $select, array($this->magtest->id, $cat->id, $question->id));
 
                 if (!$this->magtest->singlechoice) {
-                    $question_editor = $mform->addElement('editor', 'questionanswer'.$cat->id.'_editor',$question_answer_text, null, $fileoptions);
-                    $mform->addRule('questionanswer'.$cat->id.'_editor', null, 'required', null, 'client');
+                    $key = 'questionanswer'.$cat->id.'_editor';
+                    $mform->addElement('editor', $key, $questionanswertext, null, $fileoptions);
+                    $mform->addRule($key, null, 'required', null, 'client');
                 }
                 if ($this->magtest->weighted) {
                     $weight = (isset($answer->weight)) ? $answer->weight : 1;
@@ -152,8 +161,8 @@ class Question_Form extends moodleform {
                 }
 
                 if (!$this->magtest->singlechoice) {
-                    $helper_text = get_string('helpertext', 'mod_magtest', $cat->name);
-                    $helper_editor = $mform->addElement('editor', 'helper'.$cat->id.'_editor', $helper_text, null, $fileoptions);
+                    $helpertext = get_string('helpertext', 'mod_magtest', $cat->name);
+                    $mform->addElement('editor', 'helper'.$cat->id.'_editor', $helpertext, null, $fileoptions);
                 }
 
                 if (!empty($answer)) {
@@ -161,12 +170,14 @@ class Question_Form extends moodleform {
                         $field = 'questionanswer'.$cat->id;
                         $question->{$field} = $answer->answertext;
                         $question->{$field.'format'} = FORMAT_HTML;
-                        $question  = file_prepare_standard_editor($question,$field, $questionoptions, $mod_context,'mod_magtest', 'questionanswer', $answer->id);
+                        $question  = file_prepare_standard_editor($question, $field, $questionoptions, $modcontext, 'mod_magtest',
+                                                                  'questionanswer', $answer->id);
     
                         $field = 'helper'.$cat->id;
                         $question->{$field} = $answer->helper;
                         $question->{$field.'format'} = FORMAT_HTML;
-                        $question  = file_prepare_standard_editor($question, $field, $questionoptions, $mod_context, 'mod_magtest', 'helper', $answer->id);
+                        $question  = file_prepare_standard_editor($question, $field, $questionoptions, $modcontext, 'mod_magtest',
+                                                                  'helper', $answer->id);
                     }
 
                     $field = 'weight'.$cat->id;

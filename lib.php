@@ -14,19 +14,18 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') or die();
-
 /**
  * Library of functions and constants for module magtest
  *
- * @package    mod_magtest
- * @category   mod
- * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
- * @contributors   Etienne Roze
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
- * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
- * @see        categories.controller.php for associated controller.
+ * @package     mod_magtest
+ * @category    mod
+ * @author      Valery Fremaux <valery.fremaux@club-internet.fr>
+ * @author      Etienne Roze
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL
+ * @copyright   (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
+ * @see         categories.controller.php for associated controller.
  */
+defined('MOODLE_INTERNAL') or die();
 
 define('MAGTEST_RESETFORM_RESET', 'magtest_reset_data_');
 
@@ -93,11 +92,11 @@ function magtest_update_instance($magtest) {
     $oldmode = $DB->get_field('magtest', 'singlechoice', array('id' => $magtest->instance));
 
     // If changing mode, we need delete all previous user dataas they are NOT relevant any more.
-    // @TODO : add notification in mod_form to alert users...
+    // TODO : add notification in mod_form to alert users...
     if ($oldmode != @$magtest->singlechoice) {
         $DB->delete_records('magtest_useranswer', array('magtestid' => $magtest->instance));
     }
-    
+
     $magtest->timemodified = time();
     $magtest->id = $magtest->instance;
 
@@ -105,12 +104,24 @@ function magtest_update_instance($magtest) {
         $magtest->weighted = 1;
     }
 
-    if (!isset($magtest->starttimeenable)) $magtest->starttimeenable = 0;
-    if (!isset($magtest->endtimeenable)) $magtest->endtimeenable = 0;
-    if (!isset($magtest->usemakegroups)) $magtest->usemakegroups = 0;
-    if (!isset($magtest->allowreplay)) $magtest->allowreplay = 0;
-    if (!isset($magtest->weighted)) $magtest->weighted = 0;
-    if (!isset($magtest->singlechoice)) $magtest->singlechoice = 0;
+    if (!isset($magtest->starttimeenable)) {
+        $magtest->starttimeenable = 0;
+    }
+    if (!isset($magtest->endtimeenable)) {
+        $magtest->endtimeenable = 0;
+    }
+    if (!isset($magtest->usemakegroups)) {
+        $magtest->usemakegroups = 0;
+    }
+    if (!isset($magtest->allowreplay)) {
+        $magtest->allowreplay = 0;
+    }
+    if (!isset($magtest->weighted)) {
+        $magtest->weighted = 0;
+    }
+    if (!isset($magtest->singlechoice)) {
+        $magtest->singlechoice = 0;
+    }
 
     return $DB->update_record('magtest', $magtest);
 }
@@ -189,10 +200,11 @@ function magtest_user_complete($course, $user, $mod, $magtest) {
 
     if ($answers = $DB->get_records('magtest_useranswer', array('userid' => $user->id))) {
         $firstanswer = array_pop($answers);
-        echo get_string('magtestattempted', 'magtest') . ': ' . userdate($firstanswer->timeanswered);
+        echo get_string('magtestattempted', 'magtest').': '.userdate($firstanswer->timeanswered);
     }
 
-    if ($accesses = $DB->get_records_select('log', " userid = ? AND module = 'magtest' and action = 'view' ", array($user->id))) {
+    $select = " userid = ? AND module = 'magtest' and action = 'view' ";
+    if ($accesses = $DB->get_records_select('log', $select, array($user->id))) {
         echo '<br/>';
         echo get_string('magtestaccesses', 'magtest', count($accesses)) ;
     }
@@ -210,8 +222,6 @@ function magtest_user_complete($course, $user, $mod, $magtest) {
  * @todo Finish documenting this function
  */
 function magtest_print_recent_activity($course, $isteacher, $timestart) {
-    global $CFG;
-
     return false;  //  True if anything was printed, otherwise false.
 }
 
@@ -225,8 +235,6 @@ function magtest_print_recent_activity($course, $isteacher, $timestart) {
  * @todo Finish documenting this function
  */
 function magtest_cron () {
-    global $CFG;
-
     return true;
 }
 
@@ -244,15 +252,13 @@ function magtest_cron () {
  * @return mixed Null or object with an array of grades and with the maximum grade
  */
 function magtest_grades($magtestid) {
-   return NULL;
+   return null;
 }
 
 /**
  *
  */
 function magtest_scale_used_anywhere($scaleid) {
-    global $DB;
-
     return false;
 }
 
@@ -294,7 +300,7 @@ function magtest_get_participants($magtestid) {
  * @return mixed
  * @todo Finish documenting this function
  **/
-function magtest_scale_used ($magtestid,$scaleid) {
+function magtest_scale_used ($magtestid, $scaleid) {
     $return = false;
 
     return $return;
@@ -319,7 +325,9 @@ function magtest_reset_userdata($data) {
             $magtestid = $matches[1];
             $magtest = $DB->get_record('magtest', array('id' => $magtestid));
             $DB->delete_records('magtest_useranswer', array('magtestid' => $magtestid));
-            $status[] = array('component' => $componentstr.':'.format_string($magtest->name), 'item' => get_string('resetting_data','magtest'), 'error' => false);
+            $status[] = array('component' => $componentstr.':'.format_string($magtest->name),
+                              'item' => get_string('resetting_data','magtest'),
+                              'error' => false);
         }
     }
     return $status;
@@ -353,14 +361,14 @@ function magtest_reset_course_form_definition(&$mform) {
  * @param array $htmlarray The array of html to return
  */
 function magtest_print_overview($courses, &$htmlarray) {
-    global $USER, $CFG, $DB;
+    global $DB;
 
     $config = get_config('mod_magtest');
 
     if (empty($config->showmymoodle)) {
-        return; // Disabled via global config.
+        // Disabled via global config.
+        return;
     }
-
 
     if (empty($courses) || !is_array($courses) || count($courses) == 0) {
         return array();
@@ -407,12 +415,11 @@ function magtest_print_overview($courses, &$htmlarray) {
 
     foreach ($magtests as $magtest) {
 
+        $magtesturl = new moodle_url('/mod/magtest/view.php', array('id' => $magtest->coursemodule));
+        $classes = $magtest->visible ? '' : ' class="dimmed"';
         $str = '<div class="magtest overview">';
-        $str .= '<div class="name">'.$strmagtest. ': '.
-               '<a '.($magtest->visible ? '':' class="dimmed"').
-               'title="'.$strmagtest.'" href="'.$CFG->wwwroot.
-               '/mod/magtest/view.php?id='.$magtest->coursemodule.'">'.
-               format_string($magtest->name).'</a></div>';
+        $link = '<a '.$classes.' title="'.$strmagtest.'" href="'.$magtesturl.'">'.format_string($magtest->name).'</a>';
+        $str .= '<div class="name">'.$strmagtest. ': '.$link.'</div>';
         if ($magtest->endtime && $magtest->endtimeenable) {
             $str .= '<div class="info">'.$strcutoffdate.': '.userdate($magtest->endtime).'</div>';
         }
@@ -420,7 +427,7 @@ function magtest_print_overview($courses, &$htmlarray) {
         if (has_capability('mod/magtest:viewotherresults', $context)) {
 
             // Count how many people need submit.
-            $submissions = 0; // init
+            $submissions = 0; // Init.
 
             $sql = "
                 SELECT DISTINCT
@@ -443,7 +450,8 @@ function magtest_print_overview($courses, &$htmlarray) {
             $usersleft = count($students) - $submissions;
             if ($submissions) {
                 $link = new moodle_url('/mod/magtest/view.php', array('id' => $magtest->coursemodule, 'view' => 'results'));
-                $str .= '<div class="details"><a href="'.$link.'">'.get_string('userstosubmit', 'magtest', $usersleft).'</a></div>';
+                $label = get_string('userstosubmit', 'magtest', $usersleft);
+                $str .= '<div class="details"><a href="'.$link.'">'.$label.'</a></div>';
             }
             $str .= '</div>';
         }
@@ -455,9 +463,10 @@ function magtest_print_overview($courses, &$htmlarray) {
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-/// Any other magtest functions go here.  Each of them must have a name that 
-/// starts with magtest_
+/*
+ * Any other magtest functions go here.  Each of them must have a name that 
+ * starts with magtest_.
+ */
 
 /**
  * tells a magtest module if the activity has been done or not
@@ -496,7 +505,7 @@ function magtest_pluginfile($course, $cm, $context, $filearea, $args, $forcedown
     $relativepath = implode('/', $args);
     $fullpath = "/$context->id/mod_magtest/$filearea/$itemid/$relativepath";
 
-    if (!$file = $fs->get_file_by_hash(sha1($fullpath)) or $file->is_directory()) {
+    if (!$file = $fs->get_file_by_hash(sha1($fullpath)) || $file->is_directory()) {
         return false;
     }
 
