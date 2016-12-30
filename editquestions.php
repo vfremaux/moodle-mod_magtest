@@ -15,15 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    mod_magtest
- * @category   mod
- * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
- * @contributors   Etienne Roze
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
- * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
- * @see        categories.controller.php for associated controller.
+ * @package     mod_magtest
+ * @category    mod
+ * @author      Valery Fremaux <valery.fremaux@gmail.com>
+ * @author      Etienne Roze
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL
+ * @copyright   (C) 2005 Valery Fremaux (http://www.mylearningfactory.com)
+ * @see         categories.controller.php for associated controller.
  */
-
 require('../../config.php');
 require_once($CFG->dirroot.'/mod/magtest/forms/addquestions_form.php');
 require_once($CFG->dirroot.'/mod/magtest/classes/magtest.class.php');
@@ -67,8 +66,16 @@ if ($qid <= 0) {
 }
 
 $maxbytes = 1024 * 1024 * 1000 ; // Default : 100 mb TODO: add settings.
-$questionoptions = array('trusttext' => true, 'subdirs' => false, 'maxfiles' => 100, 'maxbytes' => $maxbytes, 'context' => $mod_context);
-$answeroptions = array('trusttext' => true, 'subdirs' => false, 'maxfiles' => 100, 'maxbytes' => $maxbytes, 'context' => $mod_context);
+$questionoptions = array('trusttext' => true,
+                         'subdirs' => false,
+                         'maxfiles' => 100,
+                         'maxbytes' => $maxbytes,
+                         'context' => $mod_context);
+$answeroptions = array('trusttext' => true,
+                       'subdirs' => false,
+                       'maxfiles' => 100,
+                       'maxbytes' => $maxbytes,
+                       'context' => $mod_context);
 
 if ($form->is_cancelled()) {
     redirect($editurl);
@@ -80,7 +87,8 @@ if ($data = $form->get_data()) {
 
     if ($cmd == 'add') {
 
-        $data = file_postupdate_standard_editor($data, 'questiontext', $questionoptions, $mod_context, 'mod_magtest', 'question', 0);
+        $data = file_postupdate_standard_editor($data, 'questiontext', $questionoptions, $mod_context,
+                                                'mod_magtest', 'question', 0);
 
         $question = new stdClass();
         $question->questiontext = $data->questiontext;

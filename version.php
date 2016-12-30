@@ -26,12 +26,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2016060100;  // The current module version (Date: YYYYMMDDXX)
-$plugin->requires = 2012120304;  // Requires this Moodle version
-$plugin->cron     = 0;           // Period for cron to check this module (secs)
-$plugin->component = 'mod_magtest';   // Full name of the plugin (used for diagnostics)
+$plugin->version  = 2016060100;  // The current module version (Date: YYYYMMDDXX).
+$plugin->requires = 2012120304;  // Requires this Moodle version.
+$plugin->component = 'mod_magtest';   // Full name of the plugin (used for diagnostics).
 $plugin->maturity = MATURITY_STABLE;
 $plugin->release = '2.7.0 (Build 2016060100)';
 
-// non moodle attributes
+// Non moodle attributes.
 $plugin->codeincrement = '2.7.0000';

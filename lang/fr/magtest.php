@@ -21,11 +21,11 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['magtest:addinstance'] = 'Ajouter une instance';
-$string['magtest:manage'] = 'Configurer le test';
-$string['magtest:multipleattempts'] = 'Rejouer le test';
-$string['magtest:viewgeneralstat'] = 'Voir les statistiques de réponse';
-$string['magtest:viewotherresults'] = 'Voir les résultats de tous';
+$string['magtest:addinstance'] = 'Ajouter une instance'; // @DYNAKEY.
+$string['magtest:manage'] = 'Configurer le test'; // @DYNAKEY.
+$string['magtest:multipleattempts'] = 'Rejouer le test'; // @DYNAKEY.
+$string['magtest:viewgeneralstat'] = 'Voir les statistiques de réponse'; // @DYNAKEY.
+$string['magtest:viewotherresults'] = 'Voir les résultats de tous'; // @DYNAKEY.
 
 $string['errorinvalidcategory'] = 'Catégorie invalide.';
 $string['erroraddcategory'] = 'Erreur lors de l\'ajout d\'une catégorie.';
@@ -43,7 +43,9 @@ $string['answerquestions'] = 'Test : ';
 $string['answers'] = 'Réponses';
 $string['answerweights'] = 'Poids des réponses'; 
 $string['answertext'] = 'Réponse pour la catégorie : {$a}';
+$string['availability'] = 'Disponibilité';
 $string['backtocourse'] = 'Revenir au parcours';
+$string['behaviour'] = 'Comportement';
 $string['categories'] = 'Catégories';
 $string['category'] = 'Catégorie';
 $string['categoryresult'] = 'Le texte résultat pour cette catégorie';
@@ -142,6 +144,7 @@ $string['answer'] = 'Réponse';
 $string['helpertext'] = 'Aide';
 $string['updatecategories'] = 'Modifier la catégorie';
 $string['updatequestion'] = 'Modifier la question';
+
 // Help strings.
 
 $string['importformat_help'] = '

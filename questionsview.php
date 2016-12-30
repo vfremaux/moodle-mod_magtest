@@ -14,6 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * @package     mod_magtest
+ * @category    mod
+ * @author      Valery Fremaux <valery.fremaux@gmail.com>
+ * @author      Etienne Roze
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL
+ * @copyright   (C) 2005 Valery Fremaux (http://www.mylearningfactory.com)
+ * @see         categories.controller.php for associated controller.
+ */
+defined('MOODLE_INTERNAL') || die;
+
 if (!(isset($id) and $view === 'questions' and  has_capability('mod/magtest:manage', $context))) {
     print 'You have not to see this page';
     exit;
@@ -94,8 +105,8 @@ $i++;
     <td>
         <?php 
             print_string('choosecategoryforanswer', 'magtest');
-            echo html_writer::select($tab_cat, 'question[answers]['.$i.'][categoryid]', $answer->categoryid); 
-            // helpbutton ('choosecategoryforanswer', get_string('choosecategoryforanswer','magtest'), 'magtest'); 
+            echo html_writer::select($tab_cat, 'question[answers]['.$i.'][categoryid]', $answer->categoryid);
+            // helpbutton ('choosecategoryforanswer', get_string('choosecategoryforanswer','magtest'), 'magtest');
         ?> 
     </td>
 </tr>

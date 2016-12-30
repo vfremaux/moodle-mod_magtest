@@ -19,10 +19,10 @@
  *
  * @package     mod_magtest
  * @category    mod
- * @author      Valery Fremaux <valery.fremaux@club-internet.fr>
+ * @author      Valery Fremaux <valery.fremaux@gmail.com>
  * @author      Etienne Roze
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL
- * @copyright   (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
+ * @copyright   (C) 2005 Valery Fremaux (http://www.mylearningfactory.com)
  * @see         categories.controller.php for associated controller.
  */
 
@@ -73,9 +73,11 @@ $table->width = '100%';
 
 foreach ($categories as $category) {
     $commands = '<div class="categorycommands">';
-    $cmdurl = new moodle_url('/mod/magtest/editcategories.php', array('id' => $cm->id, 'catid' => $category->id));
+    $params = array('id' => $cm->id, 'catid' => $category->id);
+    $cmdurl = new moodle_url('/mod/magtest/editcategories.php', $params);
     $commands .= '<a href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/edit').'"</a>';
-    $cmdurl = new moodle_url('/mod/magtest/view.php', array('id' => $cm->id, 'what' => 'deletecategory', 'catid' => $category->id));
+    $params = array('id' => $cm->id, 'what' => 'deletecategory', 'catid' => $category->id);
+    $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
     $commands .=' <a id="delete" href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/delete').'" /></a>';
 
     if ($category->sortorder > 1) {

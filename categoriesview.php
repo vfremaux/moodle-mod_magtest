@@ -15,13 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    mod_magtest
- * @category   mod
- * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
- * @contributors   Etienne Roze
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
- * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
- * @see        categories.controller.php for associated controller.
+ * @package     mod_magtest
+ * @category    mod
+ * @author      Valery Fremaux <valery.fremaux@gmail.com>
+ * @author      Etienne Roze
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL
+ * @copyright   (C) 2005 Valery Fremaux (http://www.mylearningfactory.com)
+ * @see         categories.controller.php for associated controller.
  */
 defined('MOODLE_INTERNAL') || die();
 
@@ -59,13 +59,16 @@ class magtest_categories_form extends moodleform {
                 $newcategory->magtestid = $magtest->id;
                 $DB->insert_record('magtest_category', $newcategory);
             } else if (!strcmp($mform->_submitValues['submitbutton'], get_string('delcategory', 'magtest'))) {
-                $select = ' categorytext = \'\' and categoryshortname = \'\' and magtestid = ';
-                $maxcat = $DB->get_record_select('magtest_category',$select. $magtestid, 'max(id) as m ');
+                $select = ' categorytext = \'\' and categoryshortname = \'\' AND magtestid = ? ';
+                $params = array($magtestid);
+                $maxcat = $DB->get_record_select('magtest_category', $select, $params, 'max(id) as m ');
 
                 if (isset($maxcat->m)) {
                     // Does a question exist in this category ? If not we can delete it.
                     if (!$DB->record_exists('magtest_question', array('categoryid' => $maxcat->m))) {
-                        $DB->delete_records_select('magtest_category', 'magtestid = ' . $magtestid . ' and id = ' . $maxcat->m);
+                        $select = 'magtestid = ? AND id = ? ';
+                        $params = array($magtestid, $maxcat->m);
+                        $DB->delete_records_select('magtest_category', $select, $params);
                     }
                 }
             }

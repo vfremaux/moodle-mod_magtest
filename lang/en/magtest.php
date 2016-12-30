@@ -21,12 +21,12 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['magtest:doit'] = 'Make the test';
-$string['magtest:manage'] = 'Configure the test';
-$string['magtest:addinstance'] = 'Add an instance';
-$string['magtest:multipleattempts'] = 'Make multiple attempts';
-$string['magtest:viewgeneralstat'] = 'View general statistics';
-$string['magtest:viewotherresults'] = 'See results of other participants';
+$string['magtest:doit'] = 'Make the test'; // @DYNAKEY.
+$string['magtest:manage'] = 'Configure the test'; // @DYNAKEY.
+$string['magtest:addinstance'] = 'Add an instance'; // @DYNAKEY.
+$string['magtest:multipleattempts'] = 'Make multiple attempts'; // @DYNAKEY.
+$string['magtest:viewgeneralstat'] = 'View general statistics'; // @DYNAKEY.
+$string['magtest:viewotherresults'] = 'See results of other participants'; // @DYNAKEY.
 
 $string['errorinvalidcategory'] = 'Invalid Category.';
 $string['erroraddcategory'] = 'Error while adding a category.';
@@ -44,7 +44,9 @@ $string['answerquestions'] = 'Test:&ensp;';
 $string['answerweights'] = 'Answer weights';
 $string['answers'] = 'Answers';
 $string['answertext'] = 'Answer for category: {$a}';
+$string['availability'] = 'Availability';
 $string['backtocourse'] = 'Back to course';
+$string['behaviour'] = 'Behaviour';
 $string['categories'] = 'Categories';
 $string['category'] = 'Category';
 $string['categoryresult'] = 'Conclusion test for the category';

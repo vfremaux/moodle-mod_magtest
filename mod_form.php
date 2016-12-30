@@ -44,6 +44,11 @@ class mod_magtest_mod_form extends moodleform_mod {
 
         $this->add_intro_editor(true, get_string('intro', 'magtest'));
 
+        $mform->addElement('htmleditor', 'result', get_string('resulttext', 'magtest'));
+        $mform->setType('result', PARAM_RAW);
+
+        $mform->addElement('header', 'h0', get_string('availability', 'magtest'));
+
         $startdatearray[] = &$mform->createElement('date_time_selector', 'starttime', '');
         $startdatearray[] = &$mform->createElement('checkbox', 'starttimeenable', '');
         $mform->addGroup($startdatearray, 'startfrom', get_string('starttime', 'magtest'), ' ', false);
@@ -54,6 +59,11 @@ class mod_magtest_mod_form extends moodleform_mod {
         $mform->addGroup($enddatearray, 'endfrom', get_string('endtime', 'magtest'), ' ', false);
         $mform->disabledIf('endfrom', 'endtimeenable');
 
+        $mform->addElement('header', 'h1', get_string('behaviour', 'magtest'));
+
+        $mform->addElement('checkbox', 'allowreplay', get_string('allowreplay', 'magtest'));
+        $mform->addHelpButton('allowreplay', 'pagesize', 'magtest');
+
         $mform->addElement('checkbox', 'singlechoice', get_string('singlechoice', 'magtest'));
         $mform->addHelpButton('singlechoice', 'singlechoice', 'magtest');
 
@@ -63,16 +73,12 @@ class mod_magtest_mod_form extends moodleform_mod {
 
         $mform->addElement('checkbox', 'usemakegroups', get_string('usemakegroups', 'magtest'));
         $mform->addHelpButton('usemakegroups', 'usemakegroups', 'magtest');
+        $mform->setAdvanced('usemakegroups');
 
-        $mform->addElement('text', 'pagesize', get_string('pagesize', 'magtest'), array('size' => 3));
+        $mform->addElement('text', 'pagesize', get_string('pagesize', 'magtest'), array('size' => 3), 10);
         $mform->addHelpButton('pagesize', 'pagesize', 'magtest');
         $mform->setType('pagesize', PARAM_TEXT);
-
-        $mform->addElement('checkbox', 'allowreplay', get_string('allowreplay', 'magtest'));
-        $mform->addHelpButton('allowreplay', 'pagesize', 'magtest');
-
-        $mform->addElement('htmleditor', 'result', get_string('resulttext', 'magtest'));
-        $mform->setType('result', PARAM_RAW);
+        $mform->setAdvanced('pagesize');
 
         $this->standard_coursemodule_elements();
         $this->add_action_buttons();

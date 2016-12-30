@@ -20,10 +20,10 @@
  *
  * @package    mod_magtest
  * @category   mod
- * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
+ * @author     Valery Fremaux <valery.fremaux@gmail.com>
  * @contributors   Etienne Roze
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
- * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
+ * @copyright   (C) 2005 Valery Fremaux (http://www.mylearningfactory.com)
  * @see        categories.php for view.
  * @usecase    deletecategory
  * @usecase    raisecategory
