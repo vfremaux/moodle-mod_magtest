@@ -52,15 +52,15 @@ class backup_magtest_activity_task extends backup_activity_task {
      * order to get transportable (encoded) links
      */
     static public function encode_content_links($content) {
-    	global $CFG;
-    	
+        global $CFG;
+
         $base = preg_quote($CFG->wwwroot,"/");
 
-        // Link to the list of magtests
+        // Link to the list of magtests.
         $search = "/(".$base."\/mod\/magtest\/index.php\?id\=)([0-9]+)/";
         $content = preg_replace($search, '$@MAGTESTINDEX*$2@$', $content);
 
-        // Link to magtests view by moduleid
+        // Link to magtests view by moduleid.
         $search = "/(".$base."\/mod\/magtest\/view.php\?id\=)([0-9]+)/";
         $content = preg_replace($search, '$@MAGTESTVIEWBYID*$2@$', $content);
 

@@ -76,7 +76,7 @@ if ($form->is_cancelled()) {
 
 if ($data = $form->get_data()) {
 
-    $cmd = $data->cmd ; 
+    $cmd = $data->cmd;
 
     if ($cmd == 'add') {
 
