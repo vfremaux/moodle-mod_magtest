@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -38,7 +37,7 @@ class backup_magtest_activity_structure_step extends backup_activity_structure_s
 
         // Define each element separated
         $magtest = new backup_nested_element('magtest', array('id'), array(
-			'name', 'intro', 'introformat', 'starttime', 'starttimeenable', 'endtime', 'endtimeenable',
+            'name', 'intro', 'introformat', 'starttime', 'starttimeenable', 'endtime', 'endtimeenable',
             'timecreated', 'result', 'weighted', 'usemakegroups', 'pagesize', 'allowreplay'));
 
         $answers = new backup_nested_element('answers');
@@ -59,8 +58,8 @@ class backup_magtest_activity_structure_step extends backup_activity_structure_s
         $categories = new backup_nested_element('categories');
         
         $category = new backup_nested_element('category', array('id'), array(
-			'name', 'descriptionformat', 'description', 'result', 'sortorder', 'symbol', 'outputgroupname', 'outputgroupdesc'));
-            
+            'name', 'descriptionformat', 'description', 'result', 'sortorder', 'symbol', 'outputgroupname', 'outputgroupdesc'));
+
         // Build the tree
         // (love this)
         $magtest->add_child($categories);
@@ -72,8 +71,8 @@ class backup_magtest_activity_structure_step extends backup_activity_structure_s
         $magtest->add_child($answers);
         $answers->add_child($answer);
 
-		$magtest->add_child($useranswers);
-		$useranswers->add_child($useranswer);
+        $magtest->add_child($useranswers);
+        $useranswers->add_child($useranswer);
 
         // Define sources
         $magtest->set_source_table('magtest', array('id' => backup::VAR_ACTIVITYID));
