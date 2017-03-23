@@ -83,7 +83,7 @@ if ($data = $form->get_data()) {
 
         $count = $data->howmany;
 
-        for ($i = 1 ; $i <= $count ; $i++) {
+        for ($i = 1; $i <= $count; $i++) {
 
             $cat = new StdClass();
 

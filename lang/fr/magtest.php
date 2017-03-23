@@ -1,4 +1,28 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * @package    mod_magtest
+ * @category   mod
+ * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
+ * @contributors   Etienne Roze
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
+ * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
+ */
+defined('MOODLE_INTERNAL') || die();
 
 $string['magtest:addinstance'] = 'Ajouter une instance';
 $string['magtest:manage'] = 'Configurer le test';
@@ -18,10 +42,10 @@ $string['addquestion'] = 'Ajouter une question';
 $string['addthree'] = 'Ajouter trois catégories supplémentaires';
 $string['allowreplay'] = 'Autoriser plusieurs essais';
 $string['answercount'] = 'Nombre de réponses';
-$string['answerquestions'] = 'Test : ';
+$string['answerquestions'] = 'Test&nbsp;:&ensp;';
 $string['answers'] = 'Réponses';
 $string['answerweights'] = 'Poids des réponses'; 
-$string['answertext'] = 'Réponse pour la catégorie : {$a}';
+$string['answertext'] = 'Réponse pour la catégorie&nbsp;: {$a}';
 $string['backtocourse'] = 'Revenir au parcours';
 $string['categories'] = 'Catégories';
 $string['category'] = 'Catégorie';
@@ -63,7 +87,7 @@ $string['magtest:doit'] = 'Faire le test';
 $string['default'] = 'Test type magazine par defaut';
 $string['makegroups'] = 'Générer les groupes du cours à partir des résultats';
 $string['modulename'] = 'Test type magazine';
-$string['magtestattempted'] = 'Test magazine effectué le ';
+$string['magtestattempted'] = 'Test magazine effectué le&ensp;';
 $string['magtestaccesses'] = 'Visualisations : {$a} accès';
 $string['pluginname'] = 'Test type magazine';
 $string['modulenameplural'] = 'Tests type magazine';
@@ -115,30 +139,35 @@ $string['weight'] = 'Pondération';
 $string['weightfor'] = 'Poids pour "{$a}"'; 
 $string['weighted'] = 'Mode pondéré';
 $string['youneedcreatingcategories'] = 'Il faut créer au moins deux catégories avant de pouvoir créer des questions';
-
+$string['you_have_to_create_categories'] = 'Vous devez créer au moins une catégorie de réponses avant de pouvoir créer une question.';
+$string['question_text'] = 'Texte de la question';
+$string['answer'] = 'Réponse';
+$string['helpertext'] = 'Aide';
+$string['updatecategories'] = 'Modifier la catégorie';
+$string['updatequestion'] = 'Modifier la question';
 // Help strings //
 
 $string['importformat_help'] = '
 ### Format d\'import des questions
 
-Le fichier d\import doit être encodé en UTF8, séparé par des ";", une question par ligne et doit avoir une première colonne avec le texte de la question. 
+Le fichier d\import doit être encodé en UTF8, séparé par des ";", une question par ligne et doit avoir une première colonne avec le texte de la question.
 
 Si l\'option "Choix simple" est active, alors les colonnes suivantes donnent dans l\'ordre les poids de catégorie (entier).
 
-Si l\'option "Choix simple" est désactivée (par défaut), alors les colonnes suivantes viennent par groupe de trois et donnent dans l\'ordre et pour chaque catégorie,
-le texte de réponse, le poids et le texte d\'aide de la réponse.
+Si l\'option "Choix simple" est désactivée (par défaut), alors les colonnes suivantes viennent par groupe de trois et donnent dans
+l\'ordre et pour chaque catégorie, le texte de réponse, le poids et le texte d\'aide de la réponse.
 ';
-
 
 $string['modulename_help'] = "Le Test de Type Magazine permet de créer une évaluation multicritère additionnant un score
 sur plusieurs évaluateurs à la fois. A la fin du test, l'utilisateur est rangé dans la catégorie correspondant à son évaluateur
-dominant. L'enseignant peut constituer des groupes de cours à partir de ces résultats. 
+dominant. L'enseignant peut constituer des groupes de cours à partir de ces résultats.
 ";
 
 $string['pagesize_help'] = '
 ### Taille des pages de test
 
-Ce paramètre permet de régler le nombre de questions que vous voulez afficher sur chaque page du test. Si vous le réglez sur 1, le teste affichera chaque question sur une nouvelle page.
+Ce paramètre permet de régler le nombre de questions que vous voulez afficher sur chaque page du test. Si vous le réglez sur 1,
+le test affichera chaque question sur une nouvelle page.
 ';
 
 $string['weighted_help'] = '
@@ -146,39 +175,43 @@ $string['weighted_help'] = '
 
 Si vous activez le mode pondéré, chaque réponse peut apporter un nombre non égal de points `la note de sa catégorie associée.
 
-Ceci permet de créer des tests qui permettent de faire varier l\'influence de certaines questions dans le "placement" des participants dans le score final.
+Ceci permet de créer des tests qui permettent de faire varier l\'influence de certaines questions dans le "placement"
+des participants dans le score final.
 
 En mode pondéré, la pondération par défaut est de 1, ce qui revient à ne pas utiliser de pondération';
 
 $string['magtest_help'] = '
-Le module "Test de magazine" propose un test qui se base sur un ensemble de catégories de réponses, comme les tests de psychologie qu l\'on trouve dans les magazines. Le test permet d\'établir les catégories de classement du résultat, et propose de définir un jeu de questions �oser aux participants. A chaque question doit correspondre un certain nombre de propositions (une par catégorie) permettant au participant de faire son choix. 
+Le module "Test de magazine" propose un test qui se base sur un ensemble de catégories de réponses, comme les tests de psychologie
+qu l\'on trouve dans les magazines. Le test permet d\'établir les catégories de classement du résultat, et propose de définir un
+jeu de questions �oser aux participants. A chaque question doit correspondre un certain nombre de propositions (une par catégorie)
+permettant au participant de faire son choix. 
 
-Lorsque le participant fait le test, il devra choisir pour chaque question la réponse appropriée ce qui rapportera un certain nombre de points à la catégorie correspondante.
+Lorsque le participant fait le test, il devra choisir pour chaque question la réponse appropriée ce qui rapportera un certain
+nombre de points à la catégorie correspondante.
 
-A la fin du test, la catégorie gagnante est celle qui a collecté de meilleur score. Une conclusion est alors montrée aux utilisateurs, laquelle souligne la conclusion "gagnante", suivie éventuellement par une conclusion plus générale.
+A la fin du test, la catégorie gagnante est celle qui a collecté de meilleur score. Une conclusion est alors montrée aux utilisateurs,
+laquelle souligne la conclusion "gagnante", suivie éventuellement par une conclusion plus générale.
 
-Les groupes de participants issus du test et classés par catégorie gagnante peuvent être convertis en groupes Moodle du cours courant. Ce module peut donc servir comme "discriminateur à critère" pour former des groupes par l\'action des participants eux-mêmes.
+Les groupes de participants issus du test et classés par catégorie gagnante peuvent être convertis en groupes Moodle du cours courant.
+Ce module peut donc servir comme "discriminateur à critère" pour former des groupes par l\'action des participants eux-mêmes.
 ';
 
 $string['usemakegroups_help'] = '
 ### Génération de groupes Moodle
 
-Le module "Test de magazine" permet de segmenter les participants en plusieurs groupes par leur simple participation au test et la catégorie de proposition qu\'ils vont choisir par leur réponses.
+Le module "Test de magazine" permet de segmenter les participants en plusieurs groupes par leur simple participation au test et
+la catégorie de proposition qu\'ils vont choisir par leur réponses.
 
 Le module permet d\'activer la fonction de génération de groupes qui définit des groupes Moodle de cours `partir de ces résultats.
 
-Le test peut ne pas être complet et les groupes seront générés avec les réponses disponibles. Par contre, il n\'est pas possible de générer les groupes s\'il existe déj`des groupes définis dans le cours. Vous devrez donc détruire les groupes après une première tentative si vous désirez `nouveau générer les groupes `partir de nouveaux résultats.
+Le test peut ne pas être complet et les groupes seront générés avec les réponses disponibles. Par contre, il n\'est pas possible de
+générer les groupes s\'il existe déj`des groupes définis dans le cours. Vous devrez donc détruire les groupes après une première
+tentative si vous désirez `nouveau générer les groupes `partir de nouveaux résultats.
 ';
 
 $string['allowreplay_help'] = '
 ### Autoriser plusieurs tentatives
 
-Ce paramètre permet de commuter la possibilité de rejouer le test au niveau de l\'instance. Les utilisateurs doivent en plus disposer de la capacité "Rejouer le test" dans leur profil pour pouvoir exécuter le test `nouveau.
+Ce paramètre permet de commuter la possibilité de rejouer le test au niveau de l\'instance. Les utilisateurs doivent en plus disposer
+de la capacité "Rejouer le test" dans leur profil pour pouvoir exécuter le test `nouveau.
 ';
-
-$string['you_have_to_create_categories'] = 'Vous devez créer au moins une catégorie de réponses avant de pouvoir créer une question.';
-$string['question_text'] = 'Texte de la question';
-$string['answer'] = 'Réponse';
-$string['helpertext'] = 'Aide';
-$string['updatecategories'] = 'Modifier la catégorie';
-$string['updatequestion'] = 'Modifier la question';
