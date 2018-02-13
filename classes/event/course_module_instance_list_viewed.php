@@ -15,9 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package     mod_magtest
- * @category    mod
- * @copyright   2010 onwards Valery Fremaux {valery.fremaux@gmail.com}
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * mod_magtest course module instance list viewed event.
+ *
+ * @package    mod_magtest
+ * @author Valery Fremaux
+ * @copyright  2014 MyLearningFactory (http://www.mylearningfactory.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+namespace mod_magtest\event;
+defined('MOODLE_INTERNAL') || die();
+
+/**
+ * mod_magtest course module instance list event class.
+ *
+ */
+class course_module_instance_list_viewed extends \core\event\course_module_instance_list_viewed {
+}
 

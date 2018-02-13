@@ -14,10 +14,19 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
- * @package     mod_magtest
- * @category    mod
- * @copyright   2010 onwards Valery Fremaux {valery.fremaux@gmail.com}
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    mod_magtest
+ * @category   mod
+ * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
+ * @contributors   Etienne Roze
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
+ * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
  */
 
+if ($ADMIN->fulltree) {
+    $settings->add(new admin_setting_configcheckbox('magtest/showmymoodle',
+                                                    get_string('configshowmymoodle', 'mod_magtest'),
+                                                    get_string('configshowmymoodledesc', 'mod_magtest'), 1));
+}

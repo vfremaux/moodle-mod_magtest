@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -16,12 +15,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package mod-magtest
- * @copyright 2010 onwards Valery Fremaux (valery.freamux@club-internet.fr)
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     mod_magtest
+ * @copyright   2010 onwards Valery Fremaux (valery.freamux@club-internet.fr)
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-/**
+/*
  * Define all the restore steps that will be used by the restore_url_activity_task
  */
 
@@ -43,12 +42,16 @@ class restore_magtest_activity_structure_step extends restore_activity_structure
         $paths[] = $questions;
         $answers = new restore_path_element('magtest_answer', '/activity/magtest/answers/answer');
         $paths[] = $answers;
+<<<<<<< HEAD:backup/moodle2/restore_magtest_stepslib.php
         
+=======
+
+>>>>>>> MOODLE_34_STABLE:backup/moodle2/restore_magtest_stepslib.php
         if ($userinfo){
-	        $paths[] = new restore_path_element('magtest_useranswer', '/activity/magtest/useranswers/useranswer');
+            $paths[] = new restore_path_element('magtest_useranswer', '/activity/magtest/useranswers/useranswer');
         }
 
-        // Return the paths wrapped into standard activity structure
+        // Return the paths wrapped into standard activity structure.
         return $this->prepare_activity_structure($paths);
     }
 
@@ -61,14 +64,14 @@ class restore_magtest_activity_structure_step extends restore_activity_structure
 
         $data->timecreated = $this->apply_date_offset($data->timecreated);
 
-        // insert the label record
+        // Insert the label record.
         $newitemid = $DB->insert_record('magtest', $data);
-        // immediately after inserting "activity" record, call this
+        // Immediately after inserting "activity" record, call this.
         $this->apply_activity_instance($newitemid);
     }
 
     protected function after_execute() {
-        // Add magtest related files, no need to match by itemname (just internally handled context)
+        // Add magtest related files, no need to match by itemname (just internally handled context).
         $this->add_related_files('mod_magtest', 'intro', null);
         $this->add_related_files('mod_magtest_answer', 'answertext', null);
         $this->add_related_files('mod_magtest_question', 'questiontext', null);
@@ -76,8 +79,8 @@ class restore_magtest_activity_structure_step extends restore_activity_structure
     }
 
     protected function process_magtest_category($data) {
-    	global $DB;
-    	
+        global $DB;
+
         $data = (object)$data;
         $oldid = $data->id;
 
@@ -85,12 +88,12 @@ class restore_magtest_activity_structure_step extends restore_activity_structure
 
         // The data is actually inserted into the database later in inform_new_usage_id.
         $newitemid = $DB->insert_record('magtest_category', $data);
-        $this->set_mapping('magtest_category', $oldid, $newitemid, false); // Has no related files
+        $this->set_mapping('magtest_category', $oldid, $newitemid, false); // Has no related files.
     }
 
     protected function process_magtest_answer($data) {
-    	global $DB;
-    	
+        global $DB;
+
         $data = (object)$data;
         $oldid = $data->id;
 
@@ -100,12 +103,12 @@ class restore_magtest_activity_structure_step extends restore_activity_structure
 
         // The data is actually inserted into the database later in inform_new_usage_id.
         $newitemid = $DB->insert_record('magtest_answer', $data);
-        $this->set_mapping('magtest_answer', $oldid, $newitemid, false); // Has no related files
+        $this->set_mapping('magtest_answer', $oldid, $newitemid, false); // Has no related files.
     }
 
     protected function process_magtest_question($data) {
-    	global $DB;
-    	
+        global $DB;
+
         $data = (object)$data;
         $oldid = $data->id;
 
@@ -113,12 +116,12 @@ class restore_magtest_activity_structure_step extends restore_activity_structure
 
         // The data is actually inserted into the database later in inform_new_usage_id.
         $newitemid = $DB->insert_record('magtest_question', $data);
-        $this->set_mapping('magtest_question', $oldid, $newitemid, false); // Has no related files
+        $this->set_mapping('magtest_question', $oldid, $newitemid, false); // Has no related files.
     }
 
     protected function process_magtest_useranswer($data) {
-    	global $DB;
-    	
+        global $DB;
+
         $data = (object)$data;
         $oldid = $data->id;
 
@@ -129,7 +132,6 @@ class restore_magtest_activity_structure_step extends restore_activity_structure
 
         // The data is actually inserted into the database later in inform_new_usage_id.
         $newitemid = $DB->insert_record('magtest_useranswer', $data);
-        $this->set_mapping('magtest_useranswer', $oldid, $newitemid, false); // Has no related files
+        $this->set_mapping('magtest_useranswer', $oldid, $newitemid, false); // Has no related files.
     }
-
 }
