@@ -33,15 +33,6 @@ $string['magtest:viewotherresults'] = 'Voir les résultats de tous';
 $string['errorinvalidcategory'] = 'Catégorie invalide.';
 $string['erroraddcategory'] = 'Erreur lors de l\'ajout d\'une catégorie.';
 
-$string['magtest:addinstance'] = 'Ajouter une instance';
-$string['magtest:manage'] = 'Configurer le test';
-$string['magtest:multipleattempts'] = 'Rejouer le test';
-$string['magtest:viewgeneralstat'] = 'Voir les statistiques de réponse';
-$string['magtest:viewotherresults'] = 'Voir les résultats de tous';
-
-$string['errorinvalidcategory'] = 'Catégorie invalide.';
-$string['erroraddcategory'] = 'Erreur lors de l\'ajout d\'une catégorie.';
-
 $string['<<'] = '<<';
 $string['>>'] = '>>';
 $string['addcategories'] = 'Ajouter des categories';
@@ -54,11 +45,7 @@ $string['answercount'] = 'Nombre de réponses';
 $string['answerquestions'] = 'Test&nbsp;:&ensp;';
 $string['answers'] = 'Réponses';
 $string['answerweights'] = 'Poids des réponses'; 
-<<<<<<< HEAD:lang/fr/magtest.php
-$string['answertext'] = 'Réponse pour la catégorie : {$a}';
-=======
 $string['answertext'] = 'Réponse pour la catégorie&nbsp;: {$a}';
->>>>>>> MOODLE_34_STABLE:lang/fr/magtest.php
 $string['backtocourse'] = 'Revenir au parcours';
 $string['categories'] = 'Catégories';
 $string['category'] = 'Catégorie';
@@ -152,38 +139,17 @@ $string['weight'] = 'Pondération';
 $string['weightfor'] = 'Poids pour "{$a}"'; 
 $string['weighted'] = 'Mode pondéré';
 $string['youneedcreatingcategories'] = 'Il faut créer au moins deux catégories avant de pouvoir créer des questions';
-<<<<<<< HEAD:lang/fr/magtest.php
-
-=======
 $string['you_have_to_create_categories'] = 'Vous devez créer au moins une catégorie de réponses avant de pouvoir créer une question.';
 $string['question_text'] = 'Texte de la question';
 $string['answer'] = 'Réponse';
 $string['helpertext'] = 'Aide';
 $string['updatecategories'] = 'Modifier la catégorie';
 $string['updatequestion'] = 'Modifier la question';
->>>>>>> MOODLE_34_STABLE:lang/fr/magtest.php
 // Help strings //
 
 $string['importformat_help'] = '
 ### Format d\'import des questions
 
-<<<<<<< HEAD:lang/fr/magtest.php
-Le fichier d\import doit être encodé en UTF8, séparé par des ";", une question par ligne et doit avoir une première colonne avec le texte de la question. 
-
-Si l\'option "Choix simple" est active, alors les colonnes suivantes donnent dans l\'ordre les poids de catégorie (entier).
-
-Si l\'option "Choix simple" est désactivée (par défaut), alors les colonnes suivantes viennent par groupe de trois et donnent dans l\'ordre et pour chaque catégorie,
-le texte de réponse, le poids et le texte d\'aide de la réponse.
-';
-
-
-$string['modulename_help'] = "Le Test de Type Magazine permet de créer une évaluation multicritère additionnant un score
-sur plusieurs évaluateurs à la fois. A la fin du test, l'utilisateur est rangé dans la catégorie correspondant à son évaluateur
-dominant. L'enseignant peut constituer des groupes de cours à partir de ces résultats. 
-";
-
-$string['pagesize_help'] = '## Test type "Magazine"
-=======
 Le fichier d\import doit être encodé en UTF8, séparé par des ";", une question par ligne et doit avoir une première colonne avec le texte de la question.
 
 Si l\'option "Choix simple" est active, alors les colonnes suivantes donnent dans l\'ordre les poids de catégorie (entier).
@@ -196,7 +162,6 @@ $string['modulename_help'] = "Le Test de Type Magazine permet de créer une éva
 sur plusieurs évaluateurs à la fois. A la fin du test, l'utilisateur est rangé dans la catégorie correspondant à son évaluateur
 dominant. L'enseignant peut constituer des groupes de cours à partir de ces résultats.
 ";
->>>>>>> MOODLE_34_STABLE:lang/fr/magtest.php
 
 $string['pagesize_help'] = '
 ### Taille des pages de test
