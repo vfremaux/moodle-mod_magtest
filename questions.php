@@ -70,7 +70,38 @@
             $answercheck = '('.implode(',<br/> ', $weights).')';
             $question->questiontext = file_rewrite_pluginfile_urls( $question->questiontext, 'pluginfile.php',$context->id, 'mod_magtest', 'question', 0);
 
+<<<<<<< HEAD
             $table->data[] = array($question->sortorder, format_string(format_text($question->questiontext, $question->questiontextformat)), $answercheck, $commands);
+=======
+if (!empty($questions)) {
+    foreach ($questions as $question) {
+        if (empty($question->answers)) {
+            $question->answers = array();
+        }
+        $order = $question->sortorder;
+        $commands = '<div class="questioncommands">';
+        $cmdurl = new moodle_url('/mod/magtest/editquestions.php', array('id' => $cm->id, 'qid' => $question->id));
+        $commands .= '<a href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/edit').'</a>';
+        $cmdurl = new moodle_url('/mod/magtest/view.php', array('id' => $cm->id, 'view' => 'questions', 'what' => 'delete', 'qid' => $question->id));
+        $commands .= '&nbsp;<a id="delete" href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/delete').'</a>';
+        if ($question->sortorder > 1) {
+            $cmdurl = new moodle_url('/mod/magtest/view.php', array('id' => $cm->id, 'view' => 'questions', 'what' => 'up', 'qid' => $question->id));
+            $commands .= '&nbsp;<a href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/up').'</a>';
+        } else {
+            $commands .= '&nbsp;'.$OUTPUT->pix_icon('up_shadow', '', 'magtest').'">';
+        }
+        if ($question->sortorder < count($questions)) {
+            $cmdurl = new moodle_url('/mod/magtest/view.php', array('id' => $cm->id, 'view' => 'questions', 'what' => 'down', 'qid' => $question->id));
+            $commands .= '&nbsp;<a href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/down').'</a>';
+        } else {
+            $commands .= '&nbsp;'.$OUTPUT->pix_icon('down_shadow', 'magtest');
+        }
+        $commands .='</div>';
+        $validanswercount = 0;
+        $weights = array();
+        foreach ($question->answers as $answer) {
+            $weights[] = $categories[$answer->categoryid]->name.': '.$answer->weight;
+>>>>>>> MOODLE_34_STABLE
         }
     }
     print('<center>');
