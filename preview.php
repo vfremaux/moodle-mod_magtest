@@ -16,7 +16,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-/**
+/*
  * Allows previewing the test before playing it
  *
  * @package    mod_magtest
@@ -52,7 +52,8 @@ if ($questions) {
         echo '<ul>';
         foreach ($questions as $question) {
             echo '<li>';
-            $question->questiontext = file_rewrite_pluginfile_urls( $question->questiontext, 'pluginfile.php', $context->id, 'mod_magtest', 'question', 0);
+            $question->questiontext = file_rewrite_pluginfile_urls($question->questiontext, 'pluginfile.php', $context->id,
+                                                                   'mod_magtest', 'question', 0);
 
             echo format_string($question->questiontext);
             $weights = array();
@@ -66,7 +67,8 @@ if ($questions) {
         echo '<ul>';
         foreach ($questions as $question) {
             echo '<li>';
-            $question->questiontext = file_rewrite_pluginfile_urls( $question->questiontext, 'pluginfile.php', $context->id, 'mod_magtest', 'question', 0);
+            $question->questiontext = file_rewrite_pluginfile_urls($question->questiontext, 'pluginfile.php', $context->id,
+                                                                   'mod_magtest', 'question', 0);
 
             echo format_string($question->questiontext);
             echo '<ul>';
@@ -75,7 +77,8 @@ if ($questions) {
                 $cat = $DB->get_record('magtest_category', array('id' => $answer->categoryid));
                 $imageurl = magtest_get_symbols_baseurl($magtest).$cat->symbol;
 
-                $answer->answertext  = file_rewrite_pluginfile_urls( $answer->answertext, 'pluginfile.php', $context->id, 'mod_magtest', 'questionanswer', $answer->id);
+                $answer->answertext  = file_rewrite_pluginfile_urls($answer->answertext, 'pluginfile.php', $context->id,
+                                                                    'mod_magtest', 'questionanswer', $answer->id);
 
                 echo "<img class=\"magtest-qsymbol\" src=\"$imageurl\" />&nbsp;&nbsp;";
                 echo ($answer->answertext).' ('.format_string($cat->name).')';

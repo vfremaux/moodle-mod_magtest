@@ -16,7 +16,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-/**
+/*
  * Controller for question management
  * @package mod-magtest
  * @category mod

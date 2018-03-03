@@ -30,6 +30,14 @@ defined('MOODLE_INTERNAL') or die();
 define('MAGTEST_RESETFORM_RESET', 'magtest_reset_data_');
 
 /**
+ * This function is not implemented in this plugin, but is needed to mark
+ * the vf documentation custom volume availability.
+ */
+function mod_magtest_supports_feature() {
+    assert(1);
+}
+
+/**
  * List of features supported in Vodeclic module
  * @param string $feature FEATURE_xx constant for requested feature
  * @return mixed True if module supports feature, false if not, null if doesn't know

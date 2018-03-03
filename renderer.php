@@ -41,7 +41,7 @@ class mod_magtest_renderer extends plugin_renderer_base {
     public function answer_help_icon($answerid) {
         global $CFG;
 
-        // first get the help image icon
+        // First get the help image icon.
         $src = $this->pix_url('help');
 
         $title = get_string('helper', 'magtest');
@@ -50,14 +50,14 @@ class mod_magtest_renderer extends plugin_renderer_base {
         $attributes = array('src' => $src, 'alt' => $alt, 'class' => 'iconhelp');
         $output = html_writer::empty_tag('img', $attributes);
 
-        // now create the link around it - we need https on loginhttps pages
+        // Now create the link around it - we need https on loginhttps pages.
         $url = new moodle_url('/mod/magtest/help.php', array('answerid' => $answerid));
 
         $attributes = array('href' => $url, 'title' => $title);
         $id = html_writer::random_id('helpicon');
         $attributes['id'] = $id;
         $output = html_writer::tag('a', $output, $attributes);
-        
+
         $this->page->requires->js_init_call('M.util.help_icon.add', array(array('id' => $id, 'url' => $url->out(false))));
 
         // And finally span.
@@ -70,11 +70,12 @@ class mod_magtest_renderer extends plugin_renderer_base {
 
         foreach ($questions as $question) {
             $str .= '<tr align="top">';
-              $str .= '<td width="20%" align="right"><b>'.get_string('question', 'magtest').':</b></td>';
-              $str .= '<td align="left" colspan="2">';
-            $str .= $question->questiontext = file_rewrite_pluginfile_urls($question->questiontext, 'pluginfile.php',$context->id, 'mod_magtest', 'question', 0);
+            $str .= '<td width="20%" align="right"><b>'.get_string('question', 'magtest').':</b></td>';
+            $str .= '<td align="left" colspan="2">';
+            $str .= $question->questiontext = file_rewrite_pluginfile_urls($question->questiontext, 'pluginfile.php', $context->id,
+                                                                           'mod_magtest', 'question', 0);
             $question->questiontext = format_string($question->questiontext);
-    
+
             $str .= '</td>';
             $str .= '</tr>';
             $i = 0;
@@ -88,7 +89,8 @@ class mod_magtest_renderer extends plugin_renderer_base {
                 $symbolurl = magtest_get_symbols_baseurl($magtest).$catsymbol;
                 $symbolimage = '<img class="magtest-qsymbol" src="'.$symbolurl.'" align="bottom" />&nbsp;&nbsp;';
                 $str .= $symbolimage;
-                $answer->answertext  = file_rewrite_pluginfile_urls( $answer->answertext, 'pluginfile.php',$context->id, 'mod_magtest', 'questionanswer', $answer->id);            
+                $answer->answertext  = file_rewrite_pluginfile_urls($answer->answertext, 'pluginfile.php', $context->id,
+                                                                    'mod_magtest', 'questionanswer', $answer->id);
                 $answertext = preg_replace('/^<p>(.*)<\/p>$/', '\\1', $answer->answertext);
                 $str .= ($answertext).' ';
                 if (!empty($answer->helper)) {
@@ -106,14 +108,15 @@ class mod_magtest_renderer extends plugin_renderer_base {
         return $str;
     }
 
-    function print_magtest_singlechoice(&$questions, $context) {
+    public function print_magtest_singlechoice(&$questions, $context) {
 
         $str = '';
 
         foreach ($questions as $question) {
             $str .= '<tr align="top">';
             $str .= '<td align="left">';
-            $str .= $question->questiontext = file_rewrite_pluginfile_urls($question->questiontext, 'pluginfile.php',$context->id, 'mod_magtest', 'question', 0);
+            $str .= $question->questiontext = file_rewrite_pluginfile_urls($question->questiontext, 'pluginfile.php', $context->id,
+                                                                           'mod_magtest', 'question', 0);
             $question->questiontext = format_string($question->questiontext);
             $str .= '</td>';
             $i = 0;
@@ -128,67 +131,40 @@ class mod_magtest_renderer extends plugin_renderer_base {
         return $str;
     }
 
-    function make_test(&$magtest, &$cm, &$context, &$nextset, &$categories) {
+    public function make_test(&$magtest, &$cm, &$context, &$nextset, &$categories) {
         global $COURSE;
 
         $currentpage = optional_param('qpage', 0, PARAM_INT);
 
-        $str = '';
-        $str .= '<form name="maketest" method="post" action="view.php">';
-        $str .= '<input type="hidden" name="id" value="'.$cm->id.'" />';
-        $str .= '<input type="hidden" name="view" value="doit" />';
-        $str .= '<input type="hidden" name="magtestid" value="'.$magtest->id.'" />';
-        $str .= '<input type="hidden" name="what" value="" />';
-        $str .= '<input type="hidden" name="qpage" value="'.($currentpage + 1).'" />';
-        $str .= '<table width="100%" cellspacing="10" cellpadding="10">';
+        $template = new StdClass;
+        $template->cmid = $cm->id;
+        $template->magtestid = $magtest->id;
+        $template->nextpage = $currentpage + 1;
 
         if (empty($magtest->singlechoice)) {
-            $str .= $this->print_magtest_quiz($nextset, $categories, $context);
+            $template->magteststandard = $this->print_magtest_quiz($nextset, $categories, $context);
         } else {
-            $str .= $this->print_magtest_singlechoice($nextset, $context);
+            $template->magtestsingle = $this->print_magtest_singlechoice($nextset, $context);
         }
 
-        $str .= '<tr align="top">';
-        $str .= '<td colspan="3" align="center">';
-        $str .= '<input type="button" name="go_btn" value="'.get_string('save', 'magtest').'" onclick="if (checkanswers()){document.forms[\'maketest\'].what.value = \'save\'; document.forms[\'maketest\'].submit();} return true;" />';
+        $template->savestr = get_string('save', 'magtest');
+        $template->savehandler = 'if (checkanswers()){document.forms[\'maketest\'].what.value = \'save\'; document.forms[\'maketest\'].submit();} return true;';
+        $template->canreplay = false;
         if (!$magtest->endtimeenable || time() < $magtest->endtime) {
             if ($magtest->allowreplay && has_capability('mod/magtest:multipleattempts', $context)) {
-                echo '<input type="button" name="reset_btn" value="'.get_string('reset', 'magtest').'" onclick="document.forms[\'maketest\'].what.value = \'reset\'; document.forms[\'maketest\'].submit(); return true;" />';
+                $template->canreplay = true;
+                $template->resetstr = get_string('reset', 'magtest');
+                $template->resethandler = 'document.forms[\'maketest\'].what.value = \'reset\'; document.forms[\'maketest\'].submit(); return true;';
             }
         }
         $courseurl = new moodle_url('/course/view.php', array('id' => $COURSE->id));
-        $str .= '<input type="button" name="backtocourse_btn" value="'.get_string('backtocourse', 'magtest') .'" onclick="document.location.href = \''.$courseurl.'\'; return true;" />';
-        $str .= '</td>';
-        $str .= '</tr>';
-        $str .= '</table>';
-        $str .= '</form>';
+        $template->backtocoursestr = get_string('backtocourse', 'magtest');
+        $template->backhandler = 'document.location.href = \''.$courseurl.'\'; return true;';
+
         if (!$magtest->singlechoice) {
-            $escapedlabel = str_replace("'", "\\'", get_string('pagenotcomplete', 'magtest'));
-            $str .= '<script type="text/javascript">
-            function checkanswers() {
-                var checkids = ['.implode(',', array_keys($nextset)).'];
-                for(i = 0 ; i < checkids.length ; i++) {
-                    rad_val = \'\';
-                    for (var j=0; j < document.forms[\'maketest\'].elements[\'answer\' + checkids[i]].length; j++){
-                        if (document.forms[\'maketest\'].elements[\'answer\' + checkids[i]][j].checked){
-                            rad_val = document.forms[\'maketest\'].elements[\'answer\' + checkids[i]].value;
-                        }
-                    }
-                    if (rad_val == \'\') {
-                        alert(\''.$escapedlabel.'\');
-                        return false; 
-                    }
-                }
-                return true;
-            }
-            </script>';
-        } else {
-            $str .= '<script type="text/javascript">';
-            $str .= "function checkanswers() {\n";
-            $str .= "    return true;\n";
-            $str .= "}\n";
-            $str .= '</script>';
+            $template->label = str_replace("'", "\\'", get_string('pagenotcomplete', 'magtest'));
+            $template->nextsetarray = implode(',', array_keys($nextset));
         }
-        return $str;
+        return $this->output->render_from_template('mod_magtest/test', $template);
     }
 }

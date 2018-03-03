@@ -16,7 +16,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-/**
+/*
  * Controller for "maketest"
  *
  * @package    mod_magtest
@@ -66,7 +66,8 @@ if ($action == 'save') {
                 $useranswer->answerid = required_param($akey, PARAM_INT);
                 $useranswer->questionid = $questionid;
                 $useranswer->timeanswered = time();
-                if ($old = $DB->get_record('magtest_useranswer', array('userid' => $USER->id, 'magtestid' => $magtest->id, 'questionid' => $questionid))) {
+                $params = array('userid' => $USER->id, 'magtestid' => $magtest->id, 'questionid' => $questionid);
+                if ($old = $DB->get_record('magtest_useranswer', $params)) {
                     $useranswer->id = $old->id;
                     $DB->update_record('magtest_useranswer', $useranswer);
                 } else {

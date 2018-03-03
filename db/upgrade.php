@@ -68,7 +68,7 @@ function xmldb_magtest_upgrade($oldversion = 0) {
         upgrade_mod_savepoint(true, 2009053100, 'magtest');
     }
 
-    // Moodle 2.0 upgrade horizon
+    // Moodle 2.0 upgrade horizon.
 
     if ($oldversion < 2012103100) {
 
@@ -91,7 +91,7 @@ function xmldb_magtest_upgrade($oldversion = 0) {
         $field->set_attributes(XMLDB_TYPE_INTEGER, '4', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, 0, 'answertext');
 
         if ($dbman->field_exists($table, $field)) {
-            // pre-fix possible old NULL values.
+            // Pre-fix possible old NULL values.
             $sql = "
                 UPDATE
                     {magtest_answer}
@@ -110,7 +110,7 @@ function xmldb_magtest_upgrade($oldversion = 0) {
         $field->set_attributes(XMLDB_TYPE_INTEGER, '4', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, 0, 'questiontext');
 
         if ($dbman->field_exists($table, $field)) {
-            // pre-fix possible old NULL values.
+            // Pre-fix possible old NULL values.
             $sql = "
                 UPDATE
                     {magtest_question}
@@ -128,9 +128,9 @@ function xmldb_magtest_upgrade($oldversion = 0) {
 
         $field = new xmldb_field('format');
         $field->set_attributes(XMLDB_TYPE_INTEGER, '4', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, 0, 'name');
-        if ($dbman->field_exists($table, $field)){
+        if ($dbman->field_exists($table, $field)) {
 
-            // pre-fix possible old NULL values.
+            // Pre-fix possible old NULL values.
             $sql = "
                 UPDATE
                     {magtest_category}
@@ -145,7 +145,7 @@ function xmldb_magtest_upgrade($oldversion = 0) {
         }
 
         $field = new xmldb_field('outputgroupname');
-        $field->set_attributes(XMLDB_TYPE_CHAR, '32', null, null, null,  null, 'result');
+        $field->set_attributes(XMLDB_TYPE_CHAR, '32', null, null, null, null, 'result');
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }

@@ -37,68 +37,49 @@ echo "<center>";
 echo $OUTPUT->box_start();
 
 if (!empty($categories)) {
+
     $symbolstr = get_string('symbol', 'magtest');
     $namestr = get_string('name');
     $descriptionstr = get_string('description');
     $resultstr = get_string('categoryresult', 'magtest');
     $commandstr = get_string('commands', 'magtest');
+
     $table = new html_table();
+    $table->head = array("<b>$symbolstr</b>", "<b>$namestr</b>", "<b>$descriptionstr</b>",
+                         "<b>$resultstr</b>", "<b>$commandstr</b>");
+    $table->align = array('center', 'left', 'left', 'left', 'left');
+    $table->size = array('5%', '15%', '30%', '30%', '15%');
+    $table->width = '100%';
 
-    $table->head = array(
-        "<b>$symbolstr</b>",
-        "<b>$namestr</b>",
-        "<b>$descriptionstr</b>",
-        "<b>$resultstr</b>",
-        "<b>$commandstr</b>"
-    );
+    foreach ($categories as $category) {
+        $commands = '<div class="categorycommands">';
+        $cmdurl = new moodle_url('/mod/magtest/editcategories.php', array('id' => $cm->id, 'catid' => $category->id));
+        $commands .= '<a href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/edit').'"></a>';
+        $cmdurl = new moodle_url('/mod/magtest/view.php', array('id' => $cm->id, 'what' => 'delete_category', 'catid' => $category->id));
+        $commands .= ' <a id="delete" href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/delete').'" /></a>';
 
-    $table->align = array(
-        'center',
-        'left',
-        'left',
-        'left',
-        'left'
-    );
+        if ($category->sortorder > 1) {
+            $params = array('id' => $cm->id, 'view' => 'categories', 'what' => 'raisecategory', 'catid' => $category->id);
+            $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
+            $commands .= '&nbsp;<a href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/up').'"></a>';
+        } else {
+            $commands .= '&nbsp;<img src="'.$OUTPUT->pix_url('up_shadow', 'magtest').'">';
+        }
 
-    $table->size = array(
-        '5%',
-        '15%',
-        '30%',
-        '30%',
-        '15%'
-    );
+        if ($category->sortorder < count($categories)) {
+            $params = array('id' => $cm->id, 'view' => 'categories', 'what' => 'lowercategory', 'catid' => $category->id);
+            $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
+            $commands .= '&nbsp;<a href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/down').'"></a>';
+        } else {
+            $commands .= '&nbsp;<img src="'.$OUTPUT->pix_url('down_shadow', 'magtest').'">';
+        }
 
-$table->width = '100%';
+        $commands .= '</div>';
+        $symbolurl = magtest_get_symbols_baseurl($magtest) . $category->symbol;
+        $symbolimage = "<img src=\"{$symbolurl}\" />";
+        $category->format = 1;
 
-foreach ($categories as $category) {
-    $commands = '<div class="categorycommands">';
-    $cmdurl = new moodle_url('/mod/magtest/editcategories.php', array('id' => $cm->id, 'catid' => $category->id));
-    $commands .= '<a href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/edit').'"</a>';
-    $cmdurl = new moodle_url('/mod/magtest/view.php', array('id' => $cm->id, 'what' => 'deletecategory', 'catid' => $category->id));
-    $commands .=' <a id="delete" href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/delete').'" /></a>';
-
-    if ($category->sortorder > 1) {
-        $params = array('id' => $cm->id, 'view' => 'categories', 'what' => 'raisecategory', 'catid' => $category->id);
-        $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
-        $commands .= '&nbsp;<a href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/up').'"></a>';
-    } else {
-        $commands.='&nbsp;<img src="'.$OUTPUT->pix_url('up_shadow', 'magtest').'">';
-    }
-
-    if ($category->sortorder < count($categories)) {
-        $params = array('id' => $cm->id, 'view' => 'categories', 'what' => 'lowercategory', 'catid' => $category->id);
-        $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
-        $commands .= '&nbsp;<a href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/down').'"></a>';
-    } else {
-        $commands.='&nbsp;<img src="'.$OUTPUT->pix_url('down_shadow', 'magtest').'">';
-    }
-
-    $commands .= '</div>';
-    $symbolurl = magtest_get_symbols_baseurl($magtest) . $category->symbol;
-    $symbolimage = "<img src=\"{$symbolurl}\" />";
-    $category->format = 1;
-
-    $table->data[] = array(
+        $table->data[] = array(
             $symbolimage,
             format_string($category->name),
             format_string(format_text($category->description, $category->format)),

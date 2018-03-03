@@ -100,7 +100,7 @@ class moodle1_mod_magtest_handler extends moodle1_mod_handler {
                     ),
                 )
             ),
-       );
+        );
     }
 
     /**
@@ -161,7 +161,7 @@ class moodle1_mod_magtest_handler extends moodle1_mod_handler {
         $this->close_xml_writer();
     }
 
-    // need wait for all elements an elements item collected into memory structure as nesting change structure occurs.
+    // Need wait for all elements an elements item collected into memory structure as nesting change structure occurs.
     public function on_answers_start() {
         $this->xmlwriter->begin_tag('answers');
     }

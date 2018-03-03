@@ -14,41 +14,43 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-if (!(isset($id) and $view === 'questions' and  has_capability('mod/magtest:manage', $context))) {
-    print 'You have not to see this page';
+defined('MOODLE_INTERNAL') || die();
+
+if (!(isset($id) && $view === 'questions' &&  has_capability('mod/magtest:manage', $context))) {
+    echo('You have not to see this page');
     exit;
 }
 
-$nb_cat = $DB->count_records_select('magtest_category','magtestid = '.$magtest->id.' and categoryshortname <> \'\'');
+$nbcat = $DB->count_records_select('magtest_category', 'magtestid = '.$magtest->id.' and categoryshortname <> \'\'');
 
-if ( $nb_cat < 2) {
-    echo $OUTPUT->notification(get_string('you_have_to_create_categories','magtest'));
+if ($nbcat < 2) {
+    echo $OUTPUT->notification(get_string('you_have_to_create_categories', 'magtest'));
     exit;
 }
 
 $first = false;
-$nb_questions = $DB->count_records('magtest_question', array('magtestid' => $magtest->id));
+$nbquestions = $DB->count_records('magtest_question', array('magtestid' => $magtest->id));
 
 if ($action != '') {
-    include("questionsview.controller.php");
-    if (!isset($question) or empty($question)) {
+    include($CFG->dirroot.'/mod/magtest/questionsview.controller.php');
+    if (!isset($question) || empty($question)) {
         echo $OUTPUT->notification('I can\'t get question. Problem !');
         exit;
     }
- } else {
+} else {
     $question = get_magtest_question($magtest->id);
-    if (! $question ) {
+    if (!$question ) {
         $question = magtest_add_empty_question($magtest->id);
         $first = true;
-    } 
- }
-
-$tab_not_ok = are_questions_not_ok($magtest->id);
-if (! $tab_not_ok ) {
-    $tab_not_ok = array();
+    }
 }
 
-$not_ok =  ( !$first and in_array($question->qorder, $tab_not_ok) );
+$tabnotok = are_questions_not_ok($magtest->id);
+if (! $tabnotok ) {
+    $tabnotok = array();
+}
+
+$notok = (!$first && in_array($question->qorder, $tabnotok));
 
 ?>
 <form name="editquestions" method="POST" action="view.php">
@@ -60,7 +62,7 @@ $not_ok =  ( !$first and in_array($question->qorder, $tab_not_ok) );
 
 <?php
 echo $OUTPUT->heading(get_string('editquestions', 'magtest')." $question->qorder");
-if ($not_ok) {
+if ($notok) {
     echo $OUTPUT->heading(get_string('questionneedattention', 'magtest'));
 }
 ?>
@@ -113,22 +115,22 @@ $i++;
     <td colspan="2" align="center">
 <?php
 
-if ($nb_questions > 1) {
-    for ($i = 1; $i <= $nb_questions; $i++) {
-        $str_i = $i;
-        if (in_array($i,$tab_not_ok)) {
-            $str_i = '<font color = "red">'.$i.'</font>';
+if ($nbquestions > 1) {
+    for ($i = 1; $i <= $nbquestions; $i++) {
+        $stri = $i;
+        if (in_array($i, $tabnotok)) {
+            $stri = '<font color = "red">'.$i.'</font>';
         }
         if ($i == $question->qorder ) {
             if ($i > 1) {
                 echo '<input type="submit" name="what" value="'.get_string('<<', 'magtest').'"  >';
             }
-            print $str_i;
-            if ($i < $nb_questions) {
+            print $stri;
+            if ($i < $nbquestions) {
                 echo '<input type="submit" name="what" value="'.get_string('>>', 'magtest').'"  >';
             }
         } else {
-            echo '<button type="submit" name="what" value="'.$i.'"  >'.$str_i.'</button>';
+            echo '<button type="submit" name="what" value="'.$i.'" >'.$stri.'</button>';
         }
     }
 }

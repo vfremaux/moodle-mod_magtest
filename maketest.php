@@ -16,7 +16,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-/**
+/*
  * Allows answering to the test, question by question
  *
  * @package    mod_magtest
@@ -64,16 +64,16 @@ if ($magtest->pagesize) {
     $donerecords = $DB->count_records_select('magtest_useranswer', "magtestid = $magtest->id AND userid = $USER->id ");
     $allpages = ceil(($DB->count_records('magtest_question', array('magtestid' => $magtest->id)) / $magtest->pagesize));
 } else {
-    $allpages = 1; // one unique page of any length
+    $allpages = 1; // One unique page of any length.
 }
 
 if (!$nextset) {
-    echo $OUTPUT->notification(get_string('testfinish','magtest'));
+    echo $OUTPUT->notification(get_string('testfinish', 'magtest'));
     include($CFG->dirroot.'/mod/magtest/testfinished.php');
     return;
 }
 
-// Keep this after test finished test, to allow students that have 
+// Keep this after test finished test, to allow students that have
 // completed the test to see results.
 if ($magtest->endtimeenable && time() >= $magtest->endtime) {
     echo '<center>';
@@ -83,9 +83,10 @@ if ($magtest->endtimeenable && time() >= $magtest->endtime) {
 }
 $categories = magtest_get_categories($magtest->id);
 
-echo $OUTPUT->heading(get_string('answerquestions', 'magtest').format_string($magtest->name).' : '.($currentpage + 1).'/'.$allpages);
+$heading = get_string('answerquestions', 'magtest').format_string($magtest->name).' : '.($currentpage + 1).'/'.$allpages;
+echo $OUTPUT->heading($heading);
 
-// print a description on first page.
+// Print a description on first page.
 if (!empty($magtest->description) && $currentpage == 1) {
     echo '<br/>';
     echo $OUTPUT->box(format_string($magtest->description));
