@@ -46,10 +46,10 @@ class Question_Form extends moodleform {
     }
 
     public function definition() {
-       global $DB, $CFG, $cm, $qid, $id;
+        global $DB, $CFG, $cm, $qid, $id;
 
         $mform = $this->_form;
-        $modcontext = context_module::instance($id); 
+        $modcontext = context_module::instance($id);
 
         $mform->addElement('header', 'header0', get_string($this->cmd.'question', 'magtest'));
 
@@ -64,13 +64,13 @@ class Question_Form extends moodleform {
         $mform->setDefault('what', 'do'. $this->cmd);
         $mform->setType('what', PARAM_ALPHA);
 
-        $maxbytes = 1024 *1024 * 100 ;
+        $maxbytes = 1024 * 1024 * 100 ;
         $questionoptions = array('trusttext' => true,
                                  'subdirs' => false,
                                  'maxfiles' => 100,
                                  'maxbytes' => $maxbytes,
                                  'context' => $modcontext);
-        $fileoptions = array('maxfiles' => EDITOR_UNLIMITED_FILES, 'noclean' => true, 'context' =>  $modcontext);
+        $fileoptions = array('maxfiles' => EDITOR_UNLIMITED_FILES, 'noclean' => true, 'context' => $modcontext);
 
         if (!empty($qid) && $qid != -1) {
             $question = magtest_get_question($qid);
@@ -82,7 +82,7 @@ class Question_Form extends moodleform {
         }
 
         $mform->addElement('hidden', 'magtestid', $this->magtest->id);
-        $mform->setType('magtestid', PARAM_INT); 
+        $mform->setType('magtestid', PARAM_INT);
 
         if ($this->cmd == 'add') {
             $mform->addElement('hidden', 'cmd', 'add');
@@ -91,7 +91,7 @@ class Question_Form extends moodleform {
             $mform->addElement('editor', 'questiontext_editor', get_string('question_text', 'magtest'), null, $fileoptions);
             // Insert hte question.
             // Get the categories.
-            $cats = $DB->get_records('magtest_category',array('magtestid' => $this->magtest->id));
+            $cats = $DB->get_records('magtest_category', array('magtestid' => $this->magtest->id));
 
             $i = 1;
             foreach ($cats as $cat) {
@@ -104,7 +104,7 @@ class Question_Form extends moodleform {
                 $questionanswertext = get_string('category', 'mod_magtest')." '".$cat->name."' answer";
                 if (empty($this->magtest->singlechoice)) {
                     $key = 'questionanswer'.$cat->id.'_editor';
-                    $question_editor = $mform->addElement('editor', $key, $questionanswertext, null, $fileoptions);
+                    $questioneditor = $mform->addElement('editor', $key, $questionanswertext, null, $fileoptions);
                     $mform->addRule('questionanswer'.$cat->id.'_editor', null, 'required', null, 'client');
                 } else {
                     $label = get_string('singlechoicemode', 'magtest');
@@ -128,7 +128,7 @@ class Question_Form extends moodleform {
             $mform->addElement('hidden', 'cmd', 'update');
             $mform->setType('cmd', PARAM_ALPHA);
 
-            $mform->addElement('hidden', 'qid', $question->id); 
+            $mform->addElement('hidden', 'qid', $question->id);
             $mform->setType('gid', PARAM_INT);
 
             $label = get_string('question_text', 'magtest');
@@ -138,8 +138,8 @@ class Question_Form extends moodleform {
                                                      'mod_magtest', 'question', 0);
 
             // Insert hte question.
-            //Get the categories.
-            $categories = $DB->get_records('magtest_category',array('magtestid' => $this->magtest->id));
+            // Get the categories.
+            $categories = $DB->get_records('magtest_category', array('magtestid' => $this->magtest->id));
             $mform->addElement('header', 'header1', get_string('answers', 'magtest'));
             foreach ($categories as $cat) {
                 $mform->addElement('hidden', 'cats['. $cat->id.']', $cat->id);
@@ -152,7 +152,7 @@ class Question_Form extends moodleform {
 
                 if (!$this->magtest->singlechoice) {
                     $key = 'questionanswer'.$cat->id.'_editor';
-                    $question_editor = $mform->addElement('editor', $key, $questionanswertext, null, $fileoptions);
+                    $questioneditor = $mform->addElement('editor', $key, $questionanswertext, null, $fileoptions);
                     $mform->addRule('questionanswer'.$cat->id.'_editor', null, 'required', null, 'client');
                 }
                 if ($this->magtest->weighted) {
@@ -173,7 +173,7 @@ class Question_Form extends moodleform {
                         $question->{$field.'format'} = FORMAT_HTML;
                         $question  = file_prepare_standard_editor($question, $field, $questionoptions, $modcontext, 'mod_magtest',
                                                                   'questionanswer', $answer->id);
-    
+
                         $field = 'helper'.$cat->id;
                         $question->{$field} = $answer->helper;
                         $question->{$field.'format'} = FORMAT_HTML;

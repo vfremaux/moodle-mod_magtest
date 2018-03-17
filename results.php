@@ -43,35 +43,35 @@ if ($isseparategroups and (!$currentgroup) ) {
     exit;
 }
 
-$baseurl = "view.php?id={$cm->id}&amp;view=results";
-groups_print_course_menu($course,$baseurl);
+$baseurl = new moodle_url('/mod/magtest/view.php', array('id' => $cm->id, 'view' => 'results'));
+groups_print_course_menu($course, $baseurl);
 
 if (! $grouptoshow ) {
     $grouptoshow = '';
 }
 
-$users = get_users_by_capability($context, 'mod/magtest:doit','', '', '', '', $grouptoshow);
+$users = get_users_by_capability($context, 'mod/magtest:doit', '', '', '', '', $grouptoshow);
 $usersanswers = get_magtest_usersanswers($magtest->id);
 
 if (! $usersanswers ) {
-    echo $OUTPUT->notification(get_string('nouseranswer','magtest'));
+    echo $OUTPUT->notification(get_string('nouseranswer', 'magtest'));
     exit;
 }
 
 $categories = get_magtest_categories($magtest->id);
 $questions = get_magtest_questions($magtest->id);
-$count_cat = array();
+$countcat = array();
 
-$nb_total = 0;
+$nbtotal = 0;
 
 foreach ($usersanswers as $useranswer) {
     if ($magtest->singlechoice) {
-        // sum each earned weight per category
+        // Sum each earned weight per category.
         $question = $questions[$useranswer->questionid];
         foreach ($questions->answers as $answer) {
             if ($useranswer->answerid == 1) {
                 $cat = $categories[$answer->categoryid];
-                $count_cat[$useranswer->userid][$cat->categoryshortname] = $count_cat[$useranswer->userid][$cat->categoryshortname] + $answer->weight;
+                $countcat[$useranswer->userid][$cat->categoryshortname] = $countcat[$useranswer->userid][$cat->categoryshortname] + $answer->weight;
             }
         }
     } else {
@@ -79,15 +79,15 @@ foreach ($usersanswers as $useranswer) {
         $question = $questions[$useranswer->questionid];
         $answer = $question->answers[$useranswer->answerid];
         $cat = $categories[$answer->categoryid];
-        $count_cat[$useranswer->userid][$cat->categoryshortname] = $count_cat[$useranswer->userid][$cat->categoryshortname] + $answer->weight ;
+        $countcat[$useranswer->userid][$cat->categoryshortname] = $countcat[$useranswer->userid][$cat->categoryshortname] + $answer->weight;
     }
 }
 
 $table->head = array(get_string('users'));
 
-foreach($categories as $category) {
+foreach ($categories as $category) {
     $table->head[] = $category->categoryshortname;
-    $tab_empty[$category->categoryshortname] = 0; 
+    $tab_empty[$category->categoryshortname] = 0;
 }
 
 $results = array();
@@ -104,7 +104,7 @@ foreach ($users as $user) {
                 fullname($user, has_capability('moodle/site:viewfullnames', $context))
             ),
         $tab_empty,
-        $count_cat[$user->id] 
+        $countcat[$user->id]
     );
 }
 

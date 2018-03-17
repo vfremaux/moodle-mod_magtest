@@ -45,7 +45,7 @@ if ($id) {
 
 require_course_login($course->id, true, $cm);
 
-$mod_context = context_module::instance($id);
+$modcontext = context_module::instance($id);
 
 $url = new moodle_url('/mod/magtest/editquestions.php', array('id' => $id));
 $editurl = new moodle_url('/mod/magtest/view.php', array('id' => $id, 'view' => 'questions'));
@@ -65,9 +65,9 @@ if ($qid <= 0) {
     $form = new Question_Form($magtest, 'update', $howmany, $url);
 }
 
-$maxbytes = 1024 * 1024 * 1000 ; // TODO: add settings.
-$questionoptions = array('trusttext' => true, 'subdirs' => false, 'maxfiles' => 100, 'maxbytes' => $maxbytes, 'context' => $mod_context);
-$answeroptions = array('trusttext' => true, 'subdirs' => false, 'maxfiles' => 100, 'maxbytes' => $maxbytes, 'context' => $mod_context);
+$maxbytes = 1024 * 1024 * 1000; // TODO: add settings.
+$questionoptions = array('trusttext' => true, 'subdirs' => false, 'maxfiles' => 100, 'maxbytes' => $maxbytes, 'context' => $modcontext);
+$answeroptions = array('trusttext' => true, 'subdirs' => false, 'maxfiles' => 100, 'maxbytes' => $maxbytes, 'context' => $modcontext);
 
 if ($form->is_cancelled()) {
     redirect($editurl);
@@ -79,27 +79,27 @@ if ($data = $form->get_data()) {
 
     if ($cmd == 'add') {
 
-        $data = file_postupdate_standard_editor($data, 'questiontext', $questionoptions, $mod_context, 'mod_magtest', 'question', 0);
+        $data = file_postupdate_standard_editor($data, 'questiontext', $questionoptions, $modcontext, 'mod_magtest', 'question', 0);
 
         $question = new stdClass();
-        $question->questiontext = $data->questiontext; 
+        $question->questiontext = $data->questiontext;
         $question->questiontextformat = FORMAT_MOODLE;
         $question->magtestid = $data->magtestid;
         $maxsort = 0 + $DB->get_field('magtest_question', 'MAX(sortorder)', array('magtestid' => $data->magtestid));
         $question->sortorder = $maxsort + 1;
-        $newanswer_id = $DB->insert_record('magtest_question', $question);
+        $newanswerid = $DB->insert_record('magtest_question', $question);
 
         // Store the cats answers.
         foreach ($data->cats as $catid) {
             if (!$magtest->singlechoice) {
-                $data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $mod_context,
-                                                        'mod_magtest', 'questionanswer', $newanswer_id);
-                $data = file_postupdate_standard_editor($data, 'helper'.$catid, $questionoptions, $mod_context, 'mod_magtest',
-                                                        'helper', $newanswer_id);
+                $data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $modcontext,
+                                                        'mod_magtest', 'questionanswer', $newanswerid);
+                $data = file_postupdate_standard_editor($data, 'helper'.$catid, $questionoptions, $modcontext, 'mod_magtest',
+                                                        'helper', $newanswerid);
             }
 
             $answer = new stdClass();
-            $answer->questionid = $newanswer_id;
+            $answer->questionid = $newanswerid;
             $answer->magtestid = $magtest->id;
 
             if (!$magtest->singlechoice) {
@@ -127,9 +127,9 @@ if ($data = $form->get_data()) {
     } else {
         // Update question.
 
-        $data = file_postupdate_standard_editor($data, 'questiontext', $questionoptions, $mod_context, 'mod_magtest',
+        $data = file_postupdate_standard_editor($data, 'questiontext', $questionoptions, $modcontext, 'mod_magtest',
                                                 'question', 0);
-        $question = $DB->get_record('magtest_question',array('id' => $data->qid));
+        $question = $DB->get_record('magtest_question', array('id' => $data->qid));
         $question->questiontext = $data->questiontext;
         $question->questiontextformat = FORMAT_HTML;
         $DB->update_record('magtest_question', $question);
@@ -142,11 +142,11 @@ if ($data = $form->get_data()) {
             if ($oldanswer) {
                 // Do an update.
                 if (!$magtest->singlechoice) {
-                    $data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $mod_context,
+                    $data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $modcontext,
                                                             'mod_magtest', 'questionanswer', $oldanswer->id);
                     $oldanswer->answertext = $data->{'questionanswer'.$catid};
 
-                    $data = file_postupdate_standard_editor($data, 'helper'.$catid, $questionoptions, $mod_context,
+                    $data = file_postupdate_standard_editor($data, 'helper'.$catid, $questionoptions, $modcontext,
                                                             'mod_magtest', 'helper', $oldanswer->id);
                     $oldanswer->helper = $data->{'helper'.$catid};
                     $oldanswer->helperformat = FORMAT_MOODLE;
@@ -181,12 +181,12 @@ if ($data = $form->get_data()) {
                 $newanswer->id = $DB->insert_record('magtest_answer', $newanswer);
 
                 if (!$magtest->pluginchoice) {
-                    $data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $mod_context,
+                    $data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $modcontext,
                                                             'mod_magtest', 'questionanswer', $newanswer->id);
                     $newanswer->answertext = $data->{'questionanswer'.$catid};
                     $newanswer->answertextformat = FORMAT_HTML;
 
-                    $data = file_postupdate_standard_editor($data, 'helper'.$catid, $questionoptions, $mod_context, 'mod_magtest',
+                    $data = file_postupdate_standard_editor($data, 'helper'.$catid, $questionoptions, $modcontext, 'mod_magtest',
                                                             'helper', $newanswer->id);
                     $newanswer->helper = $data->{'helper'.$catid};
                     $newanswer->helperformat = FORMAT_HTML;

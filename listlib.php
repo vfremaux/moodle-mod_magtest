@@ -44,8 +44,10 @@ function magtest_list_delete($id, $table) {
         return null;
     }
 
-    $res =  $DB->get_record($table, array('id' => $id));
-    if (!$res) return;
+    $res = $DB->get_record($table, array('id' => $id));
+    if (!$res) {
+        return;
+    }
     if ($res->sortorder > 1) {
         $previous = $DB->get_record($table, array('id' => $id, 'sortorder' => $res->sortorder - 1));
     }
@@ -59,8 +61,8 @@ function magtest_list_delete($id, $table) {
 }
 
 /**
- * Updates ordering of a list, reordering 
- * all subsequent siblings. 
+ * Updates ordering of a list, reordering
+ * all subsequent siblings.
  * @param reference $magtest a context to get records from
  * @param int $id the node from where to reorder
  * @param string $table the ordered table
@@ -73,7 +75,7 @@ function magtest_list_updateordering(&$magtest, $id, $table) {
     }
 
     // Getting ordering value of the current node.
-    $res =  $DB->get_record($table, array('id' => $id));
+    $res = $DB->get_record($table, array('id' => $id));
     if (!$res) {
         return;
     }
@@ -116,7 +118,7 @@ function magtest_list_up(&$magtest, $id, $table) {
     $res = $DB->get_record($table, array('id' => $id));
     if ($res->sortorder > 1) {
         $previousorder = $res->sortorder - 1;
-        $previous =  $DB->get_record($table, array('magtestid' => $magtest->id, 'sortorder' => $previousorder));
+        $previous = $DB->get_record($table, array('magtestid' => $magtest->id, 'sortorder' => $previousorder));
 
         // Swapping.
         $res->sortorder--;
@@ -141,7 +143,7 @@ function magtest_list_down(&$magtest, $id, $table) {
 
     if ($res->sortorder < $maxordering) {
         $nextorder = $res->sortorder + 1;
-        $next =  $DB->get_record($table, array('magtestid' => $magtest->id, 'sortorder' => $nextorder));
+        $next = $DB->get_record($table, array('magtestid' => $magtest->id, 'sortorder' => $nextorder));
 
         // Swapping.
         $res->sortorder++;

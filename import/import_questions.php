@@ -119,7 +119,7 @@ if ($data = $form->get_data()) {
 
             if ($magtest->singlechoice) {
                 $j = 1;
-                foreach($categories as $cat) {
+                foreach ($categories as $cat) {
                     $answer = new StdClass();
                     $answer->magtestid = $magtest->id;
                     $answer->categoryid = $cat->id;

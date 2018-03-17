@@ -26,10 +26,10 @@ require('../../config.php');
 require_once($CFG->dirroot.'/mod/magtest/lib.php');
 require_once($CFG->dirroot.'/mod/magtest/locallib.php');
 
-$id = optional_param('id', 0, PARAM_INT); // Course Module ID, or
-$a = optional_param('a', 0, PARAM_INT); // Magtest ID
-$view = optional_param('view',@$SESSION->view, PARAM_ACTION); // View.
-$page = optional_param('page',@$SESSION->page, PARAM_ACTION); // Page.
+$id = optional_param('id', 0, PARAM_INT); // Course Module ID.
+$a = optional_param('a', 0, PARAM_INT); // Magtest ID.
+$view = optional_param('view', @$SESSION->view, PARAM_ACTION); // View.
+$page = optional_param('page', @$SESSION->page, PARAM_ACTION); // Page.
 $action = optional_param('what', '', PARAM_RAW); // Command.
 
 // Load jquery.
@@ -133,9 +133,9 @@ if ($view == 'results') {
     }
 
     $tabname = get_string('resultsbyusers', 'magtest');
-    $tabrows[1][]= new tabobject('byusers', "view.php?id={$cm->id}&amp;view=results&amp;page=byusers", $tabname);
+    $tabrows[1][] = new tabobject('byusers', "view.php?id={$cm->id}&amp;view=results&amp;page=byusers", $tabname);
     $tabname = get_string('resultsbycats', 'magtest');
-    $tabrows[1][]= new tabobject('bycats', "view.php?id={$cm->id}&amp;view=results&amp;page=bycats", $tabname);
+    $tabrows[1][] = new tabobject('bycats', "view.php?id={$cm->id}&amp;view=results&amp;page=bycats", $tabname);
 
     if (!empty($page)) {
         $selected = $page;
@@ -153,28 +153,28 @@ switch ($view) {
         if (!has_capability('mod/magtest:doit', $context)) {
             print_error('errornotallowed', 'magtest');
         }
-        $file_to_include = 'maketest.php';
+        $filetoinclude = 'maketest.php';
         break;
 
     case 'preview':
         if (!has_capability('mod/magtest:manage', $context)) {
             redirect ("view.php?view=doit&amp;id={$cm->id}");
         }
-        $file_to_include = 'preview.php';
+        $filetoinclude = 'preview.php';
         break;
 
     case 'categories':
         if (!has_capability('mod/magtest:manage', $context)) {
             redirect ("view.php?view=doit&amp;id={$cm->id}");
         }
-        $file_to_include = 'categories.php';
+        $filetoinclude = 'categories.php';
         break;
 
     case 'questions':
         if (!has_capability('mod/magtest:manage', $context)) {
             redirect ("view.php?view=doit&amp;id={$cm->id}");
         }
-        $file_to_include = 'questions.php';
+        $filetoinclude = 'questions.php';
         break;
 
     case 'results':
@@ -183,11 +183,11 @@ switch ($view) {
         }
         switch ($page) {
             case 'byusers':
-                $file_to_include = 'resultsbyusers.php';
+                $filetoinclude = 'resultsbyusers.php';
                 break;
 
             case 'bycats':
-                $file_to_include = 'resultsbycats.php';
+                $filetoinclude = 'resultsbycats.php';
         }
         break;
 
@@ -195,7 +195,7 @@ switch ($view) {
         if (!has_capability('mod/magtest:viewgeneralstat', $context)) {
             redirect ("view.php?view=doit&amp;id={$cm->id}");
         }
-        $file_to_include = 'stat.php';
+        $filetoinclude = 'stat.php';
         break;
 
     default:;
@@ -218,7 +218,7 @@ print_tabs($tabrows, $selected, '', $activated);
 echo '<br/>';
 echo $OUTPUT->container_end();
 
-include $CFG->dirroot.'/mod/magtest/'.$file_to_include;
+require($CFG->dirroot.'/mod/magtest/'.$filetoinclude);
 
 // Finish the page.
 

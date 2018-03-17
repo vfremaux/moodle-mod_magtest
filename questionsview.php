@@ -14,26 +14,30 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-if (!(isset($id) and $view === 'questions' and  has_capability('mod/magtest:manage', $context))) {
+defined('MOODLE_INTERNAL') || die();
+
+if (!(isset($id) and $view === 'questions' && has_capability('mod/magtest:manage', $context))) {
     print 'You have not to see this page';
-    exit;
+    die;
 }
 
-$nb_cat = $DB->count_records_select('magtest_category','magtestid = '.$magtest->id.' and categoryshortname <> \'\'');
+$nbcat = $DB->count_records_select('magtest_category', 'magtestid = '.$magtest->id.' and categoryshortname <> \'\'');
 
-if ( $nb_cat < 2) {
-    echo $OUTPUT->notification(get_string('you_have_to_create_categories','magtest'));
-    exit;
+if ($nbcat < 2) {
+    echo $OUTPUT->notification(get_string('you_have_to_create_categories', 'magtest'));
+    echo $OUTPUT->footer();
+    die();
 }
 
 $first = false;
-$nb_questions = $DB->count_records('magtest_question', array('magtestid' => $magtest->id));
+$nbquestions = $DB->count_records('magtest_question', array('magtestid' => $magtest->id));
 
 if ($action != '') {
-    include("questionsview.controller.php");
+    include($CFG->dirroot.'/mod/magtest/questionsview.controller.php');
     if (!isset($question) or empty($question)) {
         echo $OUTPUT->notification('I can\'t get question. Problem !');
-        exit;
+        echo $OUTPUT->footer();
+        die();
     }
  } else {
     $question = get_magtest_question($magtest->id);
@@ -43,12 +47,12 @@ if ($action != '') {
     } 
  }
 
-$tab_not_ok = are_questions_not_ok($magtest->id);
-if (! $tab_not_ok ) {
-    $tab_not_ok = array();
+$tabnotok = are_questions_not_ok($magtest->id);
+if (! $tabnotok ) {
+    $tabnotok = array();
 }
 
-$not_ok =  ( !$first and in_array($question->qorder, $tab_not_ok) );
+$notok = (!$first && in_array($question->qorder, $tabnotok));
 
 ?>
 <form name="editquestions" method="POST" action="view.php">
@@ -60,24 +64,24 @@ $not_ok =  ( !$first and in_array($question->qorder, $tab_not_ok) );
 
 <?php
 echo $OUTPUT->heading(get_string('editquestions', 'magtest')." $question->qorder");
-if ($not_ok) {
+if ($notok) {
     echo $OUTPUT->heading(get_string('questionneedattention', 'magtest'));
 }
 ?>
 <tr>
     <td align="right"><b><?php print_string('question', 'magtest') ?>:</b></td>
     <td align="left">
-        <?php print_textarea(true, 10, 60, 660, 200, 'question[questiontext]', stripslashes($question->questiontext), $COURSE->id); ?>
+        <?php print_textarea(true, 10, 60, 660, 200, 'question[questiontext]', $question->questiontext, $COURSE->id); ?>
     </td>
 </tr>
 <?php
 $i = 0;
 $categories = get_magtest_categories($magtest->id);
-foreach( $categories as $category) {
-    $tab_cat[$category->id] = $category->categoryshortname;
+foreach ($categories as $category) {
+    $tabcat[$category->id] = $category->categoryshortname;
 }
-foreach($question->answers as $answer) {
-$i++;
+foreach ($question->answers as $answer) {
+    $i++;
 ?>
 <tr>
     <td align="right">
@@ -85,7 +89,7 @@ $i++;
         <b><?php print_string('answer', 'magtest'); echo " $i"; ?>:</b>
     </td>
     <td align="left">
-        <?php print_textarea(true, 10, 60, 660, 200,"question[answers][$i][answertext]",stripslashes($answer->answertext)); ?>
+        <?php print_textarea(true, 10, 60, 660, 200,"question[answers][$i][answertext]", $answer->answertext); ?>
     </td>
 </tr>
 <tr>
@@ -94,9 +98,9 @@ $i++;
     <td>
         <?php 
             print_string('choosecategoryforanswer', 'magtest');
-            echo html_writer::select($tab_cat, 'question[answers]['.$i.'][categoryid]', $answer->categoryid); 
-            // helpbutton ('choosecategoryforanswer', get_string('choosecategoryforanswer','magtest'), 'magtest'); 
-        ?> 
+            echo html_writer::select($tabcat, 'question[answers]['.$i.'][categoryid]', $answer->categoryid);
+            // helpbutton ('choosecategoryforanswer', get_string('choosecategoryforanswer','magtest'), 'magtest');
+        ?>
     </td>
 </tr>
 <?php
@@ -113,22 +117,22 @@ $i++;
     <td colspan="2" align="center">
 <?php
 
-if ($nb_questions > 1) {
-    for ($i = 1; $i <= $nb_questions; $i++) {
-        $str_i = $i;
-        if (in_array($i,$tab_not_ok)) {
-            $str_i = '<font color = "red">'.$i.'</font>';
+if ($nbquestions > 1) {
+    for ($i = 1; $i <= $nbquestions; $i++) {
+        $stri = $i;
+        if (in_array($i, $tabnotok)) {
+            $stri = '<font color = "red">'.$i.'</font>';
         }
         if ($i == $question->qorder ) {
             if ($i > 1) {
                 echo '<input type="submit" name="what" value="'.get_string('<<', 'magtest').'"  >';
             }
-            print $str_i;
-            if ($i < $nb_questions) {
+            print $stri;
+            if ($i < $nbquestions) {
                 echo '<input type="submit" name="what" value="'.get_string('>>', 'magtest').'"  >';
             }
         } else {
-            echo '<button type="submit" name="what" value="'.$i.'"  >'.$str_i.'</button>';
+            echo '<button type="submit" name="what" value="'.$i.'"  >'.$stri.'</button>';
         }
     }
 }

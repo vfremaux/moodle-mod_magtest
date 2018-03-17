@@ -69,14 +69,14 @@ if (!$missings = magtest_get_unsubmitted_users($magtest, $users)) {
 
 $usersanswers = magtest_get_useranswers($magtest->id, $users);
 if (! $usersanswers ) {
-    echo $OUTPUT->notification(get_string('nouseranswer','magtest'));
+    echo $OUTPUT->notification(get_string('nouseranswer', 'magtest'));
     return;
 }
 
 $categories = magtest_get_categories($magtest->id);
 $questions = magtest_get_questions($magtest->id);
-$count_cat = array();
-$nb_total = 0;
+$countcat = array();
+$nbtotal = 0;
 
 foreach ($usersanswers as $useranswer) {
     if ($magtest->singlechoice) {
@@ -84,14 +84,14 @@ foreach ($usersanswers as $useranswer) {
         foreach ($question->answers as $answer) {
             // Aggregate scores for each cat on each user.
             $cat = $categories[$answer->categoryid];
-            $count_cat[$useranswer->userid][$cat->id] = 0 + @$count_cat[$useranswer->userid][$cat->id] + $answer->weight;
+            $countcat[$useranswer->userid][$cat->id] = 0 + @$countcat[$useranswer->userid][$cat->id] + $answer->weight;
         }
     } else {
         $question = $questions[$useranswer->questionid];
         $answer = $question->answers[$useranswer->answerid];
         $cat = $categories[$answer->categoryid];
         // Aggregate scores.
-        $count_cat[$useranswer->userid][$cat->id] = 0 + @$count_cat[$useranswer->userid][$cat->id] + $answer->weight;
+        $countcat[$useranswer->userid][$cat->id] = 0 + @$countcat[$useranswer->userid][$cat->id] + $answer->weight;
     }
 }
 
@@ -101,13 +101,13 @@ foreach ($users as $user) {
     if (array_key_exists($user->id, $missings)) {
         continue;
     }
-    $max_cat[$user->id] = new StdClass();
-    $max_cat[$user->id]->score = 0;
-    $max_cat[$user->id]->catid = 0;
+    $maxcat[$user->id] = new StdClass();
+    $maxcat[$user->id]->score = 0;
+    $maxcat[$user->id]->catid = 0;
     foreach ($categories as $cat) {
-        if (@$count_cat[$user->id][$cat->id] > $max_cat[$user->id]->score) {
-            $max_cat[$user->id]->score = $count_cat[$user->id][$cat->id];
-            $max_cat[$user->id]->catid = $cat->id;
+        if (@$countcat[$user->id][$cat->id] > $maxcat[$user->id]->score) {
+            $maxcat[$user->id]->score = $countcat[$user->id][$cat->id];
+            $maxcat[$user->id]->catid = $cat->id;
         }
     }
 }
@@ -128,14 +128,14 @@ foreach ($users as $userid => $user) {
     $username = $OUTPUT->user_picture($user).' '.$userlink;
     $scoreboard = '<table width="100%" class=\"magtest-scoretable\">';
     foreach ($categories as $category) {
-        if ($max_cat[$user->id]->catid == $category->id) {
+        if ($maxcat[$user->id]->catid == $category->id) {
             $pf = '<span class="winner">';
             $sf = '</span>';
         } else {
             $pf = '';
             $sf = '';
         }
-        $score = @$count_cat[$user->id][$category->id];
+        $score = @$countcat[$user->id][$category->id];
         $symbolurl = magtest_get_symbols_baseurl($magtest).$category->symbol;
         $symbolimg = "<img src=\"$symbolurl\" /> ";
         $scoreboard .= "<tr><td>{$pf}{$symbolimg} {$category->name}{$sf}</td><td align=\"right\">{$pf}{$score}{$sf}</td></tr>";
