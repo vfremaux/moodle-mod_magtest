@@ -42,13 +42,11 @@ class mod_magtest_renderer extends plugin_renderer_base {
         global $CFG;
 
         // first get the help image icon
-        $src = $this->pix_url('help');
-
         $title = get_string('helper', 'magtest');
         $alt = get_string('helper', 'magtest');
 
-        $attributes = array('src' => $src, 'alt' => $alt, 'class' => 'iconhelp');
-        $output = html_writer::empty_tag('img', $attributes);
+        $attributes = array('class' => 'iconhelp');
+        $output = $this->pix_icon('help', $alt, 'core', $attributes);
 
         // now create the link around it - we need https on loginhttps pages
         $url = new moodle_url('/mod/magtest/help.php', array('answerid' => $answerid));

@@ -62,20 +62,20 @@ if (!empty($questions)) {
         $order = $question->sortorder;
         $commands = '<div class="questioncommands">';
         $cmdurl = new moodle_url('/mod/magtest/editquestions.php', array('id' => $cm->id, 'qid' => $question->id));
-        $commands .= '<a href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/edit').'"></a>';
+        $commands .= '<a href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/edit').'</a>';
         $cmdurl = new moodle_url('/mod/magtest/view.php', array('id' => $cm->id, 'view' => 'questions', 'what' => 'delete', 'qid' => $question->id));
-        $commands .= '&nbsp;<a id="delete" href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/delete').'"></a>';
+        $commands .= '&nbsp;<a id="delete" href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/delete').'</a>';
         if ($question->sortorder > 1) {
             $cmdurl = new moodle_url('/mod/magtest/view.php', array('id' => $cm->id, 'view' => 'questions', 'what' => 'up', 'qid' => $question->id));
-            $commands .= '&nbsp;<a href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/up').'"></a>';
+            $commands .= '&nbsp;<a href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/up').'</a>';
         } else {
-            $commands .= '&nbsp;<img src="'.$OUTPUT->pix_url('up_shadow', 'magtest').'">';
+            $commands .= '&nbsp;'.$OUTPUT->pix_icon('up_shadow', '', 'magtest').'">';
         }
         if ($question->sortorder < count($questions)) {
             $cmdurl = new moodle_url('/mod/magtest/view.php', array('id' => $cm->id, 'view' => 'questions', 'what' => 'down', 'qid' => $question->id));
-            $commands .= '&nbsp;<a href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/down').'"></a>';
+            $commands .= '&nbsp;<a href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/down').'</a>';
         } else {
-            $commands .= '&nbsp;<img src="'.$OUTPUT->pix_url('down_shadow', 'magtest').'">';
+            $commands .= '&nbsp;'.$OUTPUT->pix_icon('down_shadow', 'magtest');
         }
         $commands .='</div>';
         $validanswercount = 0;
