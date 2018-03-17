@@ -35,16 +35,10 @@ class backup_magtest_activity_structure_step extends backup_activity_structure_s
         // To know if we are including userinfo.
         $userinfo = $this->get_setting_value('userinfo');
 
-<<<<<<< HEAD:backup/moodle2/backup_magtest_stepslib.php
-        // Define each element separated
-        $magtest = new backup_nested_element('magtest', array('id'), array(
-			'name', 'intro', 'introformat', 'starttime', 'starttimeenable', 'endtime', 'endtimeenable', 'timecreated', 'result', 'weighted', 'usemakegroups', 'pagesize', 'allowreplay'));
-=======
         // Define each element separated.
         $magtest = new backup_nested_element('magtest', array('id'), array(
             'name', 'intro', 'introformat', 'starttime', 'starttimeenable', 'endtime', 'endtimeenable',
             'timecreated', 'result', 'weighted', 'usemakegroups', 'pagesize', 'allowreplay'));
->>>>>>> MOODLE_34_STABLE:backup/moodle2/backup_magtest_stepslib.php
 
         $answers = new backup_nested_element('answers');
 
@@ -60,24 +54,13 @@ class backup_magtest_activity_structure_step extends backup_activity_structure_s
 
         $useranswer = new backup_nested_element('useranswer', array('id'), array(
             'answerid', 'userid', 'questionid', 'timeanswered'));
-<<<<<<< HEAD:backup/moodle2/backup_magtest_stepslib.php
-            
-=======
 
->>>>>>> MOODLE_34_STABLE:backup/moodle2/backup_magtest_stepslib.php
         $categories = new backup_nested_element('categories');
 
         $category = new backup_nested_element('category', array('id'), array(
-<<<<<<< HEAD:backup/moodle2/backup_magtest_stepslib.php
-			'name', 'descriptionformat', 'description', 'result', 'sortorder', 'symbol', 'outputgroupname', 'outputgroupdesc'));
-            
-        // Build the tree
-        // (love this)
-=======
             'name', 'descriptionformat', 'description', 'result', 'sortorder', 'symbol', 'outputgroupname', 'outputgroupdesc'));
 
         // Build the tree.
->>>>>>> MOODLE_34_STABLE:backup/moodle2/backup_magtest_stepslib.php
         $magtest->add_child($categories);
         $categories->add_child($category);
 
@@ -103,21 +86,12 @@ class backup_magtest_activity_structure_step extends backup_activity_structure_s
         // Define id annotations.
         $useranswer->annotate_ids('user', 'userid');
 
-<<<<<<< HEAD:backup/moodle2/backup_magtest_stepslib.php
-        // Define file annotations
-        $magtest->annotate_files('mod_magtest', 'intro', null); // This file area hasn't itemid
-        $magtest->annotate_files('mod_magtest', 'result', null); // This file area hasn't itemid
-        $answer->annotate_files('mod_magtest', 'answertext', 'id'); // This file area has itemid
-        $category->annotate_files('mod_magtest', 'result', 'id'); // This file area has itemid
-        $question->annotate_files('mod_magtest', 'questiontext', 'id'); // This file area has itemid
-=======
         // Define file annotations.
         $magtest->annotate_files('mod_magtest', 'intro', null); // This file area hasn't itemid.
         $magtest->annotate_files('mod_magtest', 'result', null); // This file area hasn't itemid.
         $answer->annotate_files('mod_magtest', 'answertext', 'id'); // This file area has itemid.
         $category->annotate_files('mod_magtest', 'result', 'id'); // This file area has itemid.
         $question->annotate_files('mod_magtest', 'questiontext', 'id'); // This file area has itemid.
->>>>>>> MOODLE_34_STABLE:backup/moodle2/backup_magtest_stepslib.php
 
         // Return the root element (tracker), wrapped into standard activity structure.
         return $this->prepare_activity_structure($magtest);

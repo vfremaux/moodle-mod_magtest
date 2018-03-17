@@ -42,11 +42,7 @@ class restore_magtest_activity_structure_step extends restore_activity_structure
         $paths[] = $questions;
         $answers = new restore_path_element('magtest_answer', '/activity/magtest/answers/answer');
         $paths[] = $answers;
-<<<<<<< HEAD:backup/moodle2/restore_magtest_stepslib.php
-        
-=======
 
->>>>>>> MOODLE_34_STABLE:backup/moodle2/restore_magtest_stepslib.php
         if ($userinfo){
             $paths[] = new restore_path_element('magtest_useranswer', '/activity/magtest/useranswers/useranswer');
         }

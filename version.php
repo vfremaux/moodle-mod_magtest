@@ -1,18 +1,36 @@
-<?php // $Id: version.php,v 1.2 2012-11-01 18:05:14 vf Exp $
+<?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
- * Code fragment to define the version of magtest
- * This fragment is called by moodle_needs_upgrading() and /admin/index.php
+ * Version details.
  *
- * @author 
- * @version $Id: version.php,v 1.2 2012-11-01 18:05:14 vf Exp $
- * @package magtest
- **/
+ * @package mod_magtest
+ * @category mod
+ * @author     Valery Fremaux (valery.fremaux@gmail.com)
+ * @copyright  2013 onwards Valery Fremaux (valery.fremaux@gmail.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
-$module->version  = 2014012802;  // The current module version (Date: YYYYMMDDXX)
-$module->requires = 2012120304;  // Requires this Moodle version
-$module->cron     = 0;           // Period for cron to check this module (secs)
-$module->component = 'mod_magtest';   // Full name of the plugin (used for diagnostics)
-$module->maturity = MATURITY_RC;
-$module->release = '2.4.0 (Build 2013070902)';
+defined('MOODLE_INTERNAL') || die();
 
+$plugin->version  = 2016060100;  // The current module version (Date: YYYYMMDDXX)
+$plugin->requires = 2017110800;  // Requires this Moodle version
+$plugin->component = 'mod_magtest';   // Full name of the plugin (used for diagnostics)
+$plugin->maturity = MATURITY_STABLE;
+$plugin->release = '3.4.0 (Build 2016060100)';
 
+// Non moodle attributes.
+$plugin->codeincrement = '3.4.0000';

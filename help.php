@@ -1,9 +1,4 @@
 <?php
-<<<<<<< HEAD
-
-include '../../config.php';
-
-=======
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -32,14 +27,8 @@ include '../../config.php';
 require('../../config.php');
 
 // Security.
->>>>>>> MOODLE_34_STABLE
 require_login();
 
 $answerid = required_param('answerid', PARAM_INT);
 $answer = $DB->get_record('magtest_answer', array('id' => $answerid));
 echo $answer->helper;
-<<<<<<< HEAD
-
-?>
-=======
->>>>>>> MOODLE_34_STABLE
