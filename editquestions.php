@@ -66,8 +66,10 @@ if ($qid <= 0) {
 }
 
 $maxbytes = 1024 * 1024 * 1000; // TODO: add settings.
-$questionoptions = array('trusttext' => true, 'subdirs' => false, 'maxfiles' => 100, 'maxbytes' => $maxbytes, 'context' => $modcontext);
-$answeroptions = array('trusttext' => true, 'subdirs' => false, 'maxfiles' => 100, 'maxbytes' => $maxbytes, 'context' => $modcontext);
+$questionoptions = array('trusttext' => true, 'subdirs' => false, 'maxfiles' => 100,
+                         'maxbytes' => $maxbytes, 'context' => $modcontext);
+$answeroptions = array('trusttext' => true, 'subdirs' => false, 'maxfiles' => 100,
+                       'maxbytes' => $maxbytes, 'context' => $modcontext);
 
 if ($form->is_cancelled()) {
     redirect($editurl);

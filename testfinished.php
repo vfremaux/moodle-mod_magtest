@@ -40,13 +40,13 @@ if (!$useranswers) {
             $options['id'] = $cm->id;
             $options['view'] = 'doit';
             $options['what'] = 'reset';
-            echo $OUTPUT->single_button(new moodle_url('view.php', $options), get_string('reset', 'magtest'), 'get');
+            echo $OUTPUT->single_button(new moodle_url('/mod/magtest/view.php', $options), get_string('reset', 'magtest'), 'get');
         }
     }
     $options = array();
     $options['id'] = $course->id;
-    $buttonurl = new moodle_url($CFG->wwwroot.'/course/view.php', $options),;
-    echo $OUTPUT->single_button($buttonurl get_string('backtocourse', 'magtest'), 'get');
+    $buttonurl = new moodle_url('/course/view.php', $options);
+    echo $OUTPUT->single_button($buttonurl, get_string('backtocourse', 'magtest'), 'get');
     echo '</center>';
     echo $OUTPUT->footer($COURSE);
     exit;

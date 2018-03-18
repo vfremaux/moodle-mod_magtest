@@ -78,7 +78,7 @@ if (!empty($questions)) {
         } else {
             $commands .= '&nbsp;'.$OUTPUT->pix_icon('down_shadow', 'magtest');
         }
-        $commands .='</div>';
+        $commands .= '</div>';
         $validanswercount = 0;
         $weights = array();
         foreach ($question->answers as $answer) {
@@ -89,7 +89,8 @@ if (!empty($questions)) {
         $question->questiontext = file_rewrite_pluginfile_urls($question->questiontext, 'pluginfile.php', $context->id,
                                                                'mod_magtest', 'question', 0);
 
-        $table->data[] = array($question->sortorder, format_string(format_text($question->questiontext, $question->questiontextformat)), $answercheck, $commands);
+        $qt = format_string(format_text($question->questiontext, $question->questiontextformat));
+        $table->data[] = array($question->sortorder, $qt, $answercheck, $commands);
     }
 }
 echo '<center>';

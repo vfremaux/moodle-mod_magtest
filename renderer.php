@@ -70,7 +70,7 @@ class mod_magtest_renderer extends plugin_renderer_base {
             $str .= '<tr align="top">';
             $str .= '<td width="20%" align="right"><b>'.get_string('question', 'magtest').':</b></td>';
             $str .= '<td align="left" colspan="2">';
-            $qt = file_rewrite_pluginfile_urls($question->questiontext, 'pluginfile.php',$context->id,
+            $qt = file_rewrite_pluginfile_urls($question->questiontext, 'pluginfile.php', $context->id,
                                                'mod_magtest', 'question', 0);
             $str .= $question->questiontext = $qt;
             $question->questiontext = format_string($question->questiontext);
@@ -88,8 +88,8 @@ class mod_magtest_renderer extends plugin_renderer_base {
                 $symbolurl = magtest_get_symbols_baseurl($magtest).$catsymbol;
                 $symbolimage = '<img class="magtest-qsymbol" src="'.$symbolurl.'" align="bottom" />&nbsp;&nbsp;';
                 $str .= $symbolimage;
-                $at = file_rewrite_pluginfile_urls($answer->answertext, 'pluginfile.php',$context->id,
-                                                   'mod_magtest', 'questionanswer', $answer->id)
+                $at = file_rewrite_pluginfile_urls($answer->answertext, 'pluginfile.php', $context->id,
+                                                   'mod_magtest', 'questionanswer', $answer->id);
                 $answer->answertext  = $at;
                 $answertext = preg_replace('/^<p>(.*)<\/p>$/', '\\1', $answer->answertext);
                 $str .= ($answertext).' ';
@@ -188,7 +188,7 @@ class mod_magtest_renderer extends plugin_renderer_base {
                     }
                     if (rad_val == \'\') {
                         alert(\''.$escapedlabel.'\');
-                        return false; 
+                        return false;
                     }
                 }
                 return true;

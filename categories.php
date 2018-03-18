@@ -74,15 +74,16 @@ if (!empty($categories)) {
         $commands = '<div class="categorycommands">';
         $cmdurl = new moodle_url('/mod/magtest/editcategories.php', array('id' => $cm->id, 'catid' => $category->id));
         $commands .= '<a href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/edit').'</a>';
-        $cmdurl = new moodle_url('/mod/magtest/view.php', array('id' => $cm->id, 'what' => 'delete_category', 'catid' => $category->id));
-        $commands .=' <a id="delete" href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/delete').'</a>';
+        $params = array('id' => $cm->id, 'what' => 'delete_category', 'catid' => $category->id);
+        $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
+        $commands .= '&nbsp;<a id="delete" href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/delete', get_string('delete')).'</a>';
 
         if ($category->sortorder > 1) {
             $params = array('id' => $cm->id, 'view' => 'categories', 'what' => 'raisecategory', 'catid' => $category->id);
             $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
             $commands .= '&nbsp;<a href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/up').'</a>';
         } else {
-            $commands .='&nbsp;'.$OUTPUT->pix_icon('up_shadow', '', 'magtest');
+            $commands .= '&nbsp;'.$OUTPUT->pix_icon('up_shadow', '', 'magtest');
         }
 
         if ($category->sortorder < count($categories)) {
@@ -90,7 +91,7 @@ if (!empty($categories)) {
             $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
             $commands .= '&nbsp;<a href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/down').'</a>';
         } else {
-            $commands .='&nbsp;'.$OUTPUT->pix_icon('down_shadow', '', 'magtest');
+            $commands .= '&nbsp;'.$OUTPUT->pix_icon('down_shadow', '', 'magtest');
         }
 
         $commands .= '</div>';

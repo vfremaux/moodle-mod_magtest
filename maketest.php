@@ -63,11 +63,11 @@ if ($magtest->pagesize) {
     $donerecords = $DB->count_records_select('magtest_useranswer', "magtestid = $magtest->id AND userid = $USER->id ");
     $allpages = ceil(($DB->count_records('magtest_question', array('magtestid' => $magtest->id)) / $magtest->pagesize));
 } else {
-    $allpages = 1; // one unique page of any length
+    $allpages = 1; // One unique page of any length.
 }
 
 if (!$nextset) {
-    echo $OUTPUT->notification(get_string('testfinish','magtest'));
+    echo $OUTPUT->notification(get_string('testfinish', 'magtest'));
     include($CFG->dirroot.'/mod/magtest/testfinished.php');
     return;
 }
@@ -84,8 +84,8 @@ if ($magtest->endtimeenable && time() >= $magtest->endtime) {
 }
 $categories = magtest_get_categories($magtest->id);
 
-$hd = 'answerquestions', 'magtest').format_string($magtest->name).' : '.($currentpage + 1).'/'.$allpages;
-echo $OUTPUT->heading(get_string($hd);
+$hd = get_string('answerquestions', 'magtest').format_string($magtest->name).' : '.($currentpage + 1).'/'.$allpages;
+echo $OUTPUT->heading($hd);
 
 // Print a description on first page.
 if (!empty($magtest->description) && $currentpage == 1) {

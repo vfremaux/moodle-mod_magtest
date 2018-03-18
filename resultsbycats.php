@@ -101,7 +101,7 @@ foreach ($categories as $cat) {
     $scoreboard .= '</table>';
 
     $cell = '<span class="magtest-cat-name">'.$symbolimg.' '.$cat->name.'</span><br/>';
-    $cell .=.format_string($cat->description, $cat->descriptionformat);
+    $cell .= format_string($cat->description, $cat->descriptionformat);
     $table->data[] = array($cell, $scoreboard);
 }
 

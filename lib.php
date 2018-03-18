@@ -426,7 +426,7 @@ function magtest_print_overview($courses, &$htmlarray) {
 
         $str = '<div class="magtest overview">';
         $str .= '<div class="name">'.$strmagtest.': '.
-               '<a '.($magtest->visible ? '':' class="dimmed"').
+               '<a '.($magtest->visible ? '' : ' class="dimmed"').
                'title="'.$strmagtest.'" href="'.$CFG->wwwroot.
                '/mod/magtest/view.php?id='.$magtest->coursemodule.'">'.
                format_string($magtest->name).'</a></div>';

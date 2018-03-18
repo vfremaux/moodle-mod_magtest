@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * @package    mod_magtest
  * @category   mod
@@ -25,8 +23,9 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
  * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
  */
+defined('MOODLE_INTERNAL') || die();
 
-if (!(isset($id) and $view === 'results' and has_capability('mod/magtest:viewotherresults', $context))) {
+if (!(isset($id) && $view === 'results' && has_capability('mod/magtest:viewotherresults', $context))) {
     print 'You have not to see this page';
     exit;
 }
@@ -36,7 +35,9 @@ require_once($CFG->libdir.'/tablelib.php');
 $currentgroup = groups_get_course_group($course, true);
 $grouptoshow = optional_param('group', $currentgroup, PARAM_INT);
 $groupmode = groups_get_course_groupmode($course); // Groups are being used.
-$isseparategroups = ($course->groupmode == SEPARATEGROUPS and $course->groupmodeforce && !has_capability('moodle/site:accessallgroups', $context));
+$isseparategroups = ($course->groupmode == SEPARATEGROUPS &&
+        $course->groupmodeforce &&
+                !has_capability('moodle/site:accessallgroups', $context));
 
 if ($isseparategroups and (!$currentgroup) ) {
     echo $OUTPUT->notification('You are not in a group.');
@@ -71,7 +72,8 @@ foreach ($usersanswers as $useranswer) {
         foreach ($questions->answers as $answer) {
             if ($useranswer->answerid == 1) {
                 $cat = $categories[$answer->categoryid];
-                $countcat[$useranswer->userid][$cat->categoryshortname] = $countcat[$useranswer->userid][$cat->categoryshortname] + $answer->weight;
+                $catscore = $countcat[$useranswer->userid][$cat->categoryshortname];
+                $countcat[$useranswer->userid][$cat->categoryshortname] = $catscore + $answer->weight;
             }
         }
     } else {
@@ -87,7 +89,7 @@ $table->head = array(get_string('users'));
 
 foreach ($categories as $category) {
     $table->head[] = $category->categoryshortname;
-    $tab_empty[$category->categoryshortname] = 0;
+    $tabempty[$category->categoryshortname] = 0;
 }
 
 $results = array();
@@ -103,7 +105,7 @@ foreach ($users as $user) {
                 'user' => $OUTPUT->user_picture($userpic).
                 fullname($user, has_capability('moodle/site:viewfullnames', $context))
             ),
-        $tab_empty,
+        $tabempty,
         $countcat[$user->id]
     );
 }

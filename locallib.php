@@ -71,7 +71,7 @@ function magtest_get_question($qid) {
  * gets answers for a question in several modes
  *
  * @param int $magtestid
- * @param int $order 
+ * @param int $order
  * @param boolean $shuffle true if you want change the order of answer
  * @return object
  *
@@ -118,7 +118,7 @@ function magtest_get_categories($magtestid) {
 function magtest_get_answer_cat($answer) {
     global $DB;
 
-    $categorie = $DB->get_record('magtest_category', array('id' => $answer->categoryid));     
+    $categorie = $DB->get_record('magtest_category', array('id' => $answer->categoryid));
     return $categorie;
 }
 
@@ -185,7 +185,7 @@ function magtest_get_next_questionset(&$magtest, $currentpage) {
     } else {
         $questionset = $DB->get_records('magtest_question', array('magtestid' => $magtest->id), 'sortorder');
     }
-  
+
     if ($questionset) {
         foreach ($questionset as $key => $question) {
             $questionset[$key]->answers = $DB->get_records('magtest_answer', array('questionid' => $question->id));
@@ -207,7 +207,7 @@ function magtest_get_symbols(&$magtest, &$renderingpathbase) {
     $symbolroot = $CFG->dirroot;
     $renderingpathbase = $CFG->wwwroot.'/mod/magtest/pix/symbols/';
     $symbolclasses = filesystem_scan_dir($symbolpath, FS_IGNORE_HIDDEN, FS_ONLY_DIRS, $symbolroot);
-    for ($i = 0 ; $i < count($symbolclasses) ; $i++) {
+    for ($i = 0; $i < count($symbolclasses); $i++) {
         $symbolclass = $symbolclasses[$i];
         if ($symbolclass == 'CVS' || preg_match('/^\./', $symbolclass)) {
             continue;
@@ -250,7 +250,7 @@ function magtest_compile_results(&$magtest, &$users, &$categories, &$maxcat) {
         echo $OUTPUT->notification(get_string('nouseranswer', 'magtest'));
         echo $OUTPUT->footer($COURSE);
         exit;
-     }
+    }
 
     $categories = magtest_get_categories($magtest->id);
     $questions = magtest_get_questions($magtest->id);

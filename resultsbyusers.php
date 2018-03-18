@@ -14,11 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Prints results of the test for the user
- * 
+ *
  * @package    mod_magtest
  * @category   mod
  * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
@@ -26,6 +24,7 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
  * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
  */
+defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir.'/tablelib.php');
 
@@ -55,10 +54,11 @@ if ($groups) {
  * Note that usemakegroups is not compatible with course groups as it is used to generate
  * moodle groups in a course and needs having no groups at start.
  */
+$fields = 'u.id,picture,email,imagealt,'.get_all_user_name_fields(true, 'u');
 if ($groupmode == NOGROUPS || $magtest->usemakegroups) {
-    $users = get_users_by_capability($context, 'mod/magtest:doit', 'u.id,firstname,lastname,picture,email,imagealt', 'lastname');
+    $users = get_users_by_capability($context, 'mod/magtest:doit', $fields, 'lastname');
 } else {
-    $users = get_users_by_capability($context, 'mod/magtest:doit', 'u.id,firstname,lastname,picture,email,imagealt', 'lastname', '', '', $currentgroupid);
+    $users = get_users_by_capability($context, 'mod/magtest:doit', $fields, 'lastname', '', '', $currentgroupid);
 }
 
 // Get missing users.

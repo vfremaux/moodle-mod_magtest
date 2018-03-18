@@ -64,7 +64,7 @@ class Question_Form extends moodleform {
         $mform->setDefault('what', 'do'. $this->cmd);
         $mform->setType('what', PARAM_ALPHA);
 
-        $maxbytes = 1024 * 1024 * 100 ;
+        $maxbytes = 1024 * 1024 * 100;
         $questionoptions = array('trusttext' => true,
                                  'subdirs' => false,
                                  'maxfiles' => 100,

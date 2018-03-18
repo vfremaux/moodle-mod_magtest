@@ -39,13 +39,13 @@ if ($action != '') {
         echo $OUTPUT->footer();
         die();
     }
- } else {
+} else {
     $question = get_magtest_question($magtest->id);
     if (! $question ) {
         $question = magtest_add_empty_question($magtest->id);
         $first = true;
-    } 
- }
+    }
+}
 
 $tabnotok = are_questions_not_ok($magtest->id);
 if (! $tabnotok ) {
@@ -89,17 +89,16 @@ foreach ($question->answers as $answer) {
         <b><?php print_string('answer', 'magtest'); echo " $i"; ?>:</b>
     </td>
     <td align="left">
-        <?php print_textarea(true, 10, 60, 660, 200,"question[answers][$i][answertext]", $answer->answertext); ?>
+        <?php print_textarea(true, 10, 60, 660, 200, "question[answers][$i][answertext]", $answer->answertext); ?>
     </td>
 </tr>
 <tr>
     <td>
     </td>
     <td>
-        <?php 
+        <?php
             print_string('choosecategoryforanswer', 'magtest');
             echo html_writer::select($tabcat, 'question[answers]['.$i.'][categoryid]', $answer->categoryid);
-            // helpbutton ('choosecategoryforanswer', get_string('choosecategoryforanswer','magtest'), 'magtest');
         ?>
     </td>
 </tr>
