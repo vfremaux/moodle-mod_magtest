@@ -25,17 +25,17 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL
  * @copyright   (C) 2005 Valery Fremaux (http://www.mylearningfactory.com)
  * @see         categories.php for view.
- * @usecase     delete_category
+ * @usecase     deletecategory
  * @usecase     raisecategory
  * @usecase     lowercategory
  */
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot.'/mod/magtest/listlib.php');
+require_once $CFG->dirroot.'/mod/magtest/listlib.php';
 
 // Delete a category.
 
-if ($action == 'delete_category') {
+if ($action == 'deletecategory') {
     $catid = required_param('catid', PARAM_INT);
 
     $answers = $DB->get_records('magtest_answer', array('categoryid' => $catid), '', 'id,id');
