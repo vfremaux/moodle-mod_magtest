@@ -151,7 +151,6 @@ $string['updatequestion'] = 'Update Question';
 $string['configusesetprofile'] = 'Use set profile';
 $string['configusesetprofile_desc'] = 'If enabled, teachers will be able to drive profile value changes from a magtest.';
 
-
 // Help strings.
 
 $string['singlechoice_help'] = 'If checked each question is requested only one simple answer (selected or not). Weights apply

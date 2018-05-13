@@ -150,7 +150,6 @@ $string['answer'] = 'Réponse';
 $string['helpertext'] = 'Aide';
 $string['updatecategories'] = 'Modifier la catégorie';
 $string['updatequestion'] = 'Modifier la question';
-// Help strings //
 
 // Help strings.
 
