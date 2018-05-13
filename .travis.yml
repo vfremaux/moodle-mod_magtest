@@ -23,12 +23,16 @@ env:
   global:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     - MOODLE_BRANCH=MOODLE_34_STABLE
 =======
     - MOODLE_BRANCH=MOODLE_35_STABLE
 >>>>>>> MOODLE_35_STABLE
 =======
 #    - MOODLE_BRANCH=master
+=======
+    - MOODLE_BRANCH=master
+>>>>>>> MOODLE_35_STABLE
 #    - MOODLE_BRANCH=MOODLE_35_STABLE
 >>>>>>> MOODLE_35_STABLE
   matrix:
