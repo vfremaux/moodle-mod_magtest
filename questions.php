@@ -109,7 +109,7 @@ echo '<center>';
 if (!empty($questions)) {
     echo html_writer::table($table);
 } else {
-    echo get_string('noquestions', 'mod_magtest');
+    echo $OUTPUT->notification(get_string('noquestions', 'mod_magtest'), 'notifyproblem');
 }
 
 $options['id'] = $cm->id;

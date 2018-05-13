@@ -35,6 +35,8 @@ class mod_magtest_mod_form extends moodleform_mod {
     public function definition() {
         global $CFG, $COURSE;
 
+        $config = get_config('magtest');
+
         $mform =& $this->_form;
 
         $mform->addElement('header', 'general', get_string('general', 'form'));
@@ -69,6 +71,11 @@ class mod_magtest_mod_form extends moodleform_mod {
 
         $mform->addElement('checkbox', 'usemakegroups', get_string('usemakegroups', 'magtest'));
         $mform->addHelpButton('usemakegroups', 'usemakegroups', 'magtest');
+
+        if ($config->usesetprofile) {
+            $mform->addElement('checkbox', 'usesetprofile', get_string('usesetprofile', 'magtest'));
+            $mform->addHelpButton('usesetprofile', 'usesetprofile', 'magtest');
+        }
 
         $mform->addElement('text', 'pagesize', get_string('pagesize', 'magtest'), array('size' => 3));
         $mform->addHelpButton('pagesize', 'pagesize', 'magtest');

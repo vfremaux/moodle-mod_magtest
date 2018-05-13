@@ -28,7 +28,19 @@
  * @usecase    makegroups
  */
 
-defined('MOODLE_INTERNAL') || die();
+/* ********************************* make moodle groups from results ********************** */
+
+if ($action == 'setprofile') {
+    magtest_compile_results($magtest, $users, $categories, $maxcat);
+
+    foreach ($categories as $category) {
+        if (!empty($category->users)) {
+            foreach ($category->users as $userid) {
+                $DB->set_field('user_info_data', '');
+            }
+        }
+    }
+}
 
 if ($action == 'makegroups') {
     $groupmode = groupmode($course, $cm);

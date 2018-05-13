@@ -73,6 +73,25 @@ if ($action == 'save') {
             }
         }
     }
+
+    if ($magtest->usesetprofile) {
+        if ($result = magtest_user_result($magtestid, $userid)) {
+            $maxid = 0;
+            $maxweight = 0;
+            foreach ($result as $catid => $weight) {
+                if ($maxweight > $weight) {
+                    $maxid = $catid;
+                    $maxweight = $weight;
+                }
+            }
+
+            if (!empty($categories[$maxid]->outputfieldname)) {
+                $field = $DB->get_record('user_info_field', array('shortname' => $categories[$maxid]->outputfieldname));
+                $params = array('userid' => $USER->id, 'fieldid' => $field->id);
+                $DB->set_field('user_info_data', 'data', $categories[$maxid]->outputfieldvalue, $params);
+            }
+        }
+    }
 }
 
 /* ****************************************** reset ********************** */

@@ -25,7 +25,9 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-if (!(isset($id) && $view === 'results' && has_capability('mod/magtest:viewotherresults', $context))) {
+if (!(isset($id) &&
+        $view === 'results' &&
+                has_capability('mod/magtest:viewotherresults', $context))) {
     print 'You have not to see this page';
     exit;
 }

@@ -34,7 +34,7 @@ if ($action) {
 
 // Setup group state regarding the user.
 
-$groupmode = groupmode($course, $cm);
+$groupmode = groups_get_activity_groupmode($cm);
 $changegroupid = optional_param('group', -1, PARAM_INT);
 
 if (has_capability('moodle/site:accessallgroups', $context)) {

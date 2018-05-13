@@ -39,7 +39,7 @@ class magtest_categories_form extends moodleform {
     }
 
     public function definition_after_data() {
-        global $CFG, $COURSE, $DB;
+        global $DB;
 
         $magtestid = $this->_customdata['id'];
         $mform = &$this->_form;
