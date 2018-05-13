@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 // TODO : get rid of this library if possible.
-require_once($CFG->dirroot.'/mod/magtest/filesystemlib.php');
+// require_once($CFG->dirroot.'/mod/magtest/filesystemlib.php');
 
 /**
  * Get all the questions structure of a magtest.
@@ -123,6 +123,67 @@ function magtest_get_answer_cat($answer) {
 }
 
 /**
+ * Get a single user result, or null if not fully answered.
+ * @return an array of category weights.
+ */
+function magtest_user_result($magtestid, $userid) {
+    global $DB;
+
+    $sql = "
+        SELECT
+            *
+        FROM
+            {magtest_questions} mq
+        LEFT JOIN
+            {magtest_user_answers} mua
+        ON
+            mua.questionid = mq.id
+        JOIN
+            {magtest_answers} ma
+        ON
+            mua.answerid = ma.id
+        WHERE
+            mq.magtest = ? AND
+            mua.userid = ?
+    ";
+
+    $uas = $DB->get_records_sql($sql, array($magtest->id, $userid));
+
+    if (!$uas) {
+        // No answers at all.
+        return null;
+    }
+
+    $countcat = array();
+    foreach ($uas as $ua) {
+
+        if (is_null($useranswer->questionid)) {
+            // One answer is not given. Magtest not finished.
+            return null;
+        }
+
+        if ($magtest->singlechoice) {
+            $question = $questions[$useranswer->questionid];
+            foreach ($question->answers as $answer) {
+                if ($useranswer->answerid == 1) {
+                    $cat = $categories[$answer->categoryid];
+                    $countcat[$cat->id] = 0 + @$countcat[$cat->id] + $answer->weight;
+                }
+            }
+        } else {
+            $question = $questions[$useranswer->questionid];
+            $answer = $question->answers[$useranswer->answerid];
+            $cat = $categories[$answer->categoryid];
+
+            // Aggregate scores.
+            $countcat[$cat->id] = 0 + @$countcat[$cat->id] + $answer->weight;
+        }
+    }
+
+    return $countcat;
+}
+
+/**
  * Get all the answers in a magtest for one user.
  * Return an array of object useranswers
  *
@@ -141,7 +202,7 @@ function magtest_get_useranswers($magtestid, $forusers = null) {
         $userlist = str_replace(',', "','", $forusers);
     }
 
-    // TODO : use more portable IN sql version.
+    // @TODO : use more portable IN sql version.
     $userclause = (!empty($forusers)) ? " AND userid IN ('$userlist') " : '';
     $select = " magtestid = ? {$userclause} ";
     if ($useranswers = $DB->get_records_select('magtest_useranswer', $select, array($magtestid), 'questionid')) {
@@ -198,22 +259,22 @@ function magtest_get_next_questionset(&$magtest, $currentpage) {
  * get a list of symbol image pathes
  * @param reference $magtest
  * @param reference $renderingpathbase the path base to be set to access image set
- * @uses custom filesystemlib.php common extra library for file system high level access
  */
 function magtest_get_symbols(&$magtest, &$renderingpathbase) {
     global $CFG;
 
-    $symbolpath = '/mod/magtest/pix/symbols';
-    $symbolroot = $CFG->dirroot;
+    $symbolbasepath = '/mod/magtest/pix/symbols';
     $renderingpathbase = $CFG->wwwroot.'/mod/magtest/pix/symbols/';
-    $symbolclasses = filesystem_scan_dir($symbolpath, FS_IGNORE_HIDDEN, FS_ONLY_DIRS, $symbolroot);
-    for ($i = 0; $i < count($symbolclasses); $i++) {
-        $symbolclass = $symbolclasses[$i];
-        if ($symbolclass == 'CVS' || preg_match('/^\./', $symbolclass)) {
+    $symbolclasses = glob($CFG->dirroot.'/'.$symbolbasepath.'/*');
+
+    foreach ($symbolclasses as $symbolclasspath) {
+        $symbolclass = basename($symbolclasspath);
+        if ($symbolclass == 'CVS' || preg_match('/^\./', $symbolclass) || !is_dir($symbolclasspath)) {
             continue;
         }
-        $symbols = filesystem_scan_dir($symbolpath.'/'.$symbolclass, FS_IGNORE_HIDDEN, FS_NO_DIRS, $symbolroot);
-        foreach ($symbols as $symbol) {
+        $symbols = glob($CFG->dirroot.'/'.$symbolbasepath.'/'.$symbolclass.'/*');
+        foreach ($symbols as $symbolpath) {
+            $symbol = basename($symbolpath);
             $symboloptions[$symbolclass][$symbolclass.'/'.$symbol] = $symbol;
         }
     }
@@ -224,7 +285,6 @@ function magtest_get_symbols(&$magtest, &$renderingpathbase) {
  * get a list of symbol image pathes
  * @param reference $magtest
  * @param reference $renderingpathbase the path base to be set to access image set
- * @uses custom filesystemlib.php common extra library for file system high level access
  */
 function magtest_get_symbols_baseurl(&$magtest) {
     global $CFG;
@@ -246,7 +306,7 @@ function magtest_compile_results(&$magtest, &$users, &$categories, &$maxcat) {
 
     $usersanswers = magtest_get_useranswers($magtest->id, $users);
 
-    if (! $usersanswers ) {
+    if (!$usersanswers) {
         echo $OUTPUT->notification(get_string('nouseranswer', 'magtest'));
         echo $OUTPUT->footer($COURSE);
         exit;
