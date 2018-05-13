@@ -24,7 +24,7 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-class MagTest {
+class magtest {
 
     /**
      * insert a new test category

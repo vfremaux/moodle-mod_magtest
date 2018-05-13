@@ -137,70 +137,35 @@ class mod_magtest_renderer extends plugin_renderer_base {
 
         $currentpage = optional_param('qpage', 0, PARAM_INT);
 
-        $str = '';
-        $str .= '<form name="maketest" method="post" action="view.php">';
-        $str .= '<input type="hidden" name="id" value="'.$cm->id.'" />';
-        $str .= '<input type="hidden" name="view" value="doit" />';
-        $str .= '<input type="hidden" name="magtestid" value="'.$magtest->id.'" />';
-        $str .= '<input type="hidden" name="what" value="" />';
-        $str .= '<input type="hidden" name="qpage" value="'.($currentpage + 1).'" />';
-        $str .= '<table width="100%" cellspacing="10" cellpadding="10">';
+        $template = new StdClass;
+        $template->cmid = $cm->id;
+        $template->magtestid = $magtest->id;
+        $template->nextpage = $currentpage + 1;
 
         if (empty($magtest->singlechoice)) {
-            $str .= $this->print_magtest_quiz($nextset, $categories, $context);
+            $template->magteststandard = $this->print_magtest_quiz($nextset, $categories, $context);
         } else {
-            $str .= $this->print_magtest_singlechoice($nextset, $context);
+            $template->magtestsingle = $this->print_magtest_singlechoice($nextset, $context);
         }
 
-        $str .= '<tr align="top">';
-        $str .= '<td colspan="3" align="center">';
-        $jshandler = 'if (checkanswers()){document.forms[\'maketest\'].what.value = \'save\';';
-        $jshandler .= 'document.forms[\'maketest\'].submit();} return true';
-        $label = get_string('save', 'magtest');
-        $str .= '<input type="button" name="go_btn" value="'.$label.'" onclick="'.$jshandler.'" />';
+        $template->savestr = get_string('save', 'magtest');
+        $template->savehandler = 'if (checkanswers()){document.forms[\'maketest\'].what.value = \'save\'; document.forms[\'maketest\'].submit();} return true;';
+        $template->canreplay = false;
         if (!$magtest->endtimeenable || time() < $magtest->endtime) {
             if ($magtest->allowreplay && has_capability('mod/magtest:multipleattempts', $context)) {
-                $label = get_string('reset', 'magtest');
-                $jshandler = 'document.forms[\'maketest\'].what.value = \'reset\';';
-                $jshandler .= 'document.forms[\'maketest\'].submit(); return true;';
-                echo '<input type="button" name="reset_btn" value="'.$label.'" onclick="'.$jshandler.'" />';
+                $template->canreplay = true;
+                $template->resetstr = get_string('reset', 'magtest');
+                $template->resethandler = 'document.forms[\'maketest\'].what.value = \'reset\'; document.forms[\'maketest\'].submit(); return true;';
             }
         }
         $courseurl = new moodle_url('/course/view.php', array('id' => $COURSE->id));
-        $label = get_string('backtocourse', 'magtest');
-        $jshandler = 'document.location.href = \''.$courseurl.'\'; return true;';
-        $str .= '<input type="button" name="backtocourse_btn" value="'.$label.'" onclick="'.$jshandler.'" />';
-        $str .= '</td>';
-        $str .= '</tr>';
-        $str .= '</table>';
-        $str .= '</form>';
+        $template->backtocoursestr = get_string('backtocourse', 'magtest');
+        $template->backhandler = 'document.location.href = \''.$courseurl.'\'; return true;';
+
         if (!$magtest->singlechoice) {
-            $escapedlabel = str_replace("'", "\\'", get_string('pagenotcomplete', 'magtest'));
-            $str .= '<script type="text/javascript">
-            function checkanswers() {
-                var checkids = ['.implode(',', array_keys($nextset)).'];
-                for(i = 0 ; i < checkids.length ; i++) {
-                    rad_val = \'\';
-                    for (var j=0; j < document.forms[\'maketest\'].elements[\'answer\' + checkids[i]].length; j++){
-                        if (document.forms[\'maketest\'].elements[\'answer\' + checkids[i]][j].checked){
-                            rad_val = document.forms[\'maketest\'].elements[\'answer\' + checkids[i]].value;
-                        }
-                    }
-                    if (rad_val == \'\') {
-                        alert(\''.$escapedlabel.'\');
-                        return false;
-                    }
-                }
-                return true;
-            }
-            </script>';
-        } else {
-            $str .= '<script type="text/javascript">';
-            $str .= "function checkanswers() {\n";
-            $str .= "    return true;\n";
-            $str .= "}\n";
-            $str .= '</script>';
+            $template->label = str_replace("'", "\\'", get_string('pagenotcomplete', 'magtest'));
+            $template->nextsetarray = implode(',', array_keys($nextset));
         }
-        return $str;
+        return $this->output->render_from_template('mod_magtest/test', $template);
     }
 }

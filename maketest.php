@@ -60,7 +60,9 @@ if ($action) {
 $nextset = magtest_get_next_questionset($magtest, $currentpage);
 
 if ($magtest->pagesize) {
-    $donerecords = $DB->count_records_select('magtest_useranswer', "magtestid = $magtest->id AND userid = $USER->id ");
+    $select = "magtestid = ? AND userid = ? ";
+    $params = array($magtest->id, $USER->id);
+    $donerecords = $DB->count_records_select('magtest_useranswer', $select, $params);
     $allpages = ceil(($DB->count_records('magtest_question', array('magtestid' => $magtest->id)) / $magtest->pagesize));
 } else {
     $allpages = 1; // One unique page of any length.
