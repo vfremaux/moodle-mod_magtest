@@ -138,7 +138,7 @@ function magtest_list_up(&$magtest, $id, $table) {
 function magtest_list_down(&$magtest, $id, $table) {
     global $DB;
 
-    $res =  $DB->get_record($table, array('id' => $id));
+    $res = $DB->get_record($table, array('id' => $id));
     $maxordering = magtest_get_max_ordering($magtest, $table);
 
     if ($res->sortorder < $maxordering) {

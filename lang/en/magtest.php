@@ -32,12 +32,12 @@ $string['magtest:viewgeneralstat'] = 'View general statistics';
 $string['magtest:viewotherresults'] = 'See results of other participants';
 
 $string['errorinvalidcategory'] = 'Invalid Category.';
-$string['erroradd_category'] = 'Error while adding a category.';
+$string['erroraddcategory'] = 'Error while adding a category.';
 
 $string['<<'] = '<<';
 $string['>>'] = '>>';
 $string['addcategories'] = 'Add categories';
-$string['add_category'] = 'Add a category';
+$string['addcategory'] = 'Add a category';
 $string['addone'] = 'Add one category';
 $string['addquestion'] = 'Add a question';
 $string['addthree'] = 'Add three categories';
@@ -71,7 +71,7 @@ $string['errornotallowed'] = 'You are not allowed to perform this test';
 $string['erroremptyanswers'] = 'Some answers have no content.<br/>The test may malfunction.';
 $string['errorquestionupdate'] = 'Error updating question {$a}';
 $string['erroranswerinsert'] = 'Failed inserting a new answer for questionid : {$a}';
-$string['errorupdate_category'] = 'Could not update magtest category {$a}';
+$string['errorupdatecategory'] = 'Could not update magtest category {$a}';
 $string['eventanswersubmitted'] = 'Answer submitted';
 $string['guestcannotuse'] = 'Guests cannot use this test';
 $string['helpnavigationquestion'] = 'Help';
@@ -104,6 +104,8 @@ $string['cleardata'] = 'Clear all data';
 $string['clearalladvice'] = 'Clearing all data will also clear all user results';
 $string['outputgroupdesc'] = 'Generated group description';
 $string['outputgroupname'] = 'Generated group name';
+$string['outputfieldname'] = 'Profile field to set';
+$string['outputfieldvalue'] = 'Profile value to set';
 $string['singlechoice'] = 'Single choice';
 $string['pagenotcomplete'] = 'All questions were not answered.';
 $string['pagesize'] = 'Questions per page';
@@ -130,8 +132,10 @@ $string['singlechoicemode'] = 'the magtest is in singlechoice mode. You cannot w
 $string['testfinish'] = 'You have finished the test';
 $string['testnotallok'] = 'The configuration of this test is not complete: you cannot perform it.';
 $string['unanswered'] = 'These users did not answer';
-$string['update_category'] = 'Update a category';
+$string['updatecategory'] = 'Update a category';
 $string['usemakegroups'] = 'Use this test for generating course groups';
+$string['usesetprofile'] = 'Use this test for changing users profile values';
+$string['usesetprofile_help'] = 'If enabled, each category can drive changes in the user\'s profile.';
 $string['userchoices'] = 'User choices';
 $string['userstosubmit'] = 'User left to submit';
 $string['weight'] = 'Weight';
@@ -144,6 +148,8 @@ $string['answer'] = 'Answer';
 $string['helpertext'] = 'Helper Text';
 $string['updatecategories'] = 'Update Category';
 $string['updatequestion'] = 'Update Question';
+$string['configusesetprofile'] = 'Use set profile';
+$string['configusesetprofile_desc'] = 'If enabled, teachers will be able to drive profile value changes from a magtest.';
 
 // Help strings.
 

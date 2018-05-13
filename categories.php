@@ -45,17 +45,38 @@ if (!empty($categories)) {
     $commandstr = get_string('commands', 'magtest');
 
     $table = new html_table();
-    $table->head = array("<b>$symbolstr</b>", "<b>$namestr</b>", "<b>$descriptionstr</b>",
-                         "<b>$resultstr</b>", "<b>$commandstr</b>");
-    $table->align = array('center', 'left', 'left', 'left', 'left');
-    $table->size = array('5%', '15%', '30%', '30%', '15%');
+
+    $table->head = array(
+        "<b>$symbolstr</b>",
+        "<b>$namestr</b>",
+        "<b>$descriptionstr</b>",
+        "<b>$resultstr</b>",
+        "<b>$commandstr</b>"
+    );
+
+    $table->align = array(
+        'center',
+        'left',
+        'left',
+        'left',
+        'left'
+    );
+
+    $table->size = array(
+        '5%',
+        '15%',
+        '30%',
+        '30%',
+        '15%'
+    );
+
     $table->width = '100%';
 
     foreach ($categories as $category) {
         $commands = '<div class="categorycommands">';
         $cmdurl = new moodle_url('/mod/magtest/editcategories.php', array('id' => $cm->id, 'catid' => $category->id));
         $commands .= '<a href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/edit').'"></a>';
-        $cmdurl = new moodle_url('/mod/magtest/view.php', array('id' => $cm->id, 'what' => 'delete_category', 'catid' => $category->id));
+        $cmdurl = new moodle_url('/mod/magtest/view.php', array('id' => $cm->id, 'what' => 'deletecategory', 'catid' => $category->id));
         $commands .= ' <a id="delete" href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/delete').'" /></a>';
 
         if ($category->sortorder > 1) {
@@ -90,7 +111,7 @@ if (!empty($categories)) {
 
     echo html_writer::table($table);
 } else {
-    print_string('nocategories', 'magtest');
+    echo $OUTPUT->notification(get_string('nocategories', 'magtest'), 'notifyproblem');
 }
 
 echo $OUTPUT->box_end();

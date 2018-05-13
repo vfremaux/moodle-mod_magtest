@@ -236,7 +236,7 @@ function magtest_user_complete($course, $user, $mod, $magtest) {
 
     if ($accesses = $DB->get_records_select('log', " userid = ? AND module = 'magtest' and action = 'view' ", array($user->id))) {
         echo '<br/>';
-        echo get_string('magtestaccesses', 'magtest', count($accesses)) ;
+        echo get_string('magtestaccesses', 'magtest', count($accesses));
     }
 
     return true;
@@ -252,7 +252,7 @@ function magtest_user_complete($course, $user, $mod, $magtest) {
  * @todo Finish documenting this function
  */
 function magtest_print_recent_activity($course, $isteacher, $timestart) {
-    return false;  //  True if anything was printed, otherwise false.
+    return false; // True if anything was printed, otherwise false.
 }
 
 /**
@@ -269,7 +269,7 @@ function magtest_print_recent_activity($course, $isteacher, $timestart) {
  * @return mixed Null or object with an array of grades and with the maximum grade
  */
 function magtest_grades($magtestid) {
-   return null;
+    return null;
 }
 
 /**
@@ -362,7 +362,7 @@ function magtest_reset_course_form_definition(&$mform) {
         return;
     }
 
-    $mform->addElement('static', 'hint', get_string('resetting_data','magtest'));
+    $mform->addElement('static', 'hint', get_string('resettingdata', 'magtest'));
     foreach ($magtests as $magtest) {
         if ($hasanswers = $DB->count_records('magtest_useranswer', array('magtestid' => $magtest->id))) {
             $mform->addElement('checkbox', MAGTEST_RESETFORM_RESET.$magtest->id, format_string($magtest->name));
@@ -433,8 +433,8 @@ function magtest_print_overview($courses, &$htmlarray) {
     foreach ($magtests as $magtest) {
 
         $str = '<div class="magtest overview">';
-        $str .= '<div class="name">'.$strmagtest. ': '.
-               '<a '.($magtest->visible ? '':' class="dimmed"').
+        $str .= '<div class="name">'.$strmagtest.': '.
+               '<a '.($magtest->visible ? '' : ' class="dimmed"').
                'title="'.$strmagtest.'" href="'.$CFG->wwwroot.
                '/mod/magtest/view.php?id='.$magtest->coursemodule.'">'.
                format_string($magtest->name).'</a></div>';

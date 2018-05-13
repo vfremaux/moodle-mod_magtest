@@ -16,16 +16,19 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-if (!(isset($id) && $view === 'questions' &&  has_capability('mod/magtest:manage', $context))) {
+if (!(isset($id) &&
+        $view === 'questions' &&
+                has_capability('mod/magtest:manage', $context))) {
     echo('You have not to see this page');
-    exit;
+    die();
 }
 
 $nbcat = $DB->count_records_select('magtest_category', 'magtestid = '.$magtest->id.' and categoryshortname <> \'\'');
 
 if ($nbcat < 2) {
     echo $OUTPUT->notification(get_string('you_have_to_create_categories', 'magtest'));
-    exit;
+    echo $OUTPUT->footer();
+    die();
 }
 
 $first = false;
@@ -35,11 +38,12 @@ if ($action != '') {
     include($CFG->dirroot.'/mod/magtest/questionsview.controller.php');
     if (!isset($question) || empty($question)) {
         echo $OUTPUT->notification('I can\'t get question. Problem !');
-        exit;
+        echo $OUTPUT->footer();
+        die();
     }
 } else {
     $question = get_magtest_question($magtest->id);
-    if (!$question ) {
+    if (!$question) {
         $question = magtest_add_empty_question($magtest->id);
         $first = true;
     }
@@ -69,17 +73,17 @@ if ($notok) {
 <tr>
     <td align="right"><b><?php print_string('question', 'magtest') ?>:</b></td>
     <td align="left">
-        <?php print_textarea(true, 10, 60, 660, 200, 'question[questiontext]', stripslashes($question->questiontext), $COURSE->id); ?>
+        <?php print_textarea(true, 10, 60, 660, 200, 'question[questiontext]', $question->questiontext, $COURSE->id); ?>
     </td>
 </tr>
 <?php
 $i = 0;
 $categories = get_magtest_categories($magtest->id);
-foreach( $categories as $category) {
-    $tab_cat[$category->id] = $category->categoryshortname;
+foreach ($categories as $category) {
+    $tabcat[$category->id] = $category->categoryshortname;
 }
-foreach($question->answers as $answer) {
-$i++;
+foreach ($question->answers as $answer) {
+    $i++;
 ?>
 <tr>
     <td align="right">
@@ -87,18 +91,17 @@ $i++;
         <b><?php print_string('answer', 'magtest'); echo " $i"; ?>:</b>
     </td>
     <td align="left">
-        <?php print_textarea(true, 10, 60, 660, 200,"question[answers][$i][answertext]",stripslashes($answer->answertext)); ?>
+        <?php print_textarea(true, 10, 60, 660, 200, "question[answers][$i][answertext]", $answer->answertext); ?>
     </td>
 </tr>
 <tr>
     <td>
     </td>
     <td>
-        <?php 
+        <?php
             print_string('choosecategoryforanswer', 'magtest');
-            echo html_writer::select($tab_cat, 'question[answers]['.$i.'][categoryid]', $answer->categoryid); 
-            // helpbutton ('choosecategoryforanswer', get_string('choosecategoryforanswer','magtest'), 'magtest'); 
-        ?> 
+            echo html_writer::select($tabcat, 'question[answers]['.$i.'][categoryid]', $answer->categoryid);
+        ?>
     </td>
 </tr>
 <?php

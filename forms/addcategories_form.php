@@ -126,7 +126,7 @@ class Category_Form extends moodleform {
             $catdesceditor->setValue(array('text' => $category->description));
 
             $label = get_string('categoryresult', 'magtest');
-            $catresulteditor  = $mform->addElement('editor', 'catresult', $label, null, $fileoptions);
+            $catresulteditor = $mform->addElement('editor', 'catresult', $label, null, $fileoptions);
             $catresulteditor->setValue(array('text' => $category->result));
 
             if ($this->magtest->usemakegroups) {
@@ -136,6 +136,15 @@ class Category_Form extends moodleform {
                 $attrs = array('size' => '255', 'maxlength' => '255');
                 $mform->addElement('text', 'outputgroupdesc', get_string('outputgroupdesc', 'magtest'), '', $attrs);
                 $mform->setType('outputgroupdesc', PARAM_CLEANHTML);
+            }
+
+            if ($this->magtest->usesetprofile) {
+                $options = $DB->get_records_menu('user_info_field', array(), 'shortname, name');
+                $mform->addElement('select', 'outputfieldname', get_string('outputfieldname', 'magtest'), $options, '');
+                $mform->setType('outputfieldname', PARAM_CLEANHTML);
+                $attrs = array('size' => '255', 'maxlength' => '255');
+                $mform->addElement('text', 'outputfieldvalue', get_string('outputfieldvalue', 'magtest'), '', $attrs);
+                $mform->setType('outputfieldvalue', PARAM_CLEANHTML);
             }
         }
 

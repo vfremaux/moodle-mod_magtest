@@ -14,9 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
-/*
+/**
  * This view allows checking deck states
  *
  * @package mod_magtest
@@ -25,6 +23,8 @@ defined('MOODLE_INTERNAL') || die();
  * @contributors Etienne Roze
  * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
  */
+defined('MOODLE_INTERNAL') || die();
+
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
 
 /**
@@ -34,6 +34,8 @@ class mod_magtest_mod_form extends moodleform_mod {
 
     public function definition() {
         global $CFG, $COURSE;
+
+        $config = get_config('magtest');
 
         $mform =& $this->_form;
 
@@ -69,6 +71,11 @@ class mod_magtest_mod_form extends moodleform_mod {
 
         $mform->addElement('checkbox', 'usemakegroups', get_string('usemakegroups', 'magtest'));
         $mform->addHelpButton('usemakegroups', 'usemakegroups', 'magtest');
+
+        if ($config->usesetprofile) {
+            $mform->addElement('checkbox', 'usesetprofile', get_string('usesetprofile', 'magtest'));
+            $mform->addHelpButton('usesetprofile', 'usesetprofile', 'magtest');
+        }
 
         $mform->addElement('text', 'pagesize', get_string('pagesize', 'magtest'), array('size' => 3));
         $mform->addHelpButton('pagesize', 'pagesize', 'magtest');

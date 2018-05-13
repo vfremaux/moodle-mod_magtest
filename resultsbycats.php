@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Prints results of the test for the user
  *
@@ -26,6 +24,7 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
  * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
  */
+defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir.'/tablelib.php');
 
@@ -38,7 +37,7 @@ if (!defined('MOODLE_INTERNAL')) {
 }
 
 // Setup group state regarding the user.
-$groupmode = groupmode($course, $cm);
+$groupmode = groups_get_activity_groupmode($cm);
 $changegroupid = optional_param('group', -1, PARAM_INT);
 
 if (has_capability('moodle/site:accessallgroups', $context)) {
@@ -58,15 +57,16 @@ if ($groups) {
  * note that usemakegroups is not compatible with course groups as it is used to generate
  * moodle groups in a course and needs having no groups at start.
  */
+$fields = 'u.id,picture,email,'.get_all_user_name_fields(true, 'u');
 if ($groupmode == NOGROUPS || $magtest->usemakegroups) {
-    $users = get_users_by_capability($context, 'mod/magtest:doit', 'u.id,firstname,lastname,picture,email', 'lastname');
+    $users = get_users_by_capability($context, 'mod/magtest:doit', $fields, 'lastname');
 } else {
-    $users = get_users_by_capability($context, 'mod/magtest:doit', 'u.id,firstname,lastname,picture,email', 'lastname', '', '', $currentgroupid);
+    $users = get_users_by_capability($context, 'mod/magtest:doit', $fields, 'lastname', '', '', $currentgroupid);
 }
 
 // Do not recalculate results if they where already calculated in controller.
 if (empty($categories) && $action != 'makegroups') {
-    magtest_compile_results($magtest, $users, $categories, $max_cat);
+    magtest_compile_results($magtest, $users, $categories, $maxcat);
 }
 
 // Make table head.
@@ -78,21 +78,21 @@ $table->head[] = '<b>'.get_string('results', 'magtest').'</b>';
 $table->size = array('30%', '70%');
 $table->width = '80%';
 
-foreach($categories as $cat) {
+foreach ($categories as $cat) {
     $symbolurl = magtest_get_symbols_baseurl($magtest).$cat->symbol;
     $symbolimg = "<img src=\"$symbolurl\" /> ";
     $scoreboard = '<table width="100%" class="magtest-user-list">';
     if (!empty($cat->users)) {
-        foreach($cat->users as $userid) {
+        foreach ($cat->users as $userid) {
             if ($groupmode != NOGROUPS && !$magtest->usemakegroups) {
-                // we ensure user is in the currently viewed group
+                // We ensure user is in the currently viewed group.
                 if (!in_array($userid, array_keys($users))) {
                     continue;
                 }
             }
             $user = $DB->get_record('user', array('id' => $userid));
             $username = $OUTPUT->user_picture($user).' '.fullname($user);
-            $score = @$max_cat[$user->id]->score;
+            $score = @$maxcat[$user->id]->score;
             $scoreboard .= "<tr><td>{$username}</td><td align=\"right\">{$score}</td></tr>";
         }
     } else {
@@ -100,7 +100,8 @@ foreach($categories as $cat) {
     }
     $scoreboard .= '</table>';
 
-    $cell = '<span class="magtest-cat-name">'.$symbolimg.' '.$cat->name.'</span><br/>'.format_string($cat->description, $cat->descriptionformat);
+    $cell = '<span class="magtest-cat-name">'.$symbolimg.' '.$cat->name.'</span><br/>';
+    $cell .= format_string($cat->description, $cat->descriptionformat);
     $table->data[] = array($cell, $scoreboard);
 }
 

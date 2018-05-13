@@ -14,9 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
-/*
+/**
  * Controller for "maketest"
  *
  * @package    mod_magtest
@@ -30,8 +28,7 @@ defined('MOODLE_INTERNAL') || die();
  * @usecase    save
  * @usecase    reset
  */
-
-/* ****************************************** save answers ********************** */
+defined('MOODLE_INTERNAL') || die();
 
 if ($action == 'save') {
     if ($magtest->singlechoice) {
@@ -73,6 +70,25 @@ if ($action == 'save') {
                 } else {
                     $DB->insert_record('magtest_useranswer', $useranswer);
                 }
+            }
+        }
+    }
+
+    if ($magtest->usesetprofile) {
+        if ($result = magtest_user_result($magtestid, $userid)) {
+            $maxid = 0;
+            $maxweight = 0;
+            foreach ($result as $catid => $weight) {
+                if ($maxweight > $weight) {
+                    $maxid = $catid;
+                    $maxweight = $weight;
+                }
+            }
+
+            if (!empty($categories[$maxid]->outputfieldname)) {
+                $field = $DB->get_record('user_info_field', array('shortname' => $categories[$maxid]->outputfieldname));
+                $params = array('userid' => $USER->id, 'fieldid' => $field->id);
+                $DB->set_field('user_info_data', 'data', $categories[$maxid]->outputfieldvalue, $params);
             }
         }
     }

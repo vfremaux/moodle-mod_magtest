@@ -14,9 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
-/*
+/**
  * Controller for question management
  * @package mod-magtest
  * @category mod
@@ -26,10 +24,9 @@ defined('MOODLE_INTERNAL') || die();
  * @usecase down
  * @usecase delete
  */
+defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/mod/magtest/listlib.php');
-
-/* ****************************** Delete a question *************** */
 
 if ($action == 'delete') {
     $qid = required_param('qid', PARAM_INT);

@@ -14,9 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
-/*
+/**
  * Allows managing question set
  *
  * @package    mod_magtest
@@ -28,8 +26,8 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
  * @see        questions.controller.php for associated controller.
  */
+defined('MOODLE_INTERNAL') || die();
 
-// Invoke controller.
 if ($action) {
     require($CFG->dirroot.'/mod/magtest/questions.controller.php');
 }
@@ -92,10 +90,8 @@ if (!empty($questions)) {
         $question->questiontext = file_rewrite_pluginfile_urls($question->questiontext, 'pluginfile.php', $context->id,
                                                                'mod_magtest', 'question', 0);
 
-        $table->data[] = array($question->sortorder,
-                               format_string(format_text($question->questiontext, $question->questiontextformat)),
-                               $answercheck,
-                               $commands);
+        $qt = format_string(format_text($question->questiontext, $question->questiontextformat));
+        $table->data[] = array($question->sortorder, $qt, $answercheck, $commands);
     }
 }
 echo '<center>';
@@ -103,7 +99,7 @@ echo '<center>';
 if (!empty($questions)) {
     echo html_writer::table($table);
 } else {
-    echo get_string('noquestions', 'mod_magtest');
+    echo $OUTPUT->notification(get_string('noquestions', 'mod_magtest'), 'notifyproblem');
 }
 
 $options['id'] = $cm->id;

@@ -16,9 +16,10 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-if (!(isset($id) and $view === 'questions' &&  has_capability('mod/magtest:manage', $context))) {
-    die('You have not to see this page');
-    exit;
+if (!(isset($id) &&
+        $view === 'questions' &&
+                has_capability('mod/magtest:manage', $context))) {
+    die();
 }
 
 /* First save data */
@@ -31,7 +32,6 @@ $tabanswers = $question->answers;
 unset($question->answers);
 
 foreach ($tabanswers as $id => $answer) {
-
     $DB->update_record('magtest_answer', (object)$answer);
     $question->answers[] = (object)$answer;
 }
@@ -46,7 +46,7 @@ switch ($action) {
 
     case get_string('addquestion', 'magtest'): {
         $question = magtest_add_empty_question($magtest->id);
-        $nb_questions = $nb_questions + 1;
+        $nbquestions = $nbquestions + 1;
         $first = true;
         break;
     }
@@ -58,12 +58,12 @@ switch ($action) {
             $DB->delete_records('magtest_answer', array('questionid' => $question->id));
             // Update the qorder value of all questions after the deleted one.
             // I can do that with one sql query but I prefer use php for sql compatibiliy problem.
-            for ($i = $question->qorder+1; $i <= $nb_questions; $i++) {
+            for ($i = $question->qorder + 1; $i <= $nbquestions; $i++) {
                 $question2 = get_magtest_question($magtest->id, $i);
                 $question2->qorder = $i - 1;
                 $DB->update_record('magtest_question', $question2);
             }
-            $nb_questions = $nb_questions - 1;
+            $nbquestions = $nbquestions - 1;
             $question = get_magtest_question($magtest->id, $question->qorder - 1);
         }
         break;

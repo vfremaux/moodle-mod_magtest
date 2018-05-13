@@ -171,5 +171,31 @@ function xmldb_magtest_upgrade($oldversion = 0) {
         upgrade_mod_savepoint(true, 2014012802, 'magtest');
     }
 
+    if ($oldversion < 2018042400) {
+
+        $table = new xmldb_table('magtest');
+        $field = new xmldb_field('usesetprofile');
+        $field->set_attributes(XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, 0, 'usemakegroups');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $table = new xmldb_table('magtest_category');
+        $field = new xmldb_field('outputfieldname');
+        $field->set_attributes(XMLDB_TYPE_CHAR, '64', null, null, null, null, 'outputgroupdesc');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $table = new xmldb_table('magtest_category');
+        $field = new xmldb_field('outputfieldvalue');
+        $field->set_attributes(XMLDB_TYPE_CHAR, '255', null, null, null, null, 'outputfieldname');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        upgrade_mod_savepoint(true, 2018042400, 'magtest');
+    }
+
     return $result;
 }

@@ -19,6 +19,7 @@
  * @copyright   2010 onwards Valery Fremaux (valery.freamux@club-internet.fr)
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die();
 
 /*
  * Define all the restore steps that will be used by the restore_url_activity_task
@@ -43,7 +44,7 @@ class restore_magtest_activity_structure_step extends restore_activity_structure
         $answers = new restore_path_element('magtest_answer', '/activity/magtest/answers/answer');
         $paths[] = $answers;
 
-        if ($userinfo){
+        if ($userinfo) {
             $paths[] = new restore_path_element('magtest_useranswer', '/activity/magtest/useranswers/useranswer');
         }
 

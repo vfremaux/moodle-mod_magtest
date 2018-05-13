@@ -31,12 +31,12 @@ $string['magtest:viewgeneralstat'] = 'Voir les statistiques de réponse';
 $string['magtest:viewotherresults'] = 'Voir les résultats de tous';
 
 $string['errorinvalidcategory'] = 'Catégorie invalide.';
-$string['erroradd_category'] = 'Erreur lors de l\'ajout d\'une catégorie.';
+$string['erroraddcategory'] = 'Erreur lors de l\'ajout d\'une catégorie.';
 
 $string['<<'] = '<<';
 $string['>>'] = '>>';
 $string['addcategories'] = 'Ajouter des categories';
-$string['add_category'] = 'Ajouter une categorie';
+$string['addcategory'] = 'Ajouter une categorie';
 $string['addone'] = 'Ajouter une categorie supplémentaire';
 $string['addquestion'] = 'Ajouter une question';
 $string['addthree'] = 'Ajouter trois catégories supplémentaires';
@@ -58,6 +58,8 @@ $string['commands'] = 'Commandes';
 $string['configshowmymoodle'] = 'Montrer les tests magazine sur les pages personnalisées';
 $string['configshowmymoodledesc'] = 'Si cette option est activée, alors les tests magazine à faire ne seront pas visible dans les pages personnalisées';
 $string['confirmdeletemessage'] = 'En supprimant cette question, vous supprimez également les réponses associées et tous les choix des utilisateurs déjà effectués pour cette question. Voulez-vous continuer ?';
+$string['configusesetprofile'] = 'Activer la modification de profil';
+$string['configusesetprofile_desc'] = 'Si activé, les enseignants peuvent associer des changements de profil aux magtest.';
 $string['delcategory'] = 'Supprimer cette catégorie';
 $string['delquestion'] = 'Supprimer cette question';
 $string['descresult'] = 'Résultats du test';
@@ -69,7 +71,7 @@ $string['erroremptyanswers'] = '(Toutes les réponses aux questions n\'ont pas �
 $string['errornotallowed'] = 'Vous n\'avez pas la permission de faire ce test';
 $string['errorquestionupdate'] = 'Erreur lors de la mise à jour de la question {$a}';
 $string['erroranswerinsert'] = 'Erreur d\'insertion d\'une nouvelle réponse pmour la question : {$a}';
-$string['errorupdate_category'] = 'Erreur de mise à jour de la catégorie {$a}';
+$string['errorupdatecategory'] = 'Erreur de mise à jour de la catégorie {$a}';
 $string['eventanswersubmitted'] = 'Réponse soumise';
 $string['guestcannotuse'] = 'Les invités ne peuvent accéder à ce test';
 $string['helpertext'] = 'Texte d\'aide pour la catégorie {$a}';
@@ -101,6 +103,8 @@ $string['nousersinthisgroup'] = 'Aucun utilisateur ne s\'est placé dans cette c
 $string['noanswerusers'] = 'Sans réponse ';
 $string['outputgroupdesc'] = 'Description du groupe généré';
 $string['outputgroupname'] = 'Nom du groupe généré';
+$string['outputfieldname'] = 'Champ de profil à modifier';
+$string['outputfieldvalue'] = 'Valeur de profil';
 $string['singlechoice'] = 'Choix simple';
 $string['singlechoice_help'] = 'Si actif, seule la première catégorie. Weights apply to all other categories if this questions is enabled. Magtest is necessarily weighted in this case.';
 $string['pagenotcomplete'] = 'Toutes les réposnes n\'ont pas été données';
@@ -132,9 +136,10 @@ $string['singlechoicemode'] = 'Ce test magazine est en mode réponse simple. You
 $string['testfinish'] = 'Vous avez répondu à toutes les questions : le test est fini.';
 $string['testnotallok'] = 'Vous ne pouvez faire ce test car sa configuration n\'est pas terminée';
 $string['unanswered'] = 'Sans réponse';
-$string['update_category'] = 'Modifier une catégorie';
+$string['updatecategory'] = 'Modifier une catégorie';
 $string['usemakegroups'] = 'Utiliser pour générer des groupes de cours';
 $string['userchoices'] = 'Réponses des utilisateurs';
+$string['usesetprofile'] = 'Utilisez ce test pour modifier les valeurs de profil';
 $string['weight'] = 'Pondération';
 $string['weightfor'] = 'Poids pour "{$a}"';
 $string['weighted'] = 'Mode pondéré';
@@ -174,7 +179,7 @@ le test affichera chaque question sur une nouvelle page.
 $string['weighted_help'] = '
 ### Mode pondéré
 
-Si vous activez le mode pondéré, chaque réponse peut apporter un nombre non égal de points `la note de sa catégorie associée.
+Si vous activez le mode pondéré, chaque réponse peut apporter un nombre non égal de points à la note de sa catégorie associée.
 
 Ceci permet de créer des tests qui permettent de faire varier l\'influence de certaines questions dans le "placement"
 des participants dans le score final.
@@ -207,7 +212,7 @@ Le module permet d\'activer la fonction de génération de groupes qui définit 
 
 Le test peut ne pas être complet et les groupes seront générés avec les réponses disponibles. Par contre, il n\'est pas possible de
 générer les groupes s\'il existe déjà des groupes définis dans le cours. Vous devrez donc détruire les groupes après une première
-tentative si vous désirez à nouveau générer les groupes `partir de nouveaux résultats.
+tentative si vous désirez à nouveau générer les groupes à partir de nouveaux résultats.
 ';
 
 $string['allowreplay_help'] = '
