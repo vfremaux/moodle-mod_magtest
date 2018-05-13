@@ -31,7 +31,7 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-require_once $CFG->dirroot.'/mod/magtest/listlib.php';
+require_once($CFG->dirroot.'/mod/magtest/listlib.php');
 
 // Delete a category.
 

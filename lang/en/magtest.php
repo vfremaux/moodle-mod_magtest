@@ -79,7 +79,7 @@ $string['helper'] = 'Read hint';
 $string['intro'] = 'Intro';
 $string['magtestattempted'] = 'Attempted on';
 $string['magtestaccesses'] = 'Accessed: {$a} times';
-$string['makegroups'] = 'Generate moodle groups from results'; 
+$string['makegroups'] = 'Generate moodle groups from results';
 $string['modulename'] = 'Multitrack test';
 $string['pluginname'] = 'Multitrack test';
 $string['pluginadministration'] = 'Magtest Settings';
@@ -104,6 +104,8 @@ $string['cleardata'] = 'Clear all data';
 $string['clearalladvice'] = 'Clearing all data will also clear all user results';
 $string['outputgroupdesc'] = 'Generated group description';
 $string['outputgroupname'] = 'Generated group name';
+$string['outputfieldname'] = 'Profile field to set';
+$string['outputfieldvalue'] = 'Profile value to set';
 $string['singlechoice'] = 'Single choice';
 $string['pagenotcomplete'] = 'All questions were not answered.';
 $string['pagesize'] = 'Questions per page';
@@ -132,6 +134,8 @@ $string['testnotallok'] = 'The configuration of this test is not complete: you c
 $string['unanswered'] = 'These users did not answer';
 $string['updatecategory'] = 'Update a category';
 $string['usemakegroups'] = 'Use this test for generating course groups';
+$string['usesetprofile'] = 'Use this test for changing users profile values';
+$string['usesetprofile_help'] = 'If enabled, each category can drive changes in the user\'s profile.';
 $string['userchoices'] = 'User choices';
 $string['userstosubmit'] = 'User left to submit';
 $string['weight'] = 'Weight';
@@ -144,6 +148,8 @@ $string['answer'] = 'Answer';
 $string['helpertext'] = 'Helper Text';
 $string['updatecategories'] = 'Update Category';
 $string['updatequestion'] = 'Update Question';
+$string['configusesetprofile'] = 'Use set profile';
+$string['configusesetprofile_desc'] = 'If enabled, teachers will be able to drive profile value changes from a magtest.';
 
 // Help strings.
 
@@ -199,7 +205,7 @@ $string['allowreplay_help'] = '## Multitrack test
 this setting allows disabling or enabling globally the capability to make multiple attempts of the test. Participants will need
 having the "Make multiple attempts" capability enabled in their profile to get access to the replay button.';
 
-$string['magtest_help'] = ' 
+$string['magtest_help'] = '
 Magtest implements such magazine tests collecting answers "by category" of answers. The test allows you to define some categories
 and deploy a set of questions that will have as many proposals for each category.
 

@@ -45,7 +45,7 @@ class Category_Form extends moodleform {
     }
 
     public function definition() {
-        global $CFG, $catid, $DB, $id;
+        global $catid, $DB, $id;
 
         $mform = $this->_form;
 
@@ -62,15 +62,14 @@ class Category_Form extends moodleform {
         $mform->setDefault('what', 'do'.$this->cmd);
         $mform->setType('what', PARAM_TEXT);
 
-        $mod_context = context_module::instance($id);
-        $fileoptions = array('maxfiles' => EDITOR_UNLIMITED_FILES, 'noclean' => true, 'context' =>  $mod_context);
+        $modulecontext = context_module::instance($id);
+        $fileoptions = array('maxfiles' => EDITOR_UNLIMITED_FILES, 'noclean' => true, 'context' => $modulecontext);
 
         if ($this->cmd == 'add') {
             $mform->addElement('hidden', 'cmd', 'add');
             $mform->setType('cmd', PARAM_TEXT);
 
             $categories = magtest_get_categories($this->magtest->id);
-            $categoryids = array_keys($categories);
             for ($i = 0; $i < $this->howmany; $i++) {
                 $num = $i + 1;
 
@@ -81,11 +80,12 @@ class Category_Form extends moodleform {
 
                 $symboloptions = magtest_get_symbols($magtest, $renderingpathbase);
 
-                $mform->addElement('selectgroups','catsymbol_'.$num, get_string('symbol', 'mod_magtest'), $symboloptions);
+                $mform->addElement('selectgroups', 'catsymbol_'.$num, get_string('symbol', 'mod_magtest'), $symboloptions);
 
-                $catdesc_editor = $mform->addElement('editor', 'catdescription_'.$num, get_string('description'), null, $fileoptions);
+                $label = get_string('description');
+                $catdesceditor = $mform->addElement('editor', 'catdescription_'.$num, $label, null, $fileoptions);
                 $label = get_string('categoryresult', 'magtest');
-                $catresult_editor  = $mform->addElement('editor', 'catresult_'.$num, $label, null, $fileoptions);
+                $catresulteditor  = $mform->addElement('editor', 'catresult_'.$num, $label, null, $fileoptions);
 
                 if ($this->magtest->usemakegroups) {
                     $attrs = array('size' => '128', 'maxlength' => '255');
@@ -122,11 +122,12 @@ class Category_Form extends moodleform {
             $selectgroup = $mform->addElement('selectgroups', 'symbol', get_string('symbol', 'mod_magtest'), $symboloptions);
             $selectgroup->setValue($category->symbol);
 
-            $catdesc_editor = $mform->addElement('editor', 'catdescription', get_string('description'), null, $fileoptions);
-            $catdesc_editor->setValue(array('text' => $category->description));
+            $catdesceditor = $mform->addElement('editor', 'catdescription', get_string('description'), null, $fileoptions);
+            $catdesceditor->setValue(array('text' => $category->description));
 
-            $catresult_editor  = $mform->addElement('editor', 'catresult', get_string('categoryresult', 'magtest'), null, $fileoptions);
-            $catresult_editor->setValue(array('text' => $category->result));
+            $label = get_string('categoryresult', 'magtest');
+            $catresulteditor = $mform->addElement('editor', 'catresult', $label, null, $fileoptions);
+            $catresulteditor->setValue(array('text' => $category->result));
 
             if ($this->magtest->usemakegroups) {
                 $attrs = array('size' => '128', 'maxlength' => '255');
@@ -135,6 +136,15 @@ class Category_Form extends moodleform {
                 $attrs = array('size' => '255', 'maxlength' => '255');
                 $mform->addElement('text', 'outputgroupdesc', get_string('outputgroupdesc', 'magtest'), '', $attrs);
                 $mform->setType('outputgroupdesc', PARAM_CLEANHTML);
+            }
+
+            if ($this->magtest->usesetprofile) {
+                $options = $DB->get_records_menu('user_info_field', array(), 'shortname, name');
+                $mform->addElement('select', 'outputfieldname', get_string('outputfieldname', 'magtest'), $options, '');
+                $mform->setType('outputfieldname', PARAM_CLEANHTML);
+                $attrs = array('size' => '255', 'maxlength' => '255');
+                $mform->addElement('text', 'outputfieldvalue', get_string('outputfieldvalue', 'magtest'), '', $attrs);
+                $mform->setType('outputfieldvalue', PARAM_CLEANHTML);
             }
         }
 
