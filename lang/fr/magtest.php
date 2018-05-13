@@ -31,12 +31,12 @@ $string['magtest:viewgeneralstat'] = 'Voir les statistiques de réponse';
 $string['magtest:viewotherresults'] = 'Voir les résultats de tous';
 
 $string['errorinvalidcategory'] = 'Catégorie invalide.';
-$string['erroraddcategory'] = 'Erreur lors de l\'ajout d\'une catégorie.';
+$string['erroradd_category'] = 'Erreur lors de l\'ajout d\'une catégorie.';
 
 $string['<<'] = '<<';
 $string['>>'] = '>>';
 $string['addcategories'] = 'Ajouter des categories';
-$string['addcategory'] = 'Ajouter une categorie';
+$string['add_category'] = 'Ajouter une categorie';
 $string['addone'] = 'Ajouter une categorie supplémentaire';
 $string['addquestion'] = 'Ajouter une question';
 $string['addthree'] = 'Ajouter trois catégories supplémentaires';
@@ -69,7 +69,7 @@ $string['erroremptyanswers'] = '(Toutes les réponses aux questions n\'ont pas �
 $string['errornotallowed'] = 'Vous n\'avez pas la permission de faire ce test';
 $string['errorquestionupdate'] = 'Erreur lors de la mise à jour de la question {$a}';
 $string['erroranswerinsert'] = 'Erreur d\'insertion d\'une nouvelle réponse pmour la question : {$a}';
-$string['errorupdatecategory'] = 'Erreur de mise à jour de la catégorie {$a}';
+$string['errorupdate_category'] = 'Erreur de mise à jour de la catégorie {$a}';
 $string['eventanswersubmitted'] = 'Réponse soumise';
 $string['guestcannotuse'] = 'Les invités ne peuvent accéder à ce test';
 $string['helpertext'] = 'Texte d\'aide pour la catégorie {$a}';
@@ -132,7 +132,7 @@ $string['singlechoicemode'] = 'Ce test magazine est en mode réponse simple. You
 $string['testfinish'] = 'Vous avez répondu à toutes les questions : le test est fini.';
 $string['testnotallok'] = 'Vous ne pouvez faire ce test car sa configuration n\'est pas terminée';
 $string['unanswered'] = 'Sans réponse';
-$string['updatecategory'] = 'Modifier une catégorie';
+$string['update_category'] = 'Modifier une catégorie';
 $string['usemakegroups'] = 'Utiliser pour générer des groupes de cours';
 $string['userchoices'] = 'Réponses des utilisateurs';
 $string['weight'] = 'Pondération';
@@ -145,7 +145,15 @@ $string['answer'] = 'Réponse';
 $string['helpertext'] = 'Aide';
 $string['updatecategories'] = 'Modifier la catégorie';
 $string['updatequestion'] = 'Modifier la question';
-// Help strings //
+
+$string['privacy:metadata:magtest_useranswer:userid'] = 'L\'identifiant de l\'utilisateur';
+$string['privacy:metadata:magtest_useranswer:magtestid'] = 'L\'identifiant du test';
+$string['privacy:metadata:magtest_useranswer:answerid'] = 'L\'identifiant de la réponse donnée par l\'utilisateur';
+$string['privacy:metadata:magtest_useranswer:questionid'] = 'L\'identifiant de la question pour laquelle l\'utilisateur a donné la réponse';
+$string['privacy:metadata:magtest_useranswer:timeanswered'] = 'La date à laquelle la réponse a été donnée';
+$string['privacy:metadata:magtest_useranswer'] = 'Stocke les réponses données par les utilisateurs dans le test';
+
+// Help strings.
 
 $string['importformat_help'] = '
 ### Format d\'import des questions
