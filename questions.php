@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Allows managing question set
  *
@@ -28,21 +26,21 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
  * @see        questions.controller.php for associated controller.
  */
+defined('MOODLE_INTERNAL') || die();
 
-// Invoke controller.
 if ($action) {
     require($CFG->dirroot.'/mod/magtest/questions.controller.php');
 }
 
-$nb_cat = $DB->count_records_select('magtest_category', 'magtestid = '.$magtest->id.' AND name <> \'\'');
-if ( $nb_cat < 2) {
-    echo $OUTPUT->notification(get_string('youneedcreatingcategories','magtest'));
-    return; // give control back to view.php
+$nbcat = $DB->count_records_select('magtest_category', 'magtestid = '.$magtest->id.' AND name <> \'\'');
+if ($nbcat < 2) {
+    echo $OUTPUT->notification(get_string('youneedcreatingcategories', 'magtest'));
+    return; // Give control back to view.php.
 }
 
 $categories = magtest_get_categories($magtest->id);
 $categorycount = count($categories);
-$questions = magtest_get_questions($magtest->id);    
+$questions = magtest_get_questions($magtest->id);
 $orderstr = get_string('sortorder', 'magtest');
 $questionstr = get_string('question', 'magtest');
 $answersstr = get_string('answerweights', 'magtest');
@@ -50,9 +48,9 @@ $commandstr = get_string('commands', 'magtest');
 
 // Prepare the table.
 $table = new html_table();
-$table->head = array("<b>$orderstr</b>","<b>$questionstr</b>","<b>$answersstr</b>","<b>$commandstr</b>");
-$table->size = array('5%','50%','30%','15%');
-$table->align = array('left','left','center','right');
+$table->head = array("<b>$orderstr</b>", "<b>$questionstr</b>", "<b>$answersstr</b>", "<b>$commandstr</b>");
+$table->size = array('5%', '50%', '30%', '15%');
+$table->align = array('left', 'left', 'center', 'right');
 
 if (!empty($questions)) {
     foreach ($questions as $question) {
@@ -63,21 +61,25 @@ if (!empty($questions)) {
         $commands = '<div class="questioncommands">';
         $cmdurl = new moodle_url('/mod/magtest/editquestions.php', array('id' => $cm->id, 'qid' => $question->id));
         $commands .= '<a href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/edit').'"></a>';
-        $cmdurl = new moodle_url('/mod/magtest/view.php', array('id' => $cm->id, 'view' => 'questions', 'what' => 'delete', 'qid' => $question->id));
+
+        $params = array('id' => $cm->id, 'view' => 'questions', 'what' => 'delete', 'qid' => $question->id);
+        $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
         $commands .= '&nbsp;<a id="delete" href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/delete').'"></a>';
         if ($question->sortorder > 1) {
-            $cmdurl = new moodle_url('/mod/magtest/view.php', array('id' => $cm->id, 'view' => 'questions', 'what' => 'up', 'qid' => $question->id));
+            $params = array('id' => $cm->id, 'view' => 'questions', 'what' => 'up', 'qid' => $question->id);
+            $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
             $commands .= '&nbsp;<a href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/up').'"></a>';
         } else {
             $commands .= '&nbsp;<img src="'.$OUTPUT->pix_url('up_shadow', 'magtest').'">';
         }
         if ($question->sortorder < count($questions)) {
-            $cmdurl = new moodle_url('/mod/magtest/view.php', array('id' => $cm->id, 'view' => 'questions', 'what' => 'down', 'qid' => $question->id));
+            $params = array('id' => $cm->id, 'view' => 'questions', 'what' => 'down', 'qid' => $question->id);
+            $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
             $commands .= '&nbsp;<a href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/down').'"></a>';
         } else {
             $commands .= '&nbsp;<img src="'.$OUTPUT->pix_url('down_shadow', 'magtest').'">';
         }
-        $commands .='</div>';
+        $commands .= '</div>';
         $validanswercount = 0;
         $weights = array();
         foreach ($question->answers as $answer) {
@@ -85,9 +87,11 @@ if (!empty($questions)) {
         }
 
         $answercheck = '('.implode(',<br/> ', $weights).')';
-        $question->questiontext = file_rewrite_pluginfile_urls( $question->questiontext, 'pluginfile.php',$context->id, 'mod_magtest', 'question', 0);
+        $question->questiontext = file_rewrite_pluginfile_urls($question->questiontext, 'pluginfile.php', $context->id,
+                                                               'mod_magtest', 'question', 0);
 
-        $table->data[] = array($question->sortorder, format_string(format_text($question->questiontext, $question->questiontextformat)), $answercheck, $commands);
+        $qt = format_string(format_text($question->questiontext, $question->questiontextformat));
+        $table->data[] = array($question->sortorder, $qt, $answercheck, $commands);
     }
 }
 echo '<center>';
@@ -95,7 +99,7 @@ echo '<center>';
 if (!empty($questions)) {
     echo html_writer::table($table);
 } else {
-    echo get_string('noquestions', 'mod_magtest');
+    echo $OUTPUT->notification(get_string('noquestions', 'mod_magtest'), 'notifyproblem');
 }
 
 $options['id'] = $cm->id;
