@@ -44,7 +44,7 @@ $string['allowreplay'] = 'Autoriser plusieurs essais';
 $string['answercount'] = 'Nombre de réponses';
 $string['answerquestions'] = 'Test&nbsp;:&ensp;';
 $string['answers'] = 'Réponses';
-$string['answerweights'] = 'Poids des réponses'; 
+$string['answerweights'] = 'Poids des réponses';
 $string['answertext'] = 'Réponse pour la catégorie&nbsp;: {$a}';
 $string['backtocourse'] = 'Revenir au parcours';
 $string['categories'] = 'Catégories';
@@ -58,6 +58,8 @@ $string['commands'] = 'Commandes';
 $string['configshowmymoodle'] = 'Montrer les tests magazine sur les pages personnalisées';
 $string['configshowmymoodledesc'] = 'Si cette option est activée, alors les tests magazine à faire ne seront pas visible dans les pages personnalisées';
 $string['confirmdeletemessage'] = 'En supprimant cette question, vous supprimez également les réponses associées et tous les choix des utilisateurs déjà effectués pour cette question. Voulez-vous continuer ?';
+$string['configusesetprofile'] = 'Activer la modification de profil';
+$string['configusesetprofile_desc'] = 'Si activé, les enseignants peuvent associer des changements de profil aux magtest.';
 $string['delcategory'] = 'Supprimer cette catégorie';
 $string['delquestion'] = 'Supprimer cette question';
 $string['descresult'] = 'Résultats du test';
@@ -101,6 +103,8 @@ $string['nousersinthisgroup'] = 'Aucun utilisateur ne s\'est placé dans cette c
 $string['noanswerusers'] = 'Sans réponse ';
 $string['outputgroupdesc'] = 'Description du groupe généré';
 $string['outputgroupname'] = 'Nom du groupe généré';
+$string['outputfieldname'] = 'Champ de profil à modifier';
+$string['outputfieldvalue'] = 'Valeur de profil';
 $string['singlechoice'] = 'Choix simple';
 $string['singlechoice_help'] = 'Si actif, seule la première catégorie. Weights apply to all other categories if this questions is enabled. Magtest is necessarily weighted in this case.';
 $string['pagenotcomplete'] = 'Toutes les réposnes n\'ont pas été données';
@@ -128,15 +132,16 @@ $string['sortorder'] = 'Rang';
 $string['starttime'] = 'Date de début';
 $string['stat'] = 'Statistiques';
 $string['symbol'] = 'Symbole';
-$string['singlechoicemode'] = 'Ce test magazine est en mode réponse simple. You cannot write answer texts in this mode. the sudent will just answer "yes" or "no" to the question, and distribute weights in categories.'; 
+$string['singlechoicemode'] = 'Ce test magazine est en mode réponse simple. You cannot write answer texts in this mode. the sudent will just answer "yes" or "no" to the question, and distribute weights in categories.';
 $string['testfinish'] = 'Vous avez répondu à toutes les questions : le test est fini.';
 $string['testnotallok'] = 'Vous ne pouvez faire ce test car sa configuration n\'est pas terminée';
 $string['unanswered'] = 'Sans réponse';
 $string['updatecategory'] = 'Modifier une catégorie';
 $string['usemakegroups'] = 'Utiliser pour générer des groupes de cours';
 $string['userchoices'] = 'Réponses des utilisateurs';
+$string['usesetprofile'] = 'Utilisez ce test pour modifier les valeurs de profil';
 $string['weight'] = 'Pondération';
-$string['weightfor'] = 'Poids pour "{$a}"'; 
+$string['weightfor'] = 'Poids pour "{$a}"';
 $string['weighted'] = 'Mode pondéré';
 $string['youneedcreatingcategories'] = 'Il faut créer au moins deux catégories avant de pouvoir créer des questions';
 $string['you_have_to_create_categories'] = 'Vous devez créer au moins une catégorie de réponses avant de pouvoir créer une question.';
@@ -145,7 +150,15 @@ $string['answer'] = 'Réponse';
 $string['helpertext'] = 'Aide';
 $string['updatecategories'] = 'Modifier la catégorie';
 $string['updatequestion'] = 'Modifier la question';
-// Help strings //
+
+$string['privacy:metadata:magtest_useranswer:userid'] = 'L\'identifiant de l\'utilisateur';
+$string['privacy:metadata:magtest_useranswer:magtestid'] = 'L\'identifiant du test';
+$string['privacy:metadata:magtest_useranswer:answerid'] = 'L\'identifiant de la réponse donnée par l\'utilisateur';
+$string['privacy:metadata:magtest_useranswer:questionid'] = 'L\'identifiant de la question pour laquelle l\'utilisateur a donné la réponse';
+$string['privacy:metadata:magtest_useranswer:timeanswered'] = 'La date à laquelle la réponse a été donnée';
+$string['privacy:metadata:magtest_useranswer'] = 'Stocke les réponses données par les utilisateurs dans le test';
+
+// Help strings.
 
 $string['importformat_help'] = '
 ### Format d\'import des questions
@@ -173,7 +186,7 @@ le test affichera chaque question sur une nouvelle page.
 $string['weighted_help'] = '
 ### Mode pondéré
 
-Si vous activez le mode pondéré, chaque réponse peut apporter un nombre non égal de points `la note de sa catégorie associée.
+Si vous activez le mode pondéré, chaque réponse peut apporter un nombre non égal de points à la note de sa catégorie associée.
 
 Ceci permet de créer des tests qui permettent de faire varier l\'influence de certaines questions dans le "placement"
 des participants dans le score final.
@@ -184,7 +197,7 @@ $string['magtest_help'] = '
 Le module "Test de magazine" propose un test qui se base sur un ensemble de catégories de réponses, comme les tests de psychologie
 qu l\'on trouve dans les magazines. Le test permet d\'établir les catégories de classement du résultat, et propose de définir un
 jeu de questions �oser aux participants. A chaque question doit correspondre un certain nombre de propositions (une par catégorie)
-permettant au participant de faire son choix. 
+permettant au participant de faire son choix.
 
 Lorsque le participant fait le test, il devra choisir pour chaque question la réponse appropriée ce qui rapportera un certain
 nombre de points à la catégorie correspondante.
@@ -202,16 +215,16 @@ $string['usemakegroups_help'] = '
 Le module "Test de magazine" permet de segmenter les participants en plusieurs groupes par leur simple participation au test et
 la catégorie de proposition qu\'ils vont choisir par leur réponses.
 
-Le module permet d\'activer la fonction de génération de groupes qui définit des groupes Moodle de cours `partir de ces résultats.
+Le module permet d\'activer la fonction de génération de groupes qui définit des groupes Moodle de cours à partir de ces résultats.
 
 Le test peut ne pas être complet et les groupes seront générés avec les réponses disponibles. Par contre, il n\'est pas possible de
-générer les groupes s\'il existe déj`des groupes définis dans le cours. Vous devrez donc détruire les groupes après une première
-tentative si vous désirez `nouveau générer les groupes `partir de nouveaux résultats.
+générer les groupes s\'il existe déjà des groupes définis dans le cours. Vous devrez donc détruire les groupes après une première
+tentative si vous désirez à nouveau générer les groupes à partir de nouveaux résultats.
 ';
 
 $string['allowreplay_help'] = '
 ### Autoriser plusieurs tentatives
 
 Ce paramètre permet de commuter la possibilité de rejouer le test au niveau de l\'instance. Les utilisateurs doivent en plus disposer
-de la capacité "Rejouer le test" dans leur profil pour pouvoir exécuter le test `nouveau.
+de la capacité "Rejouer le test" dans leur profil pour pouvoir exécuter le test à nouveau.
 ';

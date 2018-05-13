@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Allows answering to the test, question by question
  *
@@ -27,6 +25,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
  * @see        preview.controller.php for associated controller.
  */
+defined('MOODLE_INTERNAL') || die();
 
 $renderer = $PAGE->get_renderer('mod_magtest');
 
@@ -61,20 +60,24 @@ if ($action) {
 $nextset = magtest_get_next_questionset($magtest, $currentpage);
 
 if ($magtest->pagesize) {
-    $donerecords = $DB->count_records_select('magtest_useranswer', "magtestid = $magtest->id AND userid = $USER->id ");
+    $select = "magtestid = ? AND userid = ? ";
+    $params = array($magtest->id, $USER->id);
+    $donerecords = $DB->count_records_select('magtest_useranswer', $select, $params);
     $allpages = ceil(($DB->count_records('magtest_question', array('magtestid' => $magtest->id)) / $magtest->pagesize));
 } else {
-    $allpages = 1; // one unique page of any length
+    $allpages = 1; // One unique page of any length.
 }
 
 if (!$nextset) {
-    echo $OUTPUT->notification(get_string('testfinish','magtest'));
+    echo $OUTPUT->notification(get_string('testfinish', 'magtest'));
     include($CFG->dirroot.'/mod/magtest/testfinished.php');
     return;
 }
 
-// Keep this after test finished test, to allow students that have 
-// completed the test to see results.
+/*
+ * Keep this after test finished test, to allow students that have
+ * completed the test to see results.
+ */
 if ($magtest->endtimeenable && time() >= $magtest->endtime) {
     echo '<center>';
     echo $OUTPUT->box(get_string('closed', 'magtest'), 'errorbox');
@@ -83,9 +86,10 @@ if ($magtest->endtimeenable && time() >= $magtest->endtime) {
 }
 $categories = magtest_get_categories($magtest->id);
 
-echo $OUTPUT->heading(get_string('answerquestions', 'magtest').format_string($magtest->name).' : '.($currentpage + 1).'/'.$allpages);
+$hd = get_string('answerquestions', 'magtest').format_string($magtest->name).' : '.($currentpage + 1).'/'.$allpages;
+echo $OUTPUT->heading($hd);
 
-// print a description on first page.
+// Print a description on first page.
 if (!empty($magtest->description) && $currentpage == 1) {
     echo '<br/>';
     echo $OUTPUT->box(format_string($magtest->description));
