@@ -20,6 +20,7 @@
  * @copyright   2010 onwards Valery Fremaux {valery.fremaux@club-internet.fr}
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die();
 
 /*
  * Define all the backup steps that will be used by the backup_vodclic_activity_task

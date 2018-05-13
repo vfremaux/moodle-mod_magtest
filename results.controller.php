@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Controller for maketest
  *
@@ -26,21 +24,22 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
  * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
  * @see        resultsbycats.php for view.
-  *
+ *
  * @usecase    makegroups
  */
 
-/* ********************************* make moodle groups from results ********************** */
+defined('MOODLE_INTERNAL') || die();
 
 if ($action == 'makegroups') {
     $groupmode = groupmode($course, $cm);
     if ($groupmode == NOGROUPS || $magtest->usemakegroups) {
-        $users = get_users_by_capability($context, 'mod/magtest:doit', 'u.id,firstname,lastname,picture,email', 'lastname');
+        $fields = 'u.id,picture,email,'.get_all_user_name_fields(true, 'u');
+        $users = get_users_by_capability($context, 'mod/magtest:doit', $fields, 'lastname');
     } else {
         print_error('errorbadgroupmode', 'magtest');
     }
 
-    magtest_compile_results($magtest, $users, $categories, $max_cat);
+    magtest_compile_results($magtest, $users, $categories, $maxcat);
 
     foreach ($categories as $category) {
         $now = time();
@@ -51,10 +50,10 @@ if ($action == 'makegroups') {
         $group->enrolmentkey = '';
         $group->timecreated = $now;
         $group->timemodified = $now;
-        if (!$groupid = $DB->insert_record('groups', addslashes_recursive($group))) {
+        if (!$groupid = $DB->insert_record('groups', $group)) {
             print_error('errorcreatinggroup', 'magtest');
         }
-        if (!empty($category->users)){
+        if (!empty($category->users)) {
             foreach ($category->users as $userid) {
                 $groupmember = new StdClass;
                 $groupmember->groupid = $groupid;

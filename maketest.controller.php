@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Controller for "maketest"
  *
@@ -30,8 +28,7 @@ defined('MOODLE_INTERNAL') || die();
  * @usecase    save
  * @usecase    reset
  */
-
-/* ****************************************** save answers ********************** */
+defined('MOODLE_INTERNAL') || die();
 
 if ($action == 'save') {
     if ($magtest->singlechoice) {
@@ -66,7 +63,8 @@ if ($action == 'save') {
                 $useranswer->answerid = required_param($akey, PARAM_INT);
                 $useranswer->questionid = $questionid;
                 $useranswer->timeanswered = time();
-                if ($old = $DB->get_record('magtest_useranswer', array('userid' => $USER->id, 'magtestid' => $magtest->id, 'questionid' => $questionid))) {
+                $params = array('userid' => $USER->id, 'magtestid' => $magtest->id, 'questionid' => $questionid);
+                if ($old = $DB->get_record('magtest_useranswer', $params)) {
                     $useranswer->id = $old->id;
                     $DB->update_record('magtest_useranswer', $useranswer);
                 } else {

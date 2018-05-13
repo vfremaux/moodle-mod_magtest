@@ -32,12 +32,12 @@ $string['magtest:viewgeneralstat'] = 'View general statistics';
 $string['magtest:viewotherresults'] = 'See results of other participants';
 
 $string['errorinvalidcategory'] = 'Invalid Category.';
-$string['erroraddcategory'] = 'Error while adding a category.';
+$string['erroradd_category'] = 'Error while adding a category.';
 
 $string['<<'] = '<<';
 $string['>>'] = '>>';
 $string['addcategories'] = 'Add categories';
-$string['addcategory'] = 'Add a category';
+$string['add_category'] = 'Add a category';
 $string['addone'] = 'Add one category';
 $string['addquestion'] = 'Add a question';
 $string['addthree'] = 'Add three categories';
@@ -71,7 +71,7 @@ $string['errornotallowed'] = 'You are not allowed to perform this test';
 $string['erroremptyanswers'] = 'Some answers have no content.<br/>The test may malfunction.';
 $string['errorquestionupdate'] = 'Error updating question {$a}';
 $string['erroranswerinsert'] = 'Failed inserting a new answer for questionid : {$a}';
-$string['errorupdatecategory'] = 'Could not update magtest category {$a}';
+$string['errorupdate_category'] = 'Could not update magtest category {$a}';
 $string['eventanswersubmitted'] = 'Answer submitted';
 $string['guestcannotuse'] = 'Guests cannot use this test';
 $string['helpnavigationquestion'] = 'Help';
@@ -79,7 +79,7 @@ $string['helper'] = 'Read hint';
 $string['intro'] = 'Intro';
 $string['magtestattempted'] = 'Attempted on';
 $string['magtestaccesses'] = 'Accessed: {$a} times';
-$string['makegroups'] = 'Generate moodle groups from results'; 
+$string['makegroups'] = 'Generate moodle groups from results';
 $string['modulename'] = 'Multitrack test';
 $string['pluginname'] = 'Multitrack test';
 $string['pluginadministration'] = 'Magtest Settings';
@@ -130,7 +130,7 @@ $string['singlechoicemode'] = 'the magtest is in singlechoice mode. You cannot w
 $string['testfinish'] = 'You have finished the test';
 $string['testnotallok'] = 'The configuration of this test is not complete: you cannot perform it.';
 $string['unanswered'] = 'These users did not answer';
-$string['updatecategory'] = 'Update a category';
+$string['update_category'] = 'Update a category';
 $string['usemakegroups'] = 'Use this test for generating course groups';
 $string['userchoices'] = 'User choices';
 $string['userstosubmit'] = 'User left to submit';
@@ -144,6 +144,13 @@ $string['answer'] = 'Answer';
 $string['helpertext'] = 'Helper Text';
 $string['updatecategories'] = 'Update Category';
 $string['updatequestion'] = 'Update Question';
+
+$string['privacy:metadata:magtest_useranswer:userid'] = 'The ID of the user';
+$string['privacy:metadata:magtest_useranswer:magtestid'] = 'The ID of the magtest instance';
+$string['privacy:metadata:magtest_useranswer:answerid'] = 'The answer ID choosed for the question';
+$string['privacy:metadata:magtest_useranswer:questionid'] = 'The question ID for which the user has answered';
+$string['privacy:metadata:magtest_useranswer:timeanswered'] = 'The time the user has given the answer';
+$string['privacy:metadata:magtest_useranswer'] = 'Stores answers of the user to the magtest questions';
 
 // Help strings.
 
@@ -199,7 +206,7 @@ $string['allowreplay_help'] = '## Multitrack test
 this setting allows disabling or enabling globally the capability to make multiple attempts of the test. Participants will need
 having the "Make multiple attempts" capability enabled in their profile to get access to the replay button.';
 
-$string['magtest_help'] = ' 
+$string['magtest_help'] = '
 Magtest implements such magazine tests collecting answers "by category" of answers. The test allows you to define some categories
 and deploy a set of questions that will have as many proposals for each category.
 

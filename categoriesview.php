@@ -28,9 +28,9 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot.'/mod/magtest/forms/categories_form.php');
 
 $categoriesform = new magtest_categories_form($magtest);
-$categoriesform->set_data(array('id' => $cm->id);
+$categoriesform->set_data(array('id' => $cm->id));
 
-if ($categories_form->is_cancelled()) {
+if ($categoriesform->is_cancelled()) {
     redirect (new moodle_url('/mod/magtest/view.php', array('id' => $cm->id)));
 }
 

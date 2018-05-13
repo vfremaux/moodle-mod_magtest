@@ -66,7 +66,7 @@ if ($form->is_cancelled()) {
 $PAGE->set_title("$course->shortname: $magtest->name");
 $PAGE->set_heading("$course->fullname");
 $PAGE->navbar->add(get_string('categories', 'magtest'), $editurl);
-$PAGE->navbar->add(get_string('addcategory', 'magtest'));
+$PAGE->navbar->add(get_string('add_category', 'magtest'));
 $PAGE->set_focuscontrol('');
 $PAGE->set_cacheable(true);
 $PAGE->set_url($url);
@@ -77,7 +77,7 @@ if ($form->is_cancelled()) {
 }
 
 if ($data = $form->get_data()) {
-    $cmd = $data->cmd ; 
+    $cmd = $data->cmd;
 
     if ($cmd == 'add') {
 
@@ -113,10 +113,10 @@ if ($data = $form->get_data()) {
             $var = 'outputgroupdesc_'.$i;
             $cat->outputgroupdesc = @$data->{$var};
 
-            $catid = magtest::addCategory($magtest->id, $cat);
+            $catid = magtest::add_category($magtest->id, $cat);
 
             if (!$catid) {
-                 print_error('erroraddcategory', 'magtest', $editurl);
+                 print_error('erroradd_category', 'magtest', $editurl);
             }
         }
     } else {
@@ -138,10 +138,10 @@ if ($data = $form->get_data()) {
     redirect($editurl);
     exit;
 }
- 
+
 if ($catid >= 0) {
-   $category = $DB->get_record('magtest_category', array('id' => $catid));
-   $form->set_data($category);
+    $category = $DB->get_record('magtest_category', array('id' => $catid));
+    $form->set_data($category);
 }
 
 echo $OUTPUT->header();

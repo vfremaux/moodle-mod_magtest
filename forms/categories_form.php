@@ -30,7 +30,7 @@ require_once($CFG->libdir.'/formslib.php');
 class magtest_categories_form extends moodleform {
 
     public function __construct($magtest) {
-        parent::moodleform(null, (array)$magtest);
+        parent::__construct(null, (array)$magtest);
     }
 
     public function definition() {
@@ -55,7 +55,7 @@ class magtest_categories_form extends moodleform {
                 }
             }
 
-            if (!strcmp($mform->_submitValues['submitbutton'], get_string('addcategory', 'magtest'))) {
+            if (!strcmp($mform->_submitValues['submitbutton'], get_string('add_category', 'magtest'))) {
                 $newcategory->categorytext = '';
                 $newcategory->magtestid = $magtestid;
                 $DB->insert_record('magtest_category', $newcategory);
@@ -94,7 +94,7 @@ class magtest_categories_form extends moodleform {
                 $mform->setDefault($key, $category->categoryshortname);
 
                 $key = 'category['.$category->id.'][categorytext]';
-                $mform->addElement('text', $key,get_string('category', 'magtest')." $i", array('size' => '64'));
+                $mform->addElement('text', $key, get_string('category', 'magtest')." $i", array('size' => '64'));
                 $mform->setType($key, PARAM_CLEANHTML);
                 $mform->setDefault($key, $category->categorytext);
             }
@@ -105,7 +105,7 @@ class magtest_categories_form extends moodleform {
             $mform->addElement('static', 'message', get_string('nocategories', 'magtest'));
         }
 
-        $buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('addcategory', 'magtest'));
+        $buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('add_category', 'magtest'));
         $buttonarray[] = &$mform->createElement('cancel');
         $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
         $mform->setType('buttonar', PARAM_RAW);
