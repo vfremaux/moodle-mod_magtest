@@ -14,11 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Prints results of the test for the user
- * 
+ *
  * @package    mod_magtest
  * @category   mod
  * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
@@ -26,6 +24,7 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
  * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
  */
+defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir.'/tablelib.php');
 
@@ -35,7 +34,7 @@ if ($action) {
 
 // Setup group state regarding the user.
 
-$groupmode = groupmode($course, $cm);
+$groupmode = groups_get_activity_groupmode($cm);
 $changegroupid = optional_param('group', -1, PARAM_INT);
 
 if (has_capability('moodle/site:accessallgroups', $context)) {
@@ -55,10 +54,11 @@ if ($groups) {
  * Note that usemakegroups is not compatible with course groups as it is used to generate
  * moodle groups in a course and needs having no groups at start.
  */
+$fields = 'u.id,picture,email,imagealt,'.get_all_user_name_fields(true, 'u');
 if ($groupmode == NOGROUPS || $magtest->usemakegroups) {
-    $users = get_users_by_capability($context, 'mod/magtest:doit', 'u.id,firstname,lastname,picture,email,imagealt', 'lastname');
+    $users = get_users_by_capability($context, 'mod/magtest:doit', $fields, 'lastname');
 } else {
-    $users = get_users_by_capability($context, 'mod/magtest:doit', 'u.id,firstname,lastname,picture,email,imagealt', 'lastname', '', '', $currentgroupid);
+    $users = get_users_by_capability($context, 'mod/magtest:doit', $fields, 'lastname', '', '', $currentgroupid);
 }
 
 // Get missing users.
@@ -69,14 +69,14 @@ if (!$missings = magtest_get_unsubmitted_users($magtest, $users)) {
 
 $usersanswers = magtest_get_useranswers($magtest->id, $users);
 if (! $usersanswers ) {
-    echo $OUTPUT->notification(get_string('nouseranswer','magtest'));
+    echo $OUTPUT->notification(get_string('nouseranswer', 'magtest'));
     return;
 }
 
 $categories = magtest_get_categories($magtest->id);
 $questions = magtest_get_questions($magtest->id);
-$count_cat = array();
-$nb_total = 0;
+$countcat = array();
+$nbtotal = 0;
 
 foreach ($usersanswers as $useranswer) {
     if ($magtest->singlechoice) {
@@ -84,14 +84,14 @@ foreach ($usersanswers as $useranswer) {
         foreach ($question->answers as $answer) {
             // Aggregate scores for each cat on each user.
             $cat = $categories[$answer->categoryid];
-            $count_cat[$useranswer->userid][$cat->id] = 0 + @$count_cat[$useranswer->userid][$cat->id] + $answer->weight;
+            $countcat[$useranswer->userid][$cat->id] = 0 + @$countcat[$useranswer->userid][$cat->id] + $answer->weight;
         }
     } else {
         $question = $questions[$useranswer->questionid];
         $answer = $question->answers[$useranswer->answerid];
         $cat = $categories[$answer->categoryid];
         // Aggregate scores.
-        $count_cat[$useranswer->userid][$cat->id] = 0 + @$count_cat[$useranswer->userid][$cat->id] + $answer->weight;
+        $countcat[$useranswer->userid][$cat->id] = 0 + @$countcat[$useranswer->userid][$cat->id] + $answer->weight;
     }
 }
 
@@ -101,13 +101,13 @@ foreach ($users as $user) {
     if (array_key_exists($user->id, $missings)) {
         continue;
     }
-    $max_cat[$user->id] = new StdClass();
-    $max_cat[$user->id]->score = 0;
-    $max_cat[$user->id]->catid = 0;
+    $maxcat[$user->id] = new StdClass();
+    $maxcat[$user->id]->score = 0;
+    $maxcat[$user->id]->catid = 0;
     foreach ($categories as $cat) {
-        if (@$count_cat[$user->id][$cat->id] > $max_cat[$user->id]->score) {
-            $max_cat[$user->id]->score = $count_cat[$user->id][$cat->id];
-            $max_cat[$user->id]->catid = $cat->id;
+        if (@$countcat[$user->id][$cat->id] > $maxcat[$user->id]->score) {
+            $maxcat[$user->id]->score = $countcat[$user->id][$cat->id];
+            $maxcat[$user->id]->catid = $cat->id;
         }
     }
 }
@@ -128,14 +128,14 @@ foreach ($users as $userid => $user) {
     $username = $OUTPUT->user_picture($user).' '.$userlink;
     $scoreboard = '<table width="100%" class=\"magtest-scoretable\">';
     foreach ($categories as $category) {
-        if ($max_cat[$user->id]->catid == $category->id) {
+        if ($maxcat[$user->id]->catid == $category->id) {
             $pf = '<span class="winner">';
             $sf = '</span>';
         } else {
             $pf = '';
             $sf = '';
         }
-        $score = @$count_cat[$user->id][$category->id];
+        $score = @$countcat[$user->id][$category->id];
         $symbolurl = magtest_get_symbols_baseurl($magtest).$category->symbol;
         $symbolimg = "<img src=\"$symbolurl\" /> ";
         $scoreboard .= "<tr><td>{$pf}{$symbolimg} {$category->name}{$sf}</td><td align=\"right\">{$pf}{$score}{$sf}</td></tr>";

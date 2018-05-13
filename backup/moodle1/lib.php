@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -37,7 +36,6 @@ class moodle1_mod_magtest_handler extends moodle1_mod_handler {
 
     /** @var int cmid */
     protected $moduleid = null;
-
 
     /**
      * Declare the paths in moodle.xml we are able to convert
@@ -102,7 +100,7 @@ class moodle1_mod_magtest_handler extends moodle1_mod_handler {
                     ),
                 )
             ),
-       );
+        );
     }
 
     /**
@@ -110,40 +108,22 @@ class moodle1_mod_magtest_handler extends moodle1_mod_handler {
      * data available
      */
     public function process_magtest($data) {
-        // get the course module id and context id
+        // Get the course module id and context id.
         $instanceid = $data['id'];
         $cminfo     = $this->get_cminfo($instanceid);
         $moduleid   = $cminfo['id'];
         $contextid  = $this->converter->get_contextid(CONTEXT_MODULE, $moduleid);
 
-        // get a fresh new file manager for this instance
+        // Get a fresh new file manager for this instance.
         $this->fileman = $this->converter->get_file_manager($contextid, 'mod_magtest');
 
-        // convert course files embedded into the intro
+        // Convert course files embedded into the intro.
         $this->fileman->filearea = 'intro';
         $this->fileman->itemid   = 0;
-        /*
-        $data['intro'] = $data['description'];
-        $data['introformat'] = $data['format'];
-        unset($data['description']);
-        unset($data['format']);
-        */
+
         $data['intro'] = moodle1_converter::migrate_referenced_files($data['intro'], $this->fileman);
 
-        // write inforef.xml
-        /*
-        $this->open_xml_writer("activities/magtest_{$moduleid}/inforef.xml");
-        $this->xmlwriter->begin_tag('inforef');
-        $this->xmlwriter->begin_tag('fileref');
-        foreach ($this->fileman->get_fileids() as $fileid) {
-            $this->write_xml('file', array('id' => $fileid));
-        }
-        $this->xmlwriter->end_tag('fileref');
-        $this->xmlwriter->end_tag('inforef');
-        $this->close_xml_writer();
-        */
-
-        // write magtest.xml
+        // Write magtest.xml.
         $this->open_xml_writer("activities/magtest_{$moduleid}/magtest.xml");
         $this->xmlwriter->begin_tag('activity', array('id' => $instanceid, 'moduleid' => $moduleid,
             'modulename' => 'magtest', 'contextid' => $contextid));
@@ -164,12 +144,12 @@ class moodle1_mod_magtest_handler extends moodle1_mod_handler {
      */
     public function on_magtest_end() {
 
-        // finish writing magtest.xml
+        // Finish writing magtest.xml.
         $this->xmlwriter->end_tag('magtest');
         $this->xmlwriter->end_tag('activity');
         $this->close_xml_writer();
 
-        // write inforef.xml
+        // Write inforef.xml.
         $this->open_xml_writer("activities/magtest_{$this->moduleid}/inforef.xml");
         $this->xmlwriter->begin_tag('inforef');
         $this->xmlwriter->begin_tag('fileref');
@@ -181,8 +161,7 @@ class moodle1_mod_magtest_handler extends moodle1_mod_handler {
         $this->close_xml_writer();
     }
 
-    /* ELEMENT and elementitem subs */
-    // need wait for all elements an elements item collected into memory structure as nesting change structure occurs
+    // Need wait for all elements an elements item collected into memory structure as nesting change structure occurs.
     public function on_answers_start() {
         $this->xmlwriter->begin_tag('answers');
     }
@@ -191,7 +170,7 @@ class moodle1_mod_magtest_handler extends moodle1_mod_handler {
         $this->xmlwriter->end_tag('answers');
     }
 
-    // process answer in one single write
+    // Process answer in one single write.
     public function process_answer($data) {
 
         $instanceid = $data['id'];
@@ -199,30 +178,29 @@ class moodle1_mod_magtest_handler extends moodle1_mod_handler {
         $moduleid   = $cminfo['id'];
         $contextid  = $this->converter->get_contextid(CONTEXT_MODULE, $moduleid);
 
-        // get a fresh new file manager for this instance
+        // Get a fresh new file manager for this instance.
         $this->fileman = $this->converter->get_file_manager($contextid, 'mod_magtest');
 
-        // convert course files embedded into the answertext
+        // Convert course files embedded into the answertext.
         $this->fileman->filearea = 'answertext';
         $this->fileman->itemid   = $data['id'];
 
         $data['answertext'] = moodle1_converter::migrate_referenced_files($data['answertext'], $this->fileman);
 
-        // process data
+        // Process data.
 
-        $this->write_xml('answer', array('id' => $data['id'], 
-                                           'magtestid' => $data['magtestid'], 
-                                           'questionid' => $data['questionid'], 
-                                           'answertext' => $data['answertext'], 
-                                           'answertextformat' => $data['answertextformat'], 
-                                           'helper' => $data['helper'], 
-                                           'helperformat' => $data['helperformat'], 
-                                           'categoryid' => $data['categoryid'], 
+        $this->write_xml('answer', array('id' => $data['id'],
+                                           'magtestid' => $data['magtestid'],
+                                           'questionid' => $data['questionid'],
+                                           'answertext' => $data['answertext'],
+                                           'answertextformat' => $data['answertextformat'],
+                                           'helper' => $data['helper'],
+                                           'helperformat' => $data['helperformat'],
+                                           'categoryid' => $data['categoryid'],
                                            'weight' => $data['weight']
                                            ));
     }
 
-    /* QUESTIONS */
     public function on_questions_start() {
         $this->xmlwriter->begin_tag('questions');
     }
@@ -231,7 +209,7 @@ class moodle1_mod_magtest_handler extends moodle1_mod_handler {
         $this->xmlwriter->end_tag('questions');
     }
 
-    // process magtest question in one single write
+    // Process magtest question in one single write.
     public function process_question($data) {
 
         $instanceid = $data['id'];
@@ -239,25 +217,24 @@ class moodle1_mod_magtest_handler extends moodle1_mod_handler {
         $moduleid   = $cminfo['id'];
         $contextid  = $this->converter->get_contextid(CONTEXT_MODULE, $moduleid);
 
-        // get a fresh new file manager for this instance
+        // Get a fresh new file manager for this instance.
         $this->fileman = $this->converter->get_file_manager($contextid, 'mod_magtest');
 
-        // convert course files embedded into the questiontext
+        // Convert course files embedded into the questiontext.
         $this->fileman->filearea = 'questiontext';
         $this->fileman->itemid   = $data['id'];
 
         $data['questiontext'] = moodle1_converter::migrate_referenced_files($data['questiontext'], $this->fileman);
 
-        $this->write_xml('question', array('id' => $data['id'], 
-                                           'magtestid' => $data['magtestid'], 
-                                           'questiontext' => $data['questiontext'], 
-                                           'questionextformat' => $data['questiontextformat'], 
+        $this->write_xml('question', array('id' => $data['id'],
+                                           'magtestid' => $data['magtestid'],
+                                           'questiontext' => $data['questiontext'],
+                                           'questionextformat' => $data['questiontextformat'],
                                            'sortorder' => $data['sortorder']
                                            ));
 
     }
 
-    /* USED ELEMENTS */
     public function on_categories_start() {
         $this->xmlwriter->begin_tag('categories');
     }
@@ -266,27 +243,27 @@ class moodle1_mod_magtest_handler extends moodle1_mod_handler {
         $this->xmlwriter->end_tag('categories');
     }
 
-    // process usedelement in one single write
+    // Process usedelement in one single write.
     public function process_category($data) {
 
         $cminfo     = $this->get_cminfo($data['magtestid']);
         $moduleid   = $cminfo['id'];
         $contextid  = $this->converter->get_contextid(CONTEXT_MODULE, $moduleid);
 
-        // get a fresh new file manager for this instance
+        // Get a fresh new file manager for this instance.
         $this->fileman = $this->converter->get_file_manager($contextid, 'mod_magtest');
 
-        // convert course files embedded into the category
+        // Convert course files embedded into the category.
         $this->fileman->filearea = 'category';
         $this->fileman->itemid   = $data['id'];
 
         $data['description'] = moodle1_converter::migrate_referenced_files($data['description'], $this->fileman);
 
-        $this->write_xml('category', array('id' => $data['id'], 
-                                           'magtestid' => $data['magtestid'], 
-                                           'name' => $data['name'], 
-                                           'description' => $data['description'], 
-                                           'descriptionformat' => $data['descriptionformat'], 
+        $this->write_xml('category', array('id' => $data['id'],
+                                           'magtestid' => $data['magtestid'],
+                                           'name' => $data['name'],
+                                           'description' => $data['description'],
+                                           'descriptionformat' => $data['descriptionformat'],
                                            'result' => $data['result'],
                                            'outputgroupname' => $data['outputgroupname'],
                                            'outputgroupdesc' => $data['outputgroupdesc'],

@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * @package    mod_magtest
  * @category   mod
@@ -25,8 +23,11 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
  * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
  */
+defined('MOODLE_INTERNAL') || die();
 
-if (!(isset($id) and $view === 'results' and has_capability('mod/magtest:viewotherresults', $context))) {
+if (!(isset($id) &&
+        $view === 'results' &&
+                has_capability('mod/magtest:viewotherresults', $context))) {
     print 'You have not to see this page';
     exit;
 }
@@ -36,42 +37,45 @@ require_once($CFG->libdir.'/tablelib.php');
 $currentgroup = groups_get_course_group($course, true);
 $grouptoshow = optional_param('group', $currentgroup, PARAM_INT);
 $groupmode = groups_get_course_groupmode($course); // Groups are being used.
-$isseparategroups = ($course->groupmode == SEPARATEGROUPS and $course->groupmodeforce && !has_capability('moodle/site:accessallgroups', $context));
+$isseparategroups = ($course->groupmode == SEPARATEGROUPS &&
+        $course->groupmodeforce &&
+                !has_capability('moodle/site:accessallgroups', $context));
 
 if ($isseparategroups and (!$currentgroup) ) {
     echo $OUTPUT->notification('You are not in a group.');
     exit;
 }
 
-$baseurl = "view.php?id={$cm->id}&amp;view=results";
-groups_print_course_menu($course,$baseurl);
+$baseurl = new moodle_url('/mod/magtest/view.php', array('id' => $cm->id, 'view' => 'results'));
+groups_print_course_menu($course, $baseurl);
 
 if (! $grouptoshow ) {
     $grouptoshow = '';
 }
 
-$users = get_users_by_capability($context, 'mod/magtest:doit','', '', '', '', $grouptoshow);
+$users = get_users_by_capability($context, 'mod/magtest:doit', '', '', '', '', $grouptoshow);
 $usersanswers = get_magtest_usersanswers($magtest->id);
 
 if (! $usersanswers ) {
-    echo $OUTPUT->notification(get_string('nouseranswer','magtest'));
+    echo $OUTPUT->notification(get_string('nouseranswer', 'magtest'));
     exit;
 }
 
 $categories = get_magtest_categories($magtest->id);
 $questions = get_magtest_questions($magtest->id);
-$count_cat = array();
+$countcat = array();
 
-$nb_total = 0;
+$nbtotal = 0;
 
 foreach ($usersanswers as $useranswer) {
     if ($magtest->singlechoice) {
-        // sum each earned weight per category
+        // Sum each earned weight per category.
         $question = $questions[$useranswer->questionid];
         foreach ($questions->answers as $answer) {
             if ($useranswer->answerid == 1) {
                 $cat = $categories[$answer->categoryid];
-                $count_cat[$useranswer->userid][$cat->categoryshortname] = $count_cat[$useranswer->userid][$cat->categoryshortname] + $answer->weight;
+                $catscore = $countcat[$useranswer->userid][$cat->categoryshortname];
+                $countcat[$useranswer->userid][$cat->categoryshortname] = $catscore + $answer->weight;
             }
         }
     } else {
@@ -79,15 +83,15 @@ foreach ($usersanswers as $useranswer) {
         $question = $questions[$useranswer->questionid];
         $answer = $question->answers[$useranswer->answerid];
         $cat = $categories[$answer->categoryid];
-        $count_cat[$useranswer->userid][$cat->categoryshortname] = $count_cat[$useranswer->userid][$cat->categoryshortname] + $answer->weight ;
+        $countcat[$useranswer->userid][$cat->categoryshortname] = $countcat[$useranswer->userid][$cat->categoryshortname] + $answer->weight;
     }
 }
 
 $table->head = array(get_string('users'));
 
-foreach($categories as $category) {
+foreach ($categories as $category) {
     $table->head[] = $category->categoryshortname;
-    $tab_empty[$category->categoryshortname] = 0; 
+    $tabempty[$category->categoryshortname] = 0;
 }
 
 $results = array();
@@ -103,8 +107,8 @@ foreach ($users as $user) {
                 'user' => $OUTPUT->user_picture($userpic).
                 fullname($user, has_capability('moodle/site:viewfullnames', $context))
             ),
-        $tab_empty,
-        $count_cat[$user->id] 
+        $tabempty,
+        $countcat[$user->id]
     );
 }
 

@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * A special lib for handling list-shaped entities.
  * Assume ordering is performed by a sortorder int field,
@@ -28,6 +26,7 @@ defined('MOODLE_INTERNAL') || die();
  * @contributors Valery Fremaux (France) (admin@www.ethnoinformatique.fr)
  * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
  */
+defined('MOODLE_INTERNAL') || die();
 
 // Library of ordered list dedicated operations.
 // inspired from techproject treelib.php.
@@ -39,14 +38,16 @@ defined('MOODLE_INTERNAL') || die();
  * @return the deleted id
  */
 function magtest_list_delete($id, $table) {
-    global $CFG,$DB;
+    global $DB;
 
     if (empty($id)) {
         return null;
     }
 
-    $res =  $DB->get_record($table, array('id' => $id));
-    if (!$res) return;
+    $res = $DB->get_record($table, array('id' => $id));
+    if (!$res) {
+        return;
+    }
     if ($res->sortorder > 1) {
         $previous = $DB->get_record($table, array('id' => $id, 'sortorder' => $res->sortorder - 1));
     }
@@ -60,35 +61,35 @@ function magtest_list_delete($id, $table) {
 }
 
 /**
- * Updates ordering of a list, reordering 
- * all subsequent siblings. 
+ * Updates ordering of a list, reordering
+ * all subsequent siblings.
  * @param reference $magtest a context to get records from
  * @param int $id the node from where to reorder
  * @param string $table the ordered table
  */
 function magtest_list_updateordering(&$magtest, $id, $table) {
-    global $CFG, $DB;
+    global $DB;
 
     if (is_int($magtest)) {
         $magtest->id = $magtest;
     }
 
     // Getting ordering value of the current node.
-    $res =  $DB->get_record($table, array('id' => $id));
+    $res = $DB->get_record($table, array('id' => $id));
     if (!$res) {
         return;
     }
 
     // Getting subsequent nodes that are upper.
     $query = "
-        SELECT 
-            id   
-        FROM 
+        SELECT
+            id
+        FROM
             {$table}
-        WHERE 
+        WHERE
             sortorder > ? AND
             magtestid = ?
-        ORDER BY 
+        ORDER BY
             sortorder
     ";
 
@@ -117,7 +118,7 @@ function magtest_list_up(&$magtest, $id, $table) {
     $res = $DB->get_record($table, array('id' => $id));
     if ($res->sortorder > 1) {
         $previousorder = $res->sortorder - 1;
-        $previous =  $DB->get_record($table, array('magtestid' => $magtest->id, 'sortorder' => $previousorder));
+        $previous = $DB->get_record($table, array('magtestid' => $magtest->id, 'sortorder' => $previousorder));
 
         // Swapping.
         $res->sortorder--;
@@ -137,12 +138,12 @@ function magtest_list_up(&$magtest, $id, $table) {
 function magtest_list_down(&$magtest, $id, $table) {
     global $DB;
 
-    $res =  $DB->get_record($table, array('id' => $id));
+    $res = $DB->get_record($table, array('id' => $id));
     $maxordering = magtest_get_max_ordering($magtest, $table);
 
     if ($res->sortorder < $maxordering) {
         $nextorder = $res->sortorder + 1;
-        $next =  $DB->get_record($table, array('magtestid' => $magtest->id, 'sortorder' => $nextorder));
+        $next = $DB->get_record($table, array('magtestid' => $magtest->id, 'sortorder' => $nextorder));
 
         // Swapping.
         $res->sortorder++;
@@ -160,7 +161,7 @@ function magtest_list_down(&$magtest, $id, $table) {
  * @return integer the max ordering found
  */
 function magtest_get_max_ordering(&$magtest, $table) {
-    global $CFG, $DB;
+    global $DB;
 
-    return 0 + $DB->get_field_select("$table", 'MAX(sortorder)', "magtestid = {$magtest->id} GROUP BY magtestid ");
+    return 0 + $DB->get_field_select("$table", 'MAX(sortorder)', "magtestid = ? GROUP BY magtestid ", array($magtest->id));
 }

@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Allows previewing the test before playing it
  *
@@ -26,6 +24,7 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
  * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
  */
+defined('MOODLE_INTERNAL') || die();
 
 if (!has_capability('mod/magtest:manage', $context)) {
     die('You cannot see this page with your role');
@@ -52,7 +51,8 @@ if ($questions) {
         echo '<ul>';
         foreach ($questions as $question) {
             echo '<li>';
-            $question->questiontext = file_rewrite_pluginfile_urls( $question->questiontext, 'pluginfile.php', $context->id, 'mod_magtest', 'question', 0);
+            $question->questiontext = file_rewrite_pluginfile_urls($question->questiontext, 'pluginfile.php', $context->id,
+                                                                   'mod_magtest', 'question', 0);
 
             echo format_string($question->questiontext);
             $weights = array();
@@ -66,7 +66,8 @@ if ($questions) {
         echo '<ul>';
         foreach ($questions as $question) {
             echo '<li>';
-            $question->questiontext = file_rewrite_pluginfile_urls( $question->questiontext, 'pluginfile.php', $context->id, 'mod_magtest', 'question', 0);
+            $question->questiontext = file_rewrite_pluginfile_urls($question->questiontext, 'pluginfile.php', $context->id,
+                                                                   'mod_magtest', 'question', 0);
 
             echo format_string($question->questiontext);
             echo '<ul>';
@@ -75,7 +76,8 @@ if ($questions) {
                 $cat = $DB->get_record('magtest_category', array('id' => $answer->categoryid));
                 $imageurl = magtest_get_symbols_baseurl($magtest).$cat->symbol;
 
-                $answer->answertext  = file_rewrite_pluginfile_urls( $answer->answertext, 'pluginfile.php', $context->id, 'mod_magtest', 'questionanswer', $answer->id);
+                $answer->answertext  = file_rewrite_pluginfile_urls($answer->answertext, 'pluginfile.php', $context->id,
+                                                                    'mod_magtest', 'questionanswer', $answer->id);
 
                 echo "<img class=\"magtest-qsymbol\" src=\"$imageurl\" />&nbsp;&nbsp;";
                 echo ($answer->answertext).' ('.format_string($cat->name).')';
