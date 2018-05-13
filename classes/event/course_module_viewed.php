@@ -22,19 +22,12 @@
  * @copyright  2014 MyLearningFactory (http://www.mylearningfactory.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 namespace mod_magtest\event;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
  * Event for when a magtest activity is viewed.
- *
- * @property-read array $other {
- *      Extra information about event.
- *
- *      @type int anonymous if tracker is anonymous.
- *      @type int cmid course module id.
- * }
  */
 class course_module_viewed extends \core\event\course_module_viewed {
 

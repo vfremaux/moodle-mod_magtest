@@ -33,19 +33,20 @@ $useranswers = magtest_get_useranswers($magtest->id, $USER->id);
 
 if (!$useranswers) {
     echo '<center>';
-    echo $OUTPUT->notification(get_string('nouseranswer','magtest'));
+    echo $OUTPUT->notification(get_string('nouseranswer', 'magtest'));
     echo '<br/>';
     if (!$magtest->endtimeenable || time() < $magtest->endtime) {
         if ($magtest->allowreplay && has_capability('mod/magtest:multipleattempts', $context)) {
             $options['id'] = $cm->id;
             $options['view'] = 'doit';
             $options['what'] = 'reset';
-            echo $OUTPUT->single_button(new moodle_url('view.php', $options), get_string('reset', 'magtest'), 'get');
+            echo $OUTPUT->single_button(new moodle_url('/mod/magtest/view.php', $options), get_string('reset', 'magtest'), 'get');
         }
     }
     $options = array();
     $options['id'] = $course->id;
-    echo $OUTPUT->single_button(new moodle_url($CFG->wwwroot.'/course/view.php', $options), get_string('backtocourse', 'magtest'), 'get');
+    $buttonurl = new moodle_url('/course/view.php', $options);
+    echo $OUTPUT->single_button($buttonurl, get_string('backtocourse', 'magtest'), 'get');
     echo '</center>';
     echo $OUTPUT->footer($COURSE);
     exit;
@@ -56,7 +57,7 @@ $questions = magtest_get_questions($magtest->id);
 
 // Prepare information relative to the categories in the final table.
 
-foreach($categories as $cat) {
+foreach ($categories as $cat) {
     $tab[$cat->id] = 0;
 }
 
@@ -102,7 +103,9 @@ foreach ($categories as $cat) {
     }
     $symbolurl = magtest_get_symbols_baseurl($magtest).$cat->symbol;
     $symbolimg = "<img src=\"$symbolurl\" /> ";
-    $table->data[] = array($symbolimg.$pf.format_string(format_text($cat->description, @$cat->format)).'<br/>'.format_string(format_text($cat->result, @$cat->format)).$sf, $pf.$tab[$cat->id].$sf);
+    $label = $symbolimg.$pf.format_string(format_text($cat->description, @$cat->format));
+    $label .= '<br/>'.format_string(format_text($cat->result, @$cat->format)).$sf;
+    $table->data[] = array($label, $pf.$tab[$cat->id].$sf);
 }
 echo html_writer::table($table);
 

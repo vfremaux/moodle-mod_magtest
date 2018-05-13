@@ -23,12 +23,11 @@
  * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
  * @see        categories.controller.php for associated controller.
  */
-
 require('../../config.php');
 require_once($CFG->dirroot.'/mod/magtest/forms/addquestions_form.php');
 require_once($CFG->dirroot.'/mod/magtest/classes/magtest.class.php');
 
-$id = required_param('id', PARAM_INT); // Course module id
+$id = required_param('id', PARAM_INT); // Course module id.
 $qid = required_param('qid', PARAM_INT); // Question id.
 $howmany = optional_param('howmany', 1, PARAM_INT);
 
@@ -46,7 +45,7 @@ if ($id) {
 
 require_course_login($course->id, true, $cm);
 
-$mod_context = context_module::instance($id);
+$modcontext = context_module::instance($id);
 
 $url = new moodle_url('/mod/magtest/editquestions.php', array('id' => $id));
 $editurl = new moodle_url('/mod/magtest/view.php', array('id' => $id, 'view' => 'questions'));
@@ -66,9 +65,11 @@ if ($qid <= 0) {
     $form = new Question_Form($magtest, 'update', $howmany, $url);
 }
 
-$maxbytes = 1024 * 1024 * 1000 ; //100 mb TODO: add settings
-$questionoptions = array('trusttext' => true, 'subdirs' => false, 'maxfiles' => 100, 'maxbytes' => $maxbytes, 'context' => $mod_context);
-$answeroptions = array('trusttext' => true, 'subdirs' => false, 'maxfiles' => 100, 'maxbytes' => $maxbytes, 'context' => $mod_context);
+$maxbytes = 1024 * 1024 * 1000; // TODO: add settings.
+$questionoptions = array('trusttext' => true, 'subdirs' => false, 'maxfiles' => 100,
+                         'maxbytes' => $maxbytes, 'context' => $modcontext);
+$answeroptions = array('trusttext' => true, 'subdirs' => false, 'maxfiles' => 100,
+                       'maxbytes' => $maxbytes, 'context' => $modcontext);
 
 if ($form->is_cancelled()) {
     redirect($editurl);
@@ -80,32 +81,34 @@ if ($data = $form->get_data()) {
 
     if ($cmd == 'add') {
 
-        $data = file_postupdate_standard_editor($data, 'questiontext', $questionoptions, $mod_context, 'mod_magtest', 'question', 0);
+        $data = file_postupdate_standard_editor($data, 'questiontext', $questionoptions, $modcontext, 'mod_magtest', 'question', 0);
 
         $question = new stdClass();
-        $question->questiontext = $data->questiontext; 
+        $question->questiontext = $data->questiontext;
         $question->questiontextformat = FORMAT_MOODLE;
         $question->magtestid = $data->magtestid;
         $maxsort = 0 + $DB->get_field('magtest_question', 'MAX(sortorder)', array('magtestid' => $data->magtestid));
         $question->sortorder = $maxsort + 1;
-        $new_answer_id = $DB->insert_record('magtest_question', $question);
+        $newanswerid = $DB->insert_record('magtest_question', $question);
 
         // Store the cats answers.
         foreach ($data->cats as $catid) {
             if (!$magtest->singlechoice) {
-                $data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'questionanswer', $new_answer_id); 
-                $data = file_postupdate_standard_editor($data, 'helper'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'helper', $new_answer_id); 
+                $data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $modcontext,
+                                                        'mod_magtest', 'questionanswer', $newanswerid);
+                $data = file_postupdate_standard_editor($data, 'helper'.$catid, $questionoptions, $modcontext, 'mod_magtest',
+                                                        'helper', $newanswerid);
             }
 
             $answer = new stdClass();
-            $answer->questionid = $new_answer_id; 
+            $answer->questionid = $newanswerid;
             $answer->magtestid = $magtest->id;
 
             if (!$magtest->singlechoice) {
                 $answer->answertextformat = FORMAT_HTML;
-                $answer->answertext = $data->{'questionanswer'.$catid} ;
+                $answer->answertext = $data->{'questionanswer'.$catid};
                 $answer->helperformat = FORMAT_HTML;
-                $answer->helper = $data->{'helper'.$catid} ;
+                $answer->helper = $data->{'helper'.$catid};
             } else {
                 $answer->answertextformat = 0;
                 $answer->answertext = '';
@@ -117,7 +120,7 @@ if ($data = $form->get_data()) {
                 $weightkey = 'weight'.$catid;
                 $answer->weight = $data->$weightkey;
             } else {
-                $answer->weight =  1;
+                $answer->weight = 1;
             }
 
             $answer->categoryid = $catid;
@@ -126,67 +129,72 @@ if ($data = $form->get_data()) {
     } else {
         // Update question.
 
-        $data = file_postupdate_standard_editor($data, 'questiontext', $questionoptions, $mod_context, 'mod_magtest', 'question', 0);
-        $question = $DB->get_record('magtest_question',array('id' => $data->qid));
-        $question->questiontext = $data->questiontext ;
-        $question->questiontextformat = FORMAT_HTML ;
+        $data = file_postupdate_standard_editor($data, 'questiontext', $questionoptions, $modcontext, 'mod_magtest',
+                                                'question', 0);
+        $question = $DB->get_record('magtest_question', array('id' => $data->qid));
+        $question->questiontext = $data->questiontext;
+        $question->questiontextformat = FORMAT_HTML;
         $DB->update_record('magtest_question', $question);
 
         foreach ($data->cats as $catid) {
 
             // Try load the answer.
-            $old_answer = $DB->get_record('magtest_answer', array('questionid' => $qid, 'categoryid' => $catid));
+            $oldanswer = $DB->get_record('magtest_answer', array('questionid' => $qid, 'categoryid' => $catid));
 
-            if ($old_answer) {
+            if ($oldanswer) {
                 // Do an update.
                 if (!$magtest->singlechoice) {
-                    $data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'questionanswer', $old_answer->id);
-                    $old_answer->answertext = $data->{'questionanswer'.$catid};
+                    $data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $modcontext,
+                                                            'mod_magtest', 'questionanswer', $oldanswer->id);
+                    $oldanswer->answertext = $data->{'questionanswer'.$catid};
 
-                    $data = file_postupdate_standard_editor($data, 'helper'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'helper', $old_answer->id);
-                    $old_answer->helper = $data->{'helper'.$catid};
-                    $old_answer->helperformat = FORMAT_MOODLE;
+                    $data = file_postupdate_standard_editor($data, 'helper'.$catid, $questionoptions, $modcontext,
+                                                            'mod_magtest', 'helper', $oldanswer->id);
+                    $oldanswer->helper = $data->{'helper'.$catid};
+                    $oldanswer->helperformat = FORMAT_MOODLE;
                 }
 
                 if ($magtest->weighted) {
                     $weightkey = 'weight'.$catid;
-                    $old_answer->weight = $data->$weightkey;
+                    $oldanswer->weight = $data->$weightkey;
                 } else {
-                    $old_answer->weight = 1;
+                    $oldanswer->weight = 1;
                 }
 
-                $DB->update_record('magtest_answer', $old_answer);
+                $DB->update_record('magtest_answer', $oldanswer);
             } else {
                 // Insert a new record.
-                $new_answer = new stdClass();
-                $new_answer->id = null;
+                $newanswer = new stdClass();
+                $newanswer->id = null;
 
-                $new_answer->questionid = $qid;
-                $new_answer->categoryid = $catid ;
-                $new_answer->answertext = '';
-                $new_answer->helpertext = '';
-                $new_answer->magtestid = $data->magtestid;
-                $new_answer->answertextformat = 0;
-                $new_answer->helpertextformat = 0;
+                $newanswer->questionid = $qid;
+                $newanswer->categoryid = $catid;
+                $newanswer->answertext = '';
+                $newanswer->helpertext = '';
+                $newanswer->magtestid = $data->magtestid;
+                $newanswer->answertextformat = 0;
+                $newanswer->helpertextformat = 0;
                 if ($magtest->weighted) {
                     $weightkey = 'weight'.$catid;
-                    $new_answer->weight = $data->$weightkey;
+                    $newanswer->weight = $data->$weightkey;
                 } else {
-                    $new_answer->weight = 1;
+                    $newanswer->weight = 1;
                 }
-                $new_answer->id = $DB->insert_record('magtest_answer', $new_answer);
+                $newanswer->id = $DB->insert_record('magtest_answer', $newanswer);
 
                 if (!$magtest->pluginchoice) {
-                    $data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'questionanswer', $new_answer->id); 
-                    $new_answer->answertext = $data->{'questionanswer'.$catid};
-                    $new_answer->answertextformat = FORMAT_HTML;
+                    $data = file_postupdate_standard_editor($data, 'questionanswer'.$catid, $questionoptions, $modcontext,
+                                                            'mod_magtest', 'questionanswer', $newanswer->id);
+                    $newanswer->answertext = $data->{'questionanswer'.$catid};
+                    $newanswer->answertextformat = FORMAT_HTML;
 
-                    $data = file_postupdate_standard_editor($data, 'helper'.$catid, $questionoptions, $mod_context, 'mod_magtest', 'helper', $new_answer->id); 
-                    $new_answer->helper = $data->{'helper'.$catid};
-                    $new_answer->helperformat = FORMAT_HTML;
+                    $data = file_postupdate_standard_editor($data, 'helper'.$catid, $questionoptions, $modcontext, 'mod_magtest',
+                                                            'helper', $newanswer->id);
+                    $newanswer->helper = $data->{'helper'.$catid};
+                    $newanswer->helperformat = FORMAT_HTML;
                 }
 
-                $DB->update_record('magtest_answer', $new_answer);
+                $DB->update_record('magtest_answer', $newanswer);
             }
         }
     }

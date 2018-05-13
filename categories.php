@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Allows managing categories
  *
@@ -27,9 +25,10 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
  * @see        categories.controller.php for associated controller.
  */
+defined('MOODLE_INTERNAL') || die();
 
 if ($action) {
-    require $CFG->dirroot.'/mod/magtest/categories.controller.php';
+    require($CFG->dirroot.'/mod/magtest/categories.controller.php');
 }
 
 $categories = magtest_get_categories($magtest->id);
@@ -38,11 +37,13 @@ echo "<center>";
 echo $OUTPUT->box_start();
 
 if (!empty($categories)) {
+
     $symbolstr = get_string('symbol', 'magtest');
     $namestr = get_string('name');
     $descriptionstr = get_string('description');
     $resultstr = get_string('categoryresult', 'magtest');
     $commandstr = get_string('commands', 'magtest');
+
     $table = new html_table();
 
     $table->head = array(
@@ -69,37 +70,37 @@ if (!empty($categories)) {
         '15%'
     );
 
-$table->width = '100%';
+    $table->width = '100%';
 
-foreach ($categories as $category) {
-    $commands = '<div class="categorycommands">';
-    $cmdurl = new moodle_url('/mod/magtest/editcategories.php', array('id' => $cm->id, 'catid' => $category->id));
-    $commands .= '<a href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/edit').'"</a>';
-    $cmdurl = new moodle_url('/mod/magtest/view.php', array('id' => $cm->id, 'what' => 'deletecategory', 'catid' => $category->id));
-    $commands .=' <a id="delete" href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/delete').'" /></a>';
+    foreach ($categories as $category) {
+        $commands = '<div class="categorycommands">';
+        $cmdurl = new moodle_url('/mod/magtest/editcategories.php', array('id' => $cm->id, 'catid' => $category->id));
+        $commands .= '<a href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/edit').'"></a>';
+        $cmdurl = new moodle_url('/mod/magtest/view.php', array('id' => $cm->id, 'what' => 'deletecategory', 'catid' => $category->id));
+        $commands .= ' <a id="delete" href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/delete').'" /></a>';
 
-    if ($category->sortorder > 1) {
-        $params = array('id' => $cm->id, 'view' => 'categories', 'what' => 'raisecategory', 'catid' => $category->id);
-        $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
-        $commands .= '&nbsp;<a href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/up').'"></a>';
-    } else {
-        $commands.='&nbsp;<img src="'.$OUTPUT->pix_url('up_shadow', 'magtest').'">';
-    }
+        if ($category->sortorder > 1) {
+            $params = array('id' => $cm->id, 'view' => 'categories', 'what' => 'raisecategory', 'catid' => $category->id);
+            $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
+            $commands .= '&nbsp;<a href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/up').'"></a>';
+        } else {
+            $commands .= '&nbsp;<img src="'.$OUTPUT->pix_url('up_shadow', 'magtest').'">';
+        }
 
-    if ($category->sortorder < count($categories)) {
-        $params = array('id' => $cm->id, 'view' => 'categories', 'what' => 'lowercategory', 'catid' => $category->id);
-        $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
-        $commands .= '&nbsp;<a href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/down').'"></a>';
-    } else {
-        $commands.='&nbsp;<img src="'.$OUTPUT->pix_url('down_shadow', 'magtest').'">';
-    }
+        if ($category->sortorder < count($categories)) {
+            $params = array('id' => $cm->id, 'view' => 'categories', 'what' => 'lowercategory', 'catid' => $category->id);
+            $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
+            $commands .= '&nbsp;<a href="'.$cmdurl.'"><img src="'.$OUTPUT->pix_url('t/down').'"></a>';
+        } else {
+            $commands .= '&nbsp;<img src="'.$OUTPUT->pix_url('down_shadow', 'magtest').'">';
+        }
 
-    $commands .= '</div>';
-    $symbolurl = magtest_get_symbols_baseurl($magtest) . $category->symbol;
-    $symbolimage = "<img src=\"{$symbolurl}\" />";
-    $category->format = 1;
+        $commands .= '</div>';
+        $symbolurl = magtest_get_symbols_baseurl($magtest) . $category->symbol;
+        $symbolimage = "<img src=\"{$symbolurl}\" />";
+        $category->format = 1;
 
-    $table->data[] = array(
+        $table->data[] = array(
             $symbolimage,
             format_string($category->name),
             format_string(format_text($category->description, $category->format)),
@@ -110,7 +111,7 @@ foreach ($categories as $category) {
 
     echo html_writer::table($table);
 } else {
-    print_string('nocategories', 'magtest');
+    echo $OUTPUT->notification(get_string('nocategories', 'magtest'), 'notifyproblem');
 }
 
 echo $OUTPUT->box_end();
