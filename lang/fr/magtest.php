@@ -58,6 +58,8 @@ $string['commands'] = 'Commandes';
 $string['configshowmymoodle'] = 'Montrer les tests magazine sur les pages personnalisées';
 $string['configshowmymoodledesc'] = 'Si cette option est activée, alors les tests magazine à faire ne seront pas visible dans les pages personnalisées';
 $string['confirmdeletemessage'] = 'En supprimant cette question, vous supprimez également les réponses associées et tous les choix des utilisateurs déjà effectués pour cette question. Voulez-vous continuer ?';
+$string['configusesetprofile'] = 'Activer la modification de profil';
+$string['configusesetprofile_desc'] = 'Si activé, les enseignants peuvent associer des changements de profil aux magtest.';
 $string['delcategory'] = 'Supprimer cette catégorie';
 $string['delquestion'] = 'Supprimer cette question';
 $string['descresult'] = 'Résultats du test';
@@ -101,6 +103,8 @@ $string['nousersinthisgroup'] = 'Aucun utilisateur ne s\'est placé dans cette c
 $string['noanswerusers'] = 'Sans réponse ';
 $string['outputgroupdesc'] = 'Description du groupe généré';
 $string['outputgroupname'] = 'Nom du groupe généré';
+$string['outputfieldname'] = 'Champ de profil à modifier';
+$string['outputfieldvalue'] = 'Valeur de profil';
 $string['singlechoice'] = 'Choix simple';
 $string['singlechoice_help'] = 'Si actif, seule la première catégorie. Weights apply to all other categories if this questions is enabled. Magtest is necessarily weighted in this case.';
 $string['pagenotcomplete'] = 'Toutes les réposnes n\'ont pas été données';
@@ -135,6 +139,7 @@ $string['unanswered'] = 'Sans réponse';
 $string['updatecategory'] = 'Modifier une catégorie';
 $string['usemakegroups'] = 'Utiliser pour générer des groupes de cours';
 $string['userchoices'] = 'Réponses des utilisateurs';
+$string['usesetprofile'] = 'Utilisez ce test pour modifier les valeurs de profil';
 $string['weight'] = 'Pondération';
 $string['weightfor'] = 'Poids pour "{$a}"';
 $string['weighted'] = 'Mode pondéré';
@@ -146,6 +151,8 @@ $string['helpertext'] = 'Aide';
 $string['updatecategories'] = 'Modifier la catégorie';
 $string['updatequestion'] = 'Modifier la question';
 // Help strings //
+
+// Help strings.
 
 $string['importformat_help'] = '
 ### Format d\'import des questions

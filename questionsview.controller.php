@@ -16,7 +16,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-if (!(isset($id) && $view === 'questions' && has_capability('mod/magtest:manage', $context))) {
+if (!(isset($id) &&
+        $view === 'questions' &&
+                has_capability('mod/magtest:manage', $context))) {
     die();
 }
 
@@ -37,17 +39,19 @@ foreach ($tabanswers as $id => $answer) {
 // Finish to save data.
 
 switch ($action) {
-    case get_string('save'):
+    case get_string('save'): {
         // Already done.
         break;
+    }
 
-    case get_string('addquestion', 'magtest'):
+    case get_string('addquestion', 'magtest'): {
         $question = magtest_add_empty_question($magtest->id);
         $nbquestions = $nbquestions + 1;
         $first = true;
         break;
+    }
 
-    case get_string('delquestion', 'magtest'):
+    case get_string('delquestion', 'magtest'): {
         // Does this question answered by a user ? If not we can delete it.
         if (! $DB->record_exists('magtest_useranswer', array('questionid' => $question->id))) {
             $DB->delete_records('magtest_question', array('id' => $question->id));
@@ -63,8 +67,9 @@ switch ($action) {
             $question = get_magtest_question($magtest->id, $question->qorder - 1);
         }
         break;
+    }
 
-    case get_string('<<', 'magtest'):
+    case get_string('<<','magtest'): {
         $question2 = get_magtest_question($magtest->id, $question->qorder - 1);
         if ($question2) {
             $question2->qorder = $question->qorder;
@@ -73,8 +78,9 @@ switch ($action) {
             $DB->update_record('magtest_question', $question2);
         }
         break;
+    }
 
-    case get_string('>>', 'magtest'):
+    case get_string('>>','magtest'): {
         $question2 = get_magtest_question($magtest->id, $question->qorder + 1);
         if ($question2) {
             $question2->qorder = $question->qorder;
@@ -83,6 +89,7 @@ switch ($action) {
             $DB->update_record('magtest_question', $question2);
         }
         break;
+    }
 
     default:
         // TODO : verify if $command is a number.

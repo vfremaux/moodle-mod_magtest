@@ -47,8 +47,4 @@ class ImportQuestionsForm extends moodleform {
 
         $this->add_action_buttons();
     }
-
-    public function validation($data, $files = null) {
-        return false;
-    }
 }

@@ -113,6 +113,12 @@ if ($data = $form->get_data()) {
             $var = 'outputgroupdesc_'.$i;
             $cat->outputgroupdesc = @$data->{$var};
 
+            $var = 'outputfieldname_'.$i;
+            $cat->outputfieldname = @$data->{$var};
+
+            $var = 'outputfieldvalue_'.$i;
+            $cat->outputfieldvalue = @$data->{$var};
+
             $catid = magtest::add_category($magtest->id, $cat);
 
             if (!$catid) {
@@ -130,6 +136,11 @@ if ($data = $form->get_data()) {
         if ($magtest->usemakegroups) {
             $category->outputgroupname = $data->outputgroupname;
             $category->outputgroupdesc = $data->outputgroupdesc;
+        }
+
+        if ($magtest->usesetprofile) {
+            $category->outputfieldname = $data->outputfieldname;
+            $category->outputfieldvalue = $data->outputfieldvalue;
         }
 
         $DB->update_record('magtest_category', $category);

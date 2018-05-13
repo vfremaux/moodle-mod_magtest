@@ -37,7 +37,7 @@ if (!defined('MOODLE_INTERNAL')) {
 }
 
 // Setup group state regarding the user.
-$groupmode = groupmode($course, $cm);
+$groupmode = groups_get_activity_groupmode($cm);
 $changegroupid = optional_param('group', -1, PARAM_INT);
 
 if (has_capability('moodle/site:accessallgroups', $context)) {
@@ -113,8 +113,7 @@ if ($magtest->usemakegroups) {
     $allgroups = groups_get_all_groups($COURSE->id);
     if (empty($allgroups)) {
         $params = array('id' => $cm->id, 'what' => 'makegroups');
-        $buttonurl = new moodle_url($CFG->wwwroot.'/mod/magtest/view.php', $params);
-        echo $OUTPUT->single_button($buttonurl, get_string('makegroups', 'magtest'), 'get');
+        echo $OUTPUT->single_button(new moodle_url($CFG->wwwroot.'/mod/magtest/view.php', $params), get_string('makegroups', 'magtest'), 'get');
     } else {
         echo $OUTPUT->box(get_string('nogroupcreationadvice', 'magtest'), 'errorbox');
     }

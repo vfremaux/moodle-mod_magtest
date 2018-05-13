@@ -104,6 +104,8 @@ $string['cleardata'] = 'Clear all data';
 $string['clearalladvice'] = 'Clearing all data will also clear all user results';
 $string['outputgroupdesc'] = 'Generated group description';
 $string['outputgroupname'] = 'Generated group name';
+$string['outputfieldname'] = 'Profile field to set';
+$string['outputfieldvalue'] = 'Profile value to set';
 $string['singlechoice'] = 'Single choice';
 $string['pagenotcomplete'] = 'All questions were not answered.';
 $string['pagesize'] = 'Questions per page';
@@ -132,6 +134,8 @@ $string['testnotallok'] = 'The configuration of this test is not complete: you c
 $string['unanswered'] = 'These users did not answer';
 $string['updatecategory'] = 'Update a category';
 $string['usemakegroups'] = 'Use this test for generating course groups';
+$string['usesetprofile'] = 'Use this test for changing users profile values';
+$string['usesetprofile_help'] = 'If enabled, each category can drive changes in the user\'s profile.';
 $string['userchoices'] = 'User choices';
 $string['userstosubmit'] = 'User left to submit';
 $string['weight'] = 'Weight';
@@ -144,6 +148,9 @@ $string['answer'] = 'Answer';
 $string['helpertext'] = 'Helper Text';
 $string['updatecategories'] = 'Update Category';
 $string['updatequestion'] = 'Update Question';
+$string['configusesetprofile'] = 'Use set profile';
+$string['configusesetprofile_desc'] = 'If enabled, teachers will be able to drive profile value changes from a magtest.';
+
 
 // Help strings.
 

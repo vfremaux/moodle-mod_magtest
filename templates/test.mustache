@@ -1,0 +1,55 @@
+
+<!-- test -->
+<form name="maketest" method="post" action="view.php">
+<input type="hidden" name="id" value="{{cmid}}" />
+<input type="hidden" name="view" value="doit" />
+<input type="hidden" name="magtestid" value="{{magtestid}}" />
+<input type="hidden" name="what" value="" />
+<input type="hidden" name="qpage" value="{{nextpage}}" />
+<table width="100%" cellspacing="10" cellpadding="10">
+
+    {{{magteststandard}}}
+    {{{magtestsingle}}}
+
+    <tr align="top">
+        <td colspan="3" align="center">
+            <input type="button" name="go_btn" value="{{savestr}}" onclick="{{{savehandler}}}" />
+            {{#canreplay}}
+            <input type="button" name="reset_btn" value="{{resetstr}}" onclick="{{{resethandler}}}" />
+            {{/canreplay}}
+            <input type="button" name="backtocourse_btn" value="{{backtocoursestr}}" onclick="{{{backhandler}}}" />
+         </td>
+    </tr>
+</table>
+</form>
+
+{{#magteststandard}}
+<script type="text/javascript">
+function checkanswers() {
+    var checkids = [{{{nextarray}}}];
+    for (i = 0; i < checkids.length; i++) {
+        rad_val = '';
+        for (var j = 0; j < document.forms['maketest'].elements['answer' + checkids[i]].length; j++) {
+            if (document.forms['maketest'].elements['answer' + checkids[i]][j].checked) {
+                rad_val = document.forms['maketest'].elements['answer' + checkids[i]].value;
+            }
+        }
+        if (rad_val == '') {
+            alert('{{{label}}}');
+            return false;
+        }
+    }
+    return true;
+}
+</script>
+{{/magteststandard}}
+
+{{#magtestsingle}}
+<script type="text/javascript">
+    function checkanswers() {
+        return true;
+    }
+</script>
+{{/magtestsingle}}
+<!-- /test -->
+

@@ -37,11 +37,13 @@ echo "<center>";
 echo $OUTPUT->box_start();
 
 if (!empty($categories)) {
+
     $symbolstr = get_string('symbol', 'magtest');
     $namestr = get_string('name');
     $descriptionstr = get_string('description');
     $resultstr = get_string('categoryresult', 'magtest');
     $commandstr = get_string('commands', 'magtest');
+
     $table = new html_table();
 
     $table->head = array(
@@ -74,7 +76,7 @@ if (!empty($categories)) {
         $commands = '<div class="categorycommands">';
         $cmdurl = new moodle_url('/mod/magtest/editcategories.php', array('id' => $cm->id, 'catid' => $category->id));
         $commands .= '<a href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/edit').'</a>';
-        $params = array('id' => $cm->id, 'what' => 'delete_category', 'catid' => $category->id);
+        $params = array('id' => $cm->id, 'what' => 'deletecategory', 'catid' => $category->id);
         $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
         $commands .= '&nbsp;<a id="delete" href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/delete', get_string('delete')).'</a>';
 
@@ -110,7 +112,7 @@ if (!empty($categories)) {
 
     echo html_writer::table($table);
 } else {
-    print_string('nocategories', 'magtest');
+    echo $OUTPUT->notification(get_string('nocategories', 'magtest'), 'notifyproblem');
 }
 
 echo $OUTPUT->box_end();
