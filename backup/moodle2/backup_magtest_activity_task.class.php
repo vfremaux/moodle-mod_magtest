@@ -55,7 +55,7 @@ class backup_magtest_activity_task extends backup_activity_task {
     static public function encode_content_links($content) {
         global $CFG;
 
-        $base = preg_quote($CFG->wwwroot, "/");
+        $base = preg_quote($CFG->wwwroot, '/');
 
         // Link to the list of magtests.
         $search = "/(".$base."\/mod\/magtest\/index.php\?id\=)([0-9]+)/";

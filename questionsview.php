@@ -16,9 +16,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-if (!(isset($id) and $view === 'questions' && has_capability('mod/magtest:manage', $context))) {
-    print 'You have not to see this page';
-    die;
+if (!(isset($id) &&
+        $view === 'questions' &&
+                has_capability('mod/magtest:manage', $context))) {
+    echo('You have not to see this page');
+    die();
 }
 
 $nbcat = $DB->count_records_select('magtest_category', 'magtestid = '.$magtest->id.' and categoryshortname <> \'\'');
@@ -34,14 +36,14 @@ $nbquestions = $DB->count_records('magtest_question', array('magtestid' => $magt
 
 if ($action != '') {
     include($CFG->dirroot.'/mod/magtest/questionsview.controller.php');
-    if (!isset($question) or empty($question)) {
+    if (!isset($question) || empty($question)) {
         echo $OUTPUT->notification('I can\'t get question. Problem !');
         echo $OUTPUT->footer();
         die();
     }
 } else {
     $question = get_magtest_question($magtest->id);
-    if (! $question ) {
+    if (!$question) {
         $question = magtest_add_empty_question($magtest->id);
         $first = true;
     }
@@ -131,7 +133,7 @@ if ($nbquestions > 1) {
                 echo '<input type="submit" name="what" value="'.get_string('>>', 'magtest').'"  >';
             }
         } else {
-            echo '<button type="submit" name="what" value="'.$i.'"  >'.$stri.'</button>';
+            echo '<button type="submit" name="what" value="'.$i.'" >'.$stri.'</button>';
         }
     }
 }

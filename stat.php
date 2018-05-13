@@ -32,7 +32,7 @@ if (!(isset($id) and $view === 'stat' && has_capability('mod/magtest:viewgeneral
     die('You cannot use this script that way');
 }
 
-$groupmode = groupmode($course, $cm);
+$groupmode = groups_get_activity_groupmode($cm);
 
 // Old mode but is the one that works !!
 

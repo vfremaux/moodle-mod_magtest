@@ -46,7 +46,7 @@ class Question_Form extends moodleform {
     }
 
     public function definition() {
-        global $DB, $CFG, $cm, $qid, $id;
+        global $DB, $qid, $id;
 
         $mform = $this->_form;
         $modcontext = context_module::instance($id);
@@ -132,7 +132,7 @@ class Question_Form extends moodleform {
             $mform->setType('gid', PARAM_INT);
 
             $label = get_string('question_text', 'magtest');
-            $questiontexteditor = $mform->addElement('editor', 'questiontext_editor', $label, null, $fileoptions);
+            $mform->addElement('editor', 'questiontext_editor', $label, null, $fileoptions);
 
             $question = file_prepare_standard_editor($question, 'questiontext', $questionoptions, $modcontext,
                                                      'mod_magtest', 'question', 0);
@@ -182,7 +182,7 @@ class Question_Form extends moodleform {
                     }
 
                     $field = 'weight'.$cat->id;
-                    $question->{$field} = $weight;
+                    $question->{$field} = $answer->weight;
                 }
             }
             $this->set_data($question);

@@ -30,6 +30,14 @@ defined('MOODLE_INTERNAL') or die();
 define('MAGTEST_RESETFORM_RESET', 'magtest_reset_data_');
 
 /**
+ * This function is not implemented in this plugin, but is needed to mark
+ * the vf documentation custom volume availability.
+ */
+function mod_magtest_supports_feature() {
+    assert(1);
+}
+
+/**
  * List of features supported in Vodeclic module
  * @param string $feature FEATURE_xx constant for requested feature
  * @return mixed True if module supports feature, false if not, null if doesn't know
@@ -354,7 +362,7 @@ function magtest_reset_course_form_definition(&$mform) {
         return;
     }
 
-    $mform->addElement('static', 'hint', get_string('resetting_data', 'magtest'));
+    $mform->addElement('static', 'hint', get_string('resettingdata', 'magtest'));
     foreach ($magtests as $magtest) {
         if ($hasanswers = $DB->count_records('magtest_useranswer', array('magtestid' => $magtest->id))) {
             $mform->addElement('checkbox', MAGTEST_RESETFORM_RESET.$magtest->id, format_string($magtest->name));
