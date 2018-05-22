@@ -62,6 +62,7 @@ if (!empty($questions)) {
         $cmdurl = new moodle_url('/mod/magtest/editquestions.php', array('id' => $cm->id, 'qid' => $question->id));
         $commands .= '<a href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/edit').'</a>';
 <<<<<<< HEAD
+<<<<<<< HEAD
         $cmdurl = new moodle_url('/mod/magtest/view.php', array('id' => $cm->id, 'view' => 'questions', 'what' => 'delete', 'qid' => $question->id));
         $commands .= '&nbsp;<a id="delete" href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/delete').'</a>';
         if ($question->sortorder > 1) {
@@ -74,17 +75,30 @@ if (!empty($questions)) {
             $params = array('id' => $cm->id, 'view' => 'questions', 'what' => 'up', 'qid' => $question->id);
             $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
 >>>>>>> MOODLE_35_STABLE
+=======
+        $params = array('id' => $cm->id, 'view' => 'questions', 'what' => 'delete', 'qid' => $question->id);
+        $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
+        $commands .= '&nbsp;<a id="delete" href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/delete', get_string('delete')).'</a>';
+        if ($question->sortorder > 1) {
+            $params = array('id' => $cm->id, 'view' => 'questions', 'what' => 'up', 'qid' => $question->id);
+            $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
+>>>>>>> MOODLE_34_STABLE
             $commands .= '&nbsp;<a href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/up').'</a>';
         } else {
             $commands .= '&nbsp;'.$OUTPUT->pix_icon('up_shadow', '', 'magtest').'">';
         }
         if ($question->sortorder < count($questions)) {
 <<<<<<< HEAD
+<<<<<<< HEAD
             $cmdurl = new moodle_url('/mod/magtest/view.php', array('id' => $cm->id, 'view' => 'questions', 'what' => 'down', 'qid' => $question->id));
 =======
             $params = array('id' => $cm->id, 'view' => 'questions', 'what' => 'down', 'qid' => $question->id);
             $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
 >>>>>>> MOODLE_35_STABLE
+=======
+            $params = array('id' => $cm->id, 'view' => 'questions', 'what' => 'down', 'qid' => $question->id);
+            $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
+>>>>>>> MOODLE_34_STABLE
             $commands .= '&nbsp;<a href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/down').'</a>';
         } else {
             $commands .= '&nbsp;'.$OUTPUT->pix_icon('down_shadow', 'magtest');

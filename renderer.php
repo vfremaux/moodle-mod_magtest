@@ -41,10 +41,14 @@ class mod_magtest_renderer extends plugin_renderer_base {
         global $CFG;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         // first get the help image icon
 =======
         // First get the help image icon.
 >>>>>>> MOODLE_35_STABLE
+=======
+        // First get the help image icon.
+>>>>>>> MOODLE_34_STABLE
         $title = get_string('helper', 'magtest');
         $alt = get_string('helper', 'magtest');
 
