@@ -70,7 +70,6 @@ $PAGE->navbar->add(get_string('addcategory', 'magtest'));
 $PAGE->set_focuscontrol('');
 $PAGE->set_cacheable(true);
 $PAGE->set_url($url);
-$PAGE->set_button($OUTPUT->update_module_button($cm->id, 'magtest'));
 
 if ($form->is_cancelled()) {
     redirect($editurl);
