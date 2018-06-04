@@ -57,7 +57,6 @@ $PAGE->navbar->add(get_string('addquestion', 'magtest'));
 $PAGE->set_focuscontrol('');
 $PAGE->set_cacheable(true);
 $PAGE->set_url($url);
-$PAGE->set_button($OUTPUT->update_module_button($cm->id, 'magtest'));
 
 if ($qid <= 0) {
     $form = new Question_Form($magtest, 'add', $howmany, $url);
