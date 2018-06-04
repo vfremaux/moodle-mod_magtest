@@ -163,7 +163,6 @@ $PAGE->set_title($course->shortname.': '.format_string($magtest->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->navbar->add($strmagtest);
 $PAGE->navbar->add(get_string('importquestions', 'magtest'));
-$PAGE->set_button($OUTPUT->update_module_button($cm->id, 'magtest'));
 
 // Print the page header.
 
