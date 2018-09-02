@@ -116,7 +116,7 @@ class mod_magtest_renderer extends plugin_renderer_base {
             $str .= '<tr align="top">';
             $str .= '<td align="left">';
             $qt = file_rewrite_pluginfile_urls($question->questiontext, 'pluginfile.php', $context->id,
-                                               'mod_magtest', 'question', 0)
+                                               'mod_magtest', 'question', 0);
             $str .= $question->questiontext = $qt;
             $question->questiontext = format_string($question->questiontext);
             $str .= '</td>';
