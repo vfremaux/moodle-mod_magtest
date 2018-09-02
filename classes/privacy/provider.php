@@ -46,8 +46,7 @@ class provider implements \core_privacy\local\metadata\provider {
   public static function get_contexts_for_userid(int $userid) : contextlist {
         $contextlist = new \core_privacy\local\request\contextlist();
 
-        // Fetching flashcard_cards context should be sufficiant to get contexts where user is involved in.
-        // It may have NO states if it has no deck cards.
+        // Fetching magtest context should be sufficiant to get contexts where user is involved in.
 
         $sql = "
             SELECT
@@ -80,28 +79,114 @@ class provider implements \core_privacy\local\metadata\provider {
      * @param   approved_contextlist    $contextlist    The approved contexts to export information for.
      */
     public static function export_user_data(approved_contextlist $contextlist) {
+        global $DB;
 
         $user = $contextlist->get_user();
 
         foreach ($contextlist->get_contexts() as $ctx) {
-            $instance = writer::withcontext($ctx);
 
-            $data = new StdClass;
+            $magtest = self::export_magtest($ctx, $user);
 
-            $params = array('magtestid' => $ctx->instanceid,
-                            'userid' => $user->id);
-            $answers = $DB->get_records('magtest_useranswer', $params);
+            $sql = "
+                SELECT
+                    mq.userid,
+                    mq.questiontext,
+                    mc.name,
+                    mc.description,
+                    ma.answertext,
+                    ma.description,
+                    ma.weight,
+                FROM
+                    {magtest_useranswer} ua,
+                    {magtest_question} mq,
+                    {magtest_answer} ma,
+                    {magtest_category} mc,
+                    {magtest} mg
+                WHERE
+                
+                    mq.id = ua.questionid AND
+                    ma.id = ua.answerid AND
+                    mc.id = ma.categoryid AND
+                    mq.magtestid = ?
+            ";
 
-            foreach ($answers as $answer) {
-                $testanswer = $DB->get_record('magtest_answer', array('id' => $answer->answerid));
-                $testquestion = $DB->get_record('magtest_question', array('id' => $answer->questionid));
-                $answer->answertext = $testanswer->answertext;
-                $answer->questiontext = $testquestion->questiontext;
-                $data->answers[] = $answer;
+            $answers = $DB->get_records_sql($sql, [$magtest->id]);
+            if ($answers) {
+                foreach ($answers as $answer) {
+                    self::export_magtest_answer($ctx, $user, $answer);
+                }
             }
-
-            $instance->export_data(null, $data);
         }
+    }
+
+    /**
+     * Export one entry in the database activity module (one record in {data_records} table)
+     *
+     * @param \context $context
+     * @param \stdClass $user
+     * @param \stdClass $recordobj
+     */
+    protected static function export_magtest_answer($context, $user, $recordobj) {
+        global $DB;
+
+        if (!$recordobj) {
+            return;
+        }
+
+        $recordobj->userid = transform::user($recordobj->userid);
+        $recordobj->timeanswered = transform::datetime($recordobj->timeanswered);
+
+        // Data about the record.
+        writer::with_context($context)->export_data([$recordobj->id], (object)$recordobj);
+    }
+
+    /**
+     * Export basic info about magtest activity module
+     *
+     * @param \context $context
+     * @param \stdClass $user
+     */
+    protected static function export_magtest($context, $user) {
+        global $DB;
+
+        if (!$context) {
+            return  null;
+        }
+
+        $contextdata = helper::get_context_data($context, $user);
+        writer::with_context($context)->export_data([], $contextdata);
+
+        $sql = "
+            SELECT
+                cm.id,
+                ".self::get_fields()."
+            FROM
+                {context} ctx,
+                {course_modules} cm,
+                {modules} m,
+                {magtest} mg
+            WHERE
+                cm.module = m.id AND
+                m.name = 'magtest' AND
+                cm.instance = mg.id AND
+                ctx.contextlevel = ? AND
+                ctx.instanceid = cm.id AND
+                ctx.id = ?
+        ";
+
+        $magtest = $DB->get_record_sql($sql, [CONTEXT_MODULE, $context->id]);
+        $magtest->starttime = transform::datetime($magtest->starttime);
+        $magtest->endtime = transform::datetime($magtest->endtime);
+        $magtest->weighted = transform::yesno($magtest->weighted);
+        $magtest->allowreplay = transform::yesno($magtest->allowreplay);
+
+        writer::with_context($context)->export_data([], $magtest);
+
+        return $magtest;
+    }
+
+    protected static function get_fields() {
+        return " mg.name, mg.intro, mg.starttime, mg.endtime, weighted, allowreplay ";
     }
 
     public static function delete_data_for_all_users_in_context(deletion_criteria $criteria) {

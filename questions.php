@@ -60,23 +60,23 @@ if (!empty($questions)) {
         $order = $question->sortorder;
         $commands = '<div class="questioncommands">';
         $cmdurl = new moodle_url('/mod/magtest/editquestions.php', array('id' => $cm->id, 'qid' => $question->id));
-        $commands .= '<a href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/edit').'</a>';
+        $commands .= '<a href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/edit', get_string('edit')).'</a>';
         $params = array('id' => $cm->id, 'view' => 'questions', 'what' => 'delete', 'qid' => $question->id);
         $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
         $commands .= '&nbsp;<a id="delete" href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/delete', get_string('delete')).'</a>';
         if ($question->sortorder > 1) {
             $params = array('id' => $cm->id, 'view' => 'questions', 'what' => 'up', 'qid' => $question->id);
             $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
-            $commands .= '&nbsp;<a href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/up').'</a>';
+            $commands .= '&nbsp;<a href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/up', '').'</a>';
         } else {
-            $commands .= '&nbsp;'.$OUTPUT->pix_icon('up_shadow', '', 'magtest').'">';
+            $commands .= '&nbsp;'.$OUTPUT->pix_icon('up_shadow', '', 'magtest');
         }
         if ($question->sortorder < count($questions)) {
             $params = array('id' => $cm->id, 'view' => 'questions', 'what' => 'down', 'qid' => $question->id);
             $cmdurl = new moodle_url('/mod/magtest/view.php', $params);
-            $commands .= '&nbsp;<a href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/down').'</a>';
+            $commands .= '&nbsp;<a href="'.$cmdurl.'">'.$OUTPUT->pix_icon('t/down', '').'</a>';
         } else {
-            $commands .= '&nbsp;'.$OUTPUT->pix_icon('down_shadow', 'magtest');
+            $commands .= '&nbsp;'.$OUTPUT->pix_icon('down_shadow', '', 'magtest');
         }
         $commands .= '</div>';
         $validanswercount = 0;
@@ -104,5 +104,5 @@ if (!empty($questions)) {
 $options['id'] = $cm->id;
 $options['qid'] = -1;
 
-echo $OUTPUT->single_button(new moodle_url('editquestions.php', $options), get_string('addquestion', 'magtest'), 'get');
+echo $OUTPUT->single_button(new moodle_url('/mod/magtest/editquestions.php', $options), get_string('addquestion', 'magtest'), 'get');
 echo '</center>';
