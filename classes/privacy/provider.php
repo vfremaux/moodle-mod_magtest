@@ -18,10 +18,15 @@ namespace mod_magtest\privacy;
 
 use \core_privacy\local\request\writer;
 use \core_privacy\local\metadata\collection;
+use core_privacy\local\request\userlist;
+use core_privacy\local\request\transform;
 
 defined('MOODLE_INTERNAL') || die();
 
-class provider implements \core_privacy\local\metadata\provider {
+class provider implements
+    \core_privacy\local\metadata\provider,
+    \core_privacy\local\request\core_userlist_provider,
+    \core_privacy\local\request\plugin\provider {
 
     public static function get_metadata(collection $collection) : collection {
 
@@ -75,6 +80,47 @@ class provider implements \core_privacy\local\metadata\provider {
     }
 
     /**
+     * Get the list of users who have data within a context.
+     *
+     * @param   userlist    $userlist   The userlist containing the list of users who have data in this context/plugin combination.
+     *
+     */
+    public static function get_users_in_context(userlist $userlist) {
+        $context = $userlist->get_context();
+
+        if (!is_a($context, \context_module::class)) {
+            return;
+        }
+
+        // Find users with magtest answers entries.
+        $sql = "
+            SELECT 
+                mua.userid
+            FROM
+                {magtest_useranswer} mua
+            JOIN
+                {modules} m
+            ON
+                m.name = :magtest
+            JOIN
+                {course_modules} cm
+            ON
+                cm.instance = mua.magtestid AND
+                cm.module = m.id
+            JOIN
+                {context} ctx
+            ON
+                ctx.instanceid = cm.id AND
+                ctx.contextlevel = :modlevel
+            WHERE
+                ctx.id = :contextid
+        ";
+        $params = ['magtest' => 'magtest', 'modlevel' => CONTEXT_MODULE, 'contextid' => $context->id];
+
+        $userlist->add_from_sql('userid', $sql, $params);
+    }
+
+    /**
      * Export all user data for the specified user, in the specified contexts, using the supplied exporter instance.
      *
      * @param   approved_contextlist    $contextlist    The approved contexts to export information for.
@@ -85,7 +131,6 @@ class provider implements \core_privacy\local\metadata\provider {
         $user = $contextlist->get_user();
 
         foreach ($contextlist->get_contexts() as $ctx) {
-
             $magtest = self::export_magtest($ctx, $user);
 
             $sql = "
