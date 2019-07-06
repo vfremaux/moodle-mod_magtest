@@ -18,10 +18,18 @@ namespace mod_magtest\privacy;
 
 use \core_privacy\local\request\writer;
 use \core_privacy\local\metadata\collection;
+use core_privacy\local\request\userlist;
+use core_privacy\local\request\approved_userlist;
+use core_privacy\local\request\transform;
+use \core_privacy\local\request\contextlist;
+use \core_privacy\local\request\approved_contextlist;
 
 defined('MOODLE_INTERNAL') || die();
 
-class provider implements \core_privacy\local\metadata\provider {
+class provider implements
+    \core_privacy\local\metadata\provider,
+    \core_privacy\local\request\core_userlist_provider,
+    \core_privacy\local\request\plugin\provider {
 
     public static function get_metadata(collection $collection) : collection {
 
@@ -45,7 +53,7 @@ class provider implements \core_privacy\local\metadata\provider {
      * @return  contextlist   $contextlist  The list of contexts used in this plugin.
      */
   public static function get_contexts_for_userid(int $userid) : contextlist {
-        $contextlist = new \core_privacy\local\request\contextlist();
+        $contextlist = new contextlist();
 
         // Fetching magtest context should be sufficiant to get contexts where user is involved in.
 
@@ -75,6 +83,47 @@ class provider implements \core_privacy\local\metadata\provider {
     }
 
     /**
+     * Get the list of users who have data within a context.
+     *
+     * @param   userlist    $userlist   The userlist containing the list of users who have data in this context/plugin combination.
+     *
+     */
+    public static function get_users_in_context(userlist $userlist) {
+        $context = $userlist->get_context();
+
+        if (!is_a($context, \context_module::class)) {
+            return;
+        }
+
+        // Find users with magtest answers entries.
+        $sql = "
+            SELECT 
+                mua.userid
+            FROM
+                {magtest_useranswer} mua
+            JOIN
+                {modules} m
+            ON
+                m.name = :magtest
+            JOIN
+                {course_modules} cm
+            ON
+                cm.instance = mua.magtestid AND
+                cm.module = m.id
+            JOIN
+                {context} ctx
+            ON
+                ctx.instanceid = cm.id AND
+                ctx.contextlevel = :modlevel
+            WHERE
+                ctx.id = :contextid
+        ";
+        $params = ['magtest' => 'magtest', 'modlevel' => CONTEXT_MODULE, 'contextid' => $context->id];
+
+        $userlist->add_from_sql('userid', $sql, $params);
+    }
+
+    /**
      * Export all user data for the specified user, in the specified contexts, using the supplied exporter instance.
      *
      * @param   approved_contextlist    $contextlist    The approved contexts to export information for.
@@ -85,7 +134,6 @@ class provider implements \core_privacy\local\metadata\provider {
         $user = $contextlist->get_user();
 
         foreach ($contextlist->get_contexts() as $ctx) {
-
             $magtest = self::export_magtest($ctx, $user);
 
             $sql = "
@@ -190,15 +238,16 @@ class provider implements \core_privacy\local\metadata\provider {
         return " mg.name, mg.intro, mg.starttime, mg.endtime, weighted, allowreplay ";
     }
 
-    public static function delete_data_for_all_users_in_context(deletion_criteria $criteria) {
+    public static function delete_data_for_all_users_in_context(\context $context) {
         global $DB;
 
-        $context = $criteria->get_context();
         if (empty($context)) {
             return;
         }
 
-        $DB->delete_records('magtest_useranswer', ['magtestid' => $context->instanceid]);
+        $cm = $DB->get_record('course_modules', ['id' => $context->instanceid]);
+
+        $DB->delete_records('magtest_useranswer', ['magtestid' => $cm->instance]);
     }
 
     public static function delete_data_for_user(approved_contextlist $contextlist) {
@@ -209,7 +258,30 @@ class provider implements \core_privacy\local\metadata\provider {
         }
         $userid = $contextlist->get_user()->id;
         foreach ($contextlist->get_contexts() as $ctx) {
-            $DB->delete_records('magtest_useranswer', ['magtestid' => $ctx->instanceid, 'userid' => $userid]);
+            $cm = $DB->get_record('course_modules', ['id' => $ctx->instanceid]);
+            $DB->delete_records('magtest_useranswer', ['magtestid' => $cm->instance, 'userid' => $userid]);
         }
+    }
+
+    /**
+     * Delete multiple users within a single context.
+     *
+     * @param   approved_userlist    $userlist The approved context and user information to delete information for.
+     */
+    public static function delete_data_for_users(approved_userlist $userlist) {
+        global $DB;
+
+        $context = $userlist->get_context();
+
+        if ($context->contextlevel != CONTEXT_MODULE) {
+            return;
+        }
+
+        $cm = $DB->get_record('course_modules', ['id' => $context->instanceid]);
+
+        foreach ($userlist->get_userids() as $uid) {
+            $DB->delete_records('magtest_useranswer', ['magtestid' => $cm->instance, 'userid' => $uid]);
+        }
+
     }
 }
