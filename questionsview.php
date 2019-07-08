@@ -126,11 +126,11 @@ if ($nbquestions > 1) {
         }
         if ($i == $question->qorder ) {
             if ($i > 1) {
-                echo '<input type="submit" name="what" value="'.get_string('<<', 'magtest').'"  >';
+                echo '<input type="submit" name="what" value="'.get_string('leftarrow', 'magtest').'"  >';
             }
             print $stri;
             if ($i < $nbquestions) {
-                echo '<input type="submit" name="what" value="'.get_string('>>', 'magtest').'"  >';
+                echo '<input type="submit" name="what" value="'.get_string('rightarrow', 'magtest').'"  >';
             }
         } else {
             echo '<button type="submit" name="what" value="'.$i.'" >'.$stri.'</button>';

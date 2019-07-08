@@ -55,7 +55,7 @@ class mod_magtest_renderer extends plugin_renderer_base {
         $attributes['id'] = $id;
         $output = html_writer::tag('a', $output, $attributes);
 
-        $daat = array('id' => $id, 'url' => $url->out(false));
+        $data = array('id' => $id, 'url' => $url->out(false));
         $this->page->requires->js_init_call('M.util.help_icon.add', array($data));
 
         // And finally span.

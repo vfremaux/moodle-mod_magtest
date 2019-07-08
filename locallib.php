@@ -221,21 +221,23 @@ function magtest_get_next_questionset(&$magtest, $currentpage) {
 
     // If all questions have answers, test is finished (no next page).
     $sql = "
-        SELECT DISTINCT(COALESCE(mq.id, mua.id)),
-            mq.id,
-            mua.id
+        SELECT
+            mq.id as mqid,
+            mua.id as muaid
         FROM
             {magtest_question} mq
         LEFT JOIN
             {magtest_useranswer} mua
         ON
-            mua.questionid = mq.id
+            mua.questionid = mq.id AND
+            mua.userid = ?
         WHERE
             mq.magtestid = ? AND
-            (mua.userid = ? OR mua.userid IS NULL) AND
             mua.id IS NULL
     ";
-    if (!$unanswered = $DB->get_records_sql($sql, array($magtest->id, $USER->id))) {
+    $unanswered = $DB->get_records_sql($sql, array($magtest->id, $USER->id));
+
+    if (!$unanswered) {
         return false;
     }
 

@@ -34,8 +34,8 @@ $string['magtest:viewotherresults'] = 'See results of other participants';
 $string['errorinvalidcategory'] = 'Invalid Category.';
 $string['erroraddcategory'] = 'Error while adding a category.';
 
-$string['<<'] = '<<';
-$string['>>'] = '>>';
+$string['leftarrow'] = '<<';
+$string['rightarrow'] = '>>';
 $string['addcategories'] = 'Add categories';
 $string['addcategory'] = 'Add a category';
 $string['addone'] = 'Add one category';
