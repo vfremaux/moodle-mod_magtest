@@ -69,7 +69,7 @@ switch ($action) {
         break;
     }
 
-    case get_string('<<', 'magtest'): {
+    case get_string('leftarrow', 'magtest'): {
         $question2 = get_magtest_question($magtest->id, $question->qorder - 1);
         if ($question2) {
             $question2->qorder = $question->qorder;
@@ -80,7 +80,7 @@ switch ($action) {
         break;
     }
 
-    case get_string('>>', 'magtest'): {
+    case get_string('rightarrow', 'magtest'): {
         $question2 = get_magtest_question($magtest->id, $question->qorder + 1);
         if ($question2) {
             $question2->qorder = $question->qorder;
