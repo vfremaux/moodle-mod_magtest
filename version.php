@@ -34,4 +34,4 @@ $plugin->release = '3.5.0 (Build 2019071700)';
 
 // Non moodle attributes.
 $plugin->codeincrement = '3.5.0002';
-$plugin->privacy = 'public';
+// $plugin->privacy = 'public'; Do not explicit public for publishing public target in x_tools
