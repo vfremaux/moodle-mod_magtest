@@ -32,6 +32,13 @@ require_once($CFG->dirroot.'/course/moodleform_mod.php');
  */
 class mod_magtest_mod_form extends moodleform_mod {
 
+    protected $resultoptions;
+
+    public function __construct() {
+        parent::__construct();
+        $this->resultoptions = [];
+    }
+
     public function definition() {
         global $CFG, $COURSE;
 
@@ -84,8 +91,8 @@ class mod_magtest_mod_form extends moodleform_mod {
         $mform->addElement('checkbox', 'allowreplay', get_string('allowreplay', 'magtest'));
         $mform->addHelpButton('allowreplay', 'pagesize', 'magtest');
 
-        $mform->addElement('htmleditor', 'result', get_string('resulttext', 'magtest'));
-        $mform->setType('result', PARAM_RAW);
+        $mform->addElement('editor', 'result_editor', get_string('resulttext', 'magtest'), $this->resultoptions);
+        $mform->setType('result_editor', PARAM_RAW);
 
         $this->standard_coursemodule_elements();
         $this->add_action_buttons();
@@ -94,5 +101,12 @@ class mod_magtest_mod_form extends moodleform_mod {
     public function validation($data, $files = null) {
         $errors = array();
         return $errors;
+    }
+
+    public function set_data($data) {
+        $data->result = file_prepare_standard_editor($question, 'result', $this->resultoptions, $context,
+                                                     'mod_magtest', 'result', 0);
+
+        parent::set_data($data);
     }
 }
