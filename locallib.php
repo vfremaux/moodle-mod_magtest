@@ -235,7 +235,7 @@ function magtest_get_next_questionset(&$magtest, $currentpage) {
             mq.magtestid = ? AND
             mua.id IS NULL
     ";
-    $unanswered = $DB->get_records_sql($sql, array($magtest->id, $USER->id));
+    $unanswered = $DB->get_records_sql($sql, array($USER->id, $magtest->id));
 
     if (!$unanswered) {
         return false;
