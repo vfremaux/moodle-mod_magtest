@@ -197,5 +197,31 @@ function xmldb_magtest_upgrade($oldversion = 0) {
         upgrade_mod_savepoint(true, 2018042400, 'magtest');
     }
 
+    if ($oldversion < 2019071700) {
+
+        $table = new xmldb_table('magtest');
+        $field = new xmldb_field('resultformat');
+        $field->set_attributes(XMLDB_TYPE_INTEGER, '4', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, 0, 'result');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        upgrade_mod_savepoint(true, 2019071700, 'magtest');
+    }
+
+    if ($oldversion < 2019071800) {
+
+        // Define field course to be added to magtest.
+        $table = new xmldb_table('magtest');
+        $field = new xmldb_field('timemodified');
+        $field->set_attributes(XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, 0, 'timecreated');
+
+        // Launch add field course.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        upgrade_mod_savepoint(true, 2019071800, 'magtest');
+    }
+
     return $result;
 }

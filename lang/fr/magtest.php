@@ -106,7 +106,6 @@ $string['outputgroupname'] = 'Nom du groupe généré';
 $string['outputfieldname'] = 'Champ de profil à modifier';
 $string['outputfieldvalue'] = 'Valeur de profil';
 $string['singlechoice'] = 'Choix simple';
-$string['singlechoice_help'] = 'Si actif, seule la première catégorie. Weights apply to all other categories if this questions is enabled. Magtest is necessarily weighted in this case.';
 $string['pagenotcomplete'] = 'Toutes les réposnes n\'ont pas été données';
 $string['pagesize'] = 'Nombre de questions par page';
 $string['preview'] = 'Prévisualisation';
@@ -159,6 +158,11 @@ $string['privacy:metadata:magtest_useranswer:timeanswered'] = 'La date à laquel
 $string['privacy:metadata:magtest_useranswer'] = 'Stocke les réponses données par les utilisateurs dans le test';
 
 // Help strings.
+
+$string['singlechoice_help'] = '
+Si actif, seule la première catégorie détermine les propositions affichées à l\'utilisateur. Les points de la question,
+si elle est cochée, sont distribués sur toutes les catégories selon la pondération. Magtest est forcément en mode
+pondéré dans ce cas.';
 
 $string['importformat_help'] = '
 ### Format d\'import des questions
@@ -228,3 +232,5 @@ $string['allowreplay_help'] = '
 Ce paramètre permet de commuter la possibilité de rejouer le test au niveau de l\'instance. Les utilisateurs doivent en plus disposer
 de la capacité "Rejouer le test" dans leur profil pour pouvoir exécuter le test à nouveau.
 ';
+
+$string['usesetprofile_help'] = 'si actif, on peut utiliser les résultats du Magtest pour affecter des valeurs du profil utilisateur.';
