@@ -100,9 +100,23 @@ function magtest_add_instance($magtest) {
         $magtest->weighted = 1;
     }
 
-    $return = $DB->insert_record('magtest', $magtest);
+    $context = context_module::instance($magtest->coursemodule);
+    $editordata = $magtest->result;
+    file_save_draft_area_files(0, $context->id, 'mod_customlabel', 'result', 0);
+    $magtest->result = file_rewrite_urls_to_pluginfile($editordata['text'], $editordata['itemid'], 0);
 
-    return $return;
+    $magtest->id = $DB->insert_record('magtest', $magtest);
+
+    $resultoptions = [];
+    $magtest = file_postupdate_standard_editor($magtest, 'result', $resultoptions, $context, 'mod_magtest', 'result', 0);
+
+    $DB->update_record('magtest', $magtest);
+
+    return $magtest->id;
+}
+
+function pix_url() {
+    return '';
 }
 
 /**
@@ -149,6 +163,11 @@ function magtest_update_instance($magtest) {
     if (!isset($magtest->singlechoice)) {
         $magtest->singlechoice = 0;
     }
+
+    $context = context_module::instance($magtest->coursemodule);
+    $editordata = $magtest->result_editor;
+    file_save_draft_area_files($editordata['itemid'], $context->id, 'mod_customlabel', 'result', 0);
+    $magtest->result = customlabel_file_rewrite_urls_to_pluginfile($editordata['text'], $editordata['itemid'], 0);
 
     return $DB->update_record('magtest', $magtest);
 }

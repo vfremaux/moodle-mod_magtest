@@ -16,7 +16,9 @@
         <FIELD NAME="endtime" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false"/>
         <FIELD NAME="endtimeenable" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false"/>
         <FIELD NAME="result" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="resultformat" TYPE="int" LENGTH="4" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="weighted" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="usemakegroups" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="usesetprofile" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>

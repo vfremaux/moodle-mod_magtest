@@ -135,7 +135,6 @@ $string['unanswered'] = 'These users did not answer';
 $string['updatecategory'] = 'Update a category';
 $string['usemakegroups'] = 'Use this test for generating course groups';
 $string['usesetprofile'] = 'Use this test for changing users profile values';
-$string['usesetprofile_help'] = 'If enabled, each category can drive changes in the user\'s profile.';
 $string['userchoices'] = 'User choices';
 $string['userstosubmit'] = 'User left to submit';
 $string['weight'] = 'Weight';
@@ -225,3 +224,5 @@ the winning sentence, and followed eventually by an overal conclusion.
 The resulting groups of participants, sorted by the winning category can eventually be converted to Moodle groups. This module
 can thus be used as a self-discrimating operator when starting a course session, or when splitting a course population into
 groups becomes necessary.';
+
+$string['usesetprofile_help'] = 'If enabled, each category can drive changes in the user\'s profile.';
