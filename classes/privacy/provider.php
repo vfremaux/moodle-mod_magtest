@@ -69,7 +69,7 @@ class provider implements
             INNER JOIN
                 {magtest} mg ON mg.id = cm.instance
             LEFT JOIN
-                {magtest_useranswer} ua ON fc.magtestid = mg.id
+                {magtest_useranswer} ua ON ua.magtestid = mg.id
             WHERE ua.userid = :userid
         ";
  
@@ -78,8 +78,9 @@ class provider implements
             'contextlevel'      => CONTEXT_MODULE,
             'userid'  => $userid,
         ];
- 
+
         $contextlist->add_from_sql($sql, $params);
+        return $contextlist;
     }
 
     /**
@@ -152,7 +153,6 @@ class provider implements
                     {magtest_category} mc,
                     {magtest} mg
                 WHERE
-                
                     mq.id = ua.questionid AND
                     ma.id = ua.answerid AND
                     mc.id = ma.categoryid AND

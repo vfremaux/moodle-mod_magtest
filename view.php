@@ -33,7 +33,7 @@ $page = optional_param('page', @$SESSION->page, PARAM_ACTION); // Page.
 $action = optional_param('what', '', PARAM_RAW); // Command.
 
 // Load jquery.
-$PAGE->requires->js('/mod/magtest/js/view.js');
+$PAGE->requires->js_call_amd('mod_magtest/view', 'init');
 
 $SESSION->view = $view;
 $SESSION->page = $page;
