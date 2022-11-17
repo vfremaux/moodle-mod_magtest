@@ -30,6 +30,7 @@ $plugin->version = 2019071800;  // The current module version (Date: YYYYMMDDXX)
 $plugin->requires = 2020060900;  // Requires this Moodle version.
 $plugin->component = 'mod_magtest';   // Full name of the plugin (used for diagnostics).
 $plugin->maturity = MATURITY_RC;
+$plugin->supported = [37, 311];
 $plugin->release = '3.9.0 (Build 2019071800)';
 
 // Non moodle attributes.
