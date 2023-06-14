@@ -19,7 +19,7 @@
  *
  * @package    mod_magtest
  * @category   mod
- * @author     Valery Fremaux <valery.fremaux@club-internet.fr>
+ * @author     Valery Fremaux <valery.fremaux@gmail.com>
  * @contributors   Etienne Roze
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
  * @copyright  (C) 1999 onwards Martin Dougiamas  http://dougiamas.com
@@ -57,7 +57,9 @@ if ($groups) {
  * note that usemakegroups is not compatible with course groups as it is used to generate
  * moodle groups in a course and needs having no groups at start.
  */
-$fields = 'u.id,picture,email,'.get_all_user_name_fields(true, 'u');
+// M4.
+$fields = \core_user\fields::for_name()->with_userpic()->excluding('id')->get_required_fields();
+$fields = 'u.id,'.implode(',', $fields);
 if ($groupmode == NOGROUPS || $magtest->usemakegroups) {
     $users = get_users_by_capability($context, 'mod/magtest:doit', $fields, 'lastname');
 } else {
