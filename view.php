@@ -203,19 +203,34 @@ switch ($view) {
 
 // Start printing the whole view.
 
+$PAGE->set_cm($cm);
+$PAGE->set_activity_record($magtest);
 $PAGE->set_title("$course->shortname: $magtest->name");
 $PAGE->set_heading("$course->fullname");
 $PAGE->navbar->add(get_string($view, 'magtest'));
 $PAGE->set_focuscontrol('');
 $PAGE->set_cacheable(true);
-$PAGE->set_url(new moodle_url('/mod/magtest/view.php', array('id' => $id)));
+$params = array('id' => $id);
+if (!empty($view)) {
+    $params['view'] = $view;
+}
+if (!empty($page)) {
+    $params['page'] = $page;
+}
+if (!empty($action)) {
+    $params['what'] = $action;
+}
+$PAGE->set_url(new moodle_url('/mod/magtest/view.php', $params));
 
 echo $OUTPUT->header();
 
+/*
+// this level of navigation is obsolete in 4.0
 echo $OUTPUT->container_start('mod-header');
 print_tabs($tabrows, $selected, '', $activated);
 echo '<br/>';
 echo $OUTPUT->container_end();
+*/
 
 require($CFG->dirroot.'/mod/magtest/'.$filetoinclude);
 

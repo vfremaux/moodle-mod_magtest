@@ -33,12 +33,12 @@ define('MAGTEST_RESETFORM_RESET', 'magtest_reset_data_');
  * This function is not implemented in this plugin, but is needed to mark
  * the vf documentation custom volume availability.
  */
-function mod_magtest_supports_feature() {
+function magtest_supports_feature($feature = null, $getsupported = false) {
     assert(1);
 }
 
 /**
- * List of features supported in Vodeclic module
+ * List of features supported in magtest module
  * @param string $feature FEATURE_xx constant for requested feature
  * @return mixed True if module supports feature, false if not, null if doesn't know
  */
@@ -75,6 +75,9 @@ function magtest_supports($feature) {
         }
         case FEATURE_SHOW_DESCRIPTION: {
             return true;
+        }
+        case FEATURE_MOD_PURPOSE: {
+            return MOD_PURPOSE_ASSESSMENT;
         }
 
         default:
@@ -569,4 +572,38 @@ function magtest_dbcleaner_add_keys() {
     );
 
     return $keys;
+}
+
+/**
+ * Standard callback for moodle navigation
+ */
+function magtest_extend_settings_navigation(settings_navigation $settingsnav, navigation_node $magtestnode) {
+
+    if (has_capability('mod/magtest:manage', $settingsnav->get_page()->context)) {
+
+        $params = ['id' => $settingsnav->get_page()->cm->id, 'view' => 'preview'];
+        $reportlink = new moodle_url("/mod/magtest/view.php", $params);
+        $magtestnode->add(get_string('preview', 'magtest'), $reportlink, navigation_node::TYPE_SETTING);
+
+        $params = ['id' => $settingsnav->get_page()->cm->id, 'view' => 'categories'];
+        $reportlink = new moodle_url("/mod/magtest/view.php", $params);
+        $magtestnode->add(get_string('categories', 'magtest'), $reportlink, navigation_node::TYPE_SETTING);
+
+        $params = ['id' => $settingsnav->get_page()->cm->id, 'view' => 'questions'];
+        $reportlink = new moodle_url("/mod/magtest/view.php", $params);
+        $magtestnode->add(get_string('questions', 'magtest'), $reportlink, navigation_node::TYPE_SETTING);
+
+        $params = ['id' => $settingsnav->get_page()->cm->id];
+        $reportlink = new moodle_url("/mod/magtest/import/import_questions.php", $params);
+        $magtestnode->add(get_string('import', 'magtest'), $reportlink, navigation_node::TYPE_SETTING);
+
+        $params = ['id' => $settingsnav->get_page()->cm->id, 'vew' => 'results'];
+        $reportlink = new moodle_url("/mod/magtest/view.php", $params);
+        $node = $magtestnode->add(get_string('results', 'magtest'), $reportlink, navigation_node::TYPE_SETTING);
+
+        $params = ['id' => $settingsnav->get_page()->cm->id, 'vew' => 'stats'];
+        $reportlink = new moodle_url("/mod/magtest/view.php", $params);
+        $node = $magtestnode->add(get_string('stat', 'magtest'), $reportlink, navigation_node::TYPE_SETTING);
+    }
+
 }
