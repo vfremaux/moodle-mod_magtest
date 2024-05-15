@@ -45,9 +45,7 @@ if ($action == 'setprofile') {
 if ($action == 'makegroups') {
     $groupmode = groupmode($course, $cm);
     if ($groupmode == NOGROUPS || $magtest->usemakegroups) {
-        // M4.
-        $fields = \core_user\fields::for_name()->with_userpic()->excluding('id')->get_required_fields();
-        $fields = 'u.id,'.implode(',', $fields);
+        $fields = mod_magtest\compat::get_user_fields('u');
         $users = get_users_by_capability($context, 'mod/magtest:doit', $fields, 'lastname');
     } else {
         print_error('errorbadgroupmode', 'magtest');

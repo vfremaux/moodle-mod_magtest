@@ -38,9 +38,7 @@ $groupmode = groups_get_activity_groupmode($cm);
 
 $changegroupid = optional_param('group', -1, PARAM_INT);
 
-// M4.
-$fields = \core_user\fields::for_name()->with_userpic()->excluding('id')->get_required_fields();
-$fields = 'u.id,picture,email,'.implode(',', $fields);
+$fields = mod_magtest\compat::get_user_fields('u');
 if ($groupmode == NOGROUPS || $magtest->usemakegroups) {
     $users = get_users_by_capability($context, 'mod/magtest:doit', $fields, 'lastname');
 } else {

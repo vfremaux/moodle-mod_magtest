@@ -26,13 +26,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2023061403;  // The current module version (Date: YYYYMMDDXX).
+$plugin->version = 2024050203;  // The current module version (Date: YYYYMMDDXX).
 $plugin->requires = 2020060900;  // Requires this Moodle version.
 $plugin->component = 'mod_magtest';   // Full name of the plugin (used for diagnostics).
 $plugin->maturity = MATURITY_RC;
 $plugin->supported = [401, 402];
-$plugin->release = '4.1.0 (Build 2023061403)';
+$plugin->release = '4.1.0 (Build 2024050203)';
 
 // Non moodle attributes.
-$plugin->codeincrement = '4.1.0002';
+$plugin->codeincrement = '4.1.0003';
 $plugin->privacy = 'public';

@@ -36,6 +36,10 @@ Features available :
 - Do not allow play nor replay if current time is over an enabled endtime
 - Delete all user's answers on course reset
 
-# 2016060100
+##### 2016060100
 
 - Fixes the magtest maketest controller call order breaking the recording of last question page
+
+#### 2024050200 (X.0003)
+
+- Add hidesymbols parameter
