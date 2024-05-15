@@ -573,37 +573,3 @@ function magtest_dbcleaner_add_keys() {
 
     return $keys;
 }
-
-/**
- * Standard callback for moodle navigation
- */
-function magtest_extend_settings_navigation(settings_navigation $settingsnav, navigation_node $magtestnode) {
-
-    if (has_capability('mod/magtest:manage', $settingsnav->get_page()->context)) {
-
-        $params = ['id' => $settingsnav->get_page()->cm->id, 'view' => 'preview'];
-        $reportlink = new moodle_url("/mod/magtest/view.php", $params);
-        $magtestnode->add(get_string('preview', 'magtest'), $reportlink, navigation_node::TYPE_SETTING);
-
-        $params = ['id' => $settingsnav->get_page()->cm->id, 'view' => 'categories'];
-        $reportlink = new moodle_url("/mod/magtest/view.php", $params);
-        $magtestnode->add(get_string('categories', 'magtest'), $reportlink, navigation_node::TYPE_SETTING);
-
-        $params = ['id' => $settingsnav->get_page()->cm->id, 'view' => 'questions'];
-        $reportlink = new moodle_url("/mod/magtest/view.php", $params);
-        $magtestnode->add(get_string('questions', 'magtest'), $reportlink, navigation_node::TYPE_SETTING);
-
-        $params = ['id' => $settingsnav->get_page()->cm->id];
-        $reportlink = new moodle_url("/mod/magtest/import/import_questions.php", $params);
-        $magtestnode->add(get_string('import', 'magtest'), $reportlink, navigation_node::TYPE_SETTING);
-
-        $params = ['id' => $settingsnav->get_page()->cm->id, 'vew' => 'results'];
-        $reportlink = new moodle_url("/mod/magtest/view.php", $params);
-        $node = $magtestnode->add(get_string('results', 'magtest'), $reportlink, navigation_node::TYPE_SETTING);
-
-        $params = ['id' => $settingsnav->get_page()->cm->id, 'vew' => 'stats'];
-        $reportlink = new moodle_url("/mod/magtest/view.php", $params);
-        $node = $magtestnode->add(get_string('stat', 'magtest'), $reportlink, navigation_node::TYPE_SETTING);
-    }
-
-}

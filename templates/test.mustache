@@ -21,7 +21,7 @@
     * none
 
 }}
-<!-- test -->
+<!-- mod_magtest/test -->
 <form name="maketest" method="post" action="view.php">
 <input type="hidden" name="id" value="{{cmid}}" />
 <input type="hidden" name="view" value="doit" />
@@ -35,11 +35,11 @@
 
     <tr align="top">
         <td colspan="3" align="center">
-            <input type="button" name="go_btn" value="{{savestr}}" onclick="{{{savehandler}}}" />
+            <input type="button" name="go_btn" value="{{#str}}save{{/str}}" onclick="{{{savehandler}}}" />
             {{#canreplay}}
-            <input type="button" name="reset_btn" value="{{resetstr}}" onclick="{{{resethandler}}}" />
+            <input type="button" name="reset_btn" value="{{#str}}reset{{/str}}" onclick="{{{resethandler}}}" />
             {{/canreplay}}
-            <input type="button" name="backtocourse_btn" value="{{backtocoursestr}}" onclick="{{{backhandler}}}" />
+            <input type="button" name="backtocourse_btn" value="{{#str}}backtocourse, magtest{{/str}}" onclick="{{{backhandler}}}" />
          </td>
     </tr>
 </table>
@@ -73,5 +73,5 @@ function checkanswers() {
     }
 </script>
 {{/magtestsingle}}
-<!-- /test -->
+<!-- /mod_magtest/test -->
 

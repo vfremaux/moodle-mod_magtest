@@ -76,6 +76,7 @@ $string['eventanswersubmitted'] = 'Answer submitted';
 $string['guestcannotuse'] = 'Guests cannot use this test';
 $string['helpnavigationquestion'] = 'Help';
 $string['helper'] = 'Read hint';
+$string['hidesymbols'] = 'Hide symbols';
 $string['intro'] = 'Intro';
 $string['magtestattempted'] = 'Attempted on';
 $string['magtestaccesses'] = 'Accessed: {$a} times';
