@@ -24,6 +24,7 @@
         <FIELD NAME="usesetprofile" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="pagesize" TYPE="int" LENGTH="4" NOTNULL="true" UNSIGNED="true" DEFAULT="4" SEQUENCE="false"/>
         <FIELD NAME="allowreplay" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="1" SEQUENCE="false"/>
+        <FIELD NAME="hidesymbols" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="1" SEQUENCE="false"/>
         <FIELD NAME="singlechoice" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="1" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>

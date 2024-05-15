@@ -85,6 +85,7 @@ $string['importquestions'] = 'Importer des questions dans le test magazine';
 $string['cleardata'] = 'Supprimer toutes les anciennes données';
 $string['clearalladvice'] = 'Attention, supprimer les données supprimera aussi les réponses utilisateur';
 $string['helper'] = 'Consulter l\'aide';
+$string['hidesymbols'] = 'Ne pas afficher les symboles de catégorie';
 $string['magtest:doit'] = 'Faire le test';
 $string['default'] = 'Test type magazine par defaut';
 $string['makegroups'] = 'Générer les groupes du cours à partir des résultats';

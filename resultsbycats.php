@@ -57,7 +57,7 @@ if ($groups) {
  * note that usemakegroups is not compatible with course groups as it is used to generate
  * moodle groups in a course and needs having no groups at start.
  */
-$fields = 'u.id,picture,email,'.get_all_user_name_fields(true, 'u');
+$fields = mod_magtest\compat::get_user_fields('u');
 if ($groupmode == NOGROUPS || $magtest->usemakegroups) {
     $users = get_users_by_capability($context, 'mod/magtest:doit', $fields, 'lastname');
 } else {

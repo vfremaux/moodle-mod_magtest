@@ -25,6 +25,7 @@
 require('../../config.php');
 require_once($CFG->dirroot.'/mod/magtest/lib.php');
 require_once($CFG->dirroot.'/mod/magtest/locallib.php');
+require_once($CFG->dirroot.'/mod/magtest/compatlib.php');
 
 $id = optional_param('id', 0, PARAM_INT); // Course Module ID.
 $a = optional_param('a', 0, PARAM_INT); // Magtest ID.
@@ -39,29 +40,13 @@ $SESSION->view = $view;
 $SESSION->page = $page;
 
 if ($id) {
-    if (!$cm = get_coursemodule_from_id('magtest', $id)) {
-        print_error ('invalidcoursemodule');
-    }
-
-    if (!$course = $DB->get_record('course', array('id' => $cm->course))) {
-        print_error ('coursemisconf');
-    }
-
-    if (!$magtest = $DB->get_record('magtest', array('id' => $cm->instance))) {
-        print_error ('invalidcoursemodule');
-    }
+    $cm = get_coursemodule_from_id('magtest', $id, 0, false, MUST_EXIST);
+    $course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
+    $magtest = $DB->get_record('magtest', ['id' => $cm->instance], '*', MUST_EXIST);
 } else {
-    if (!$magtest = $DB->get_record('magtest', array('id' => $a))) {
-        print_error ('invalidcoursemodule');
-    }
-
-    if (!$course = $DB->get_record('course', array('id' => $magtest->course))) {
-        print_error ('coursemisconf');
-    }
-
-    if (!$cm = get_coursemodule_from_instance('magtest', $magtest->id, $course->id)) {
-        print_error ('invalidcoursemodule');
-    }
+    $magtest = $DB->get_record('magtest', ['id' => $a], '*', MUST_EXIST);
+    $course = $DB->get_record('course', ['id' => $magtest->course], '*', MUST_EXIST);
+    $cm = get_coursemodule_from_instance('magtest', $magtest->id, $course->id, false, MUST_EXIST);
 }
 
 require_course_login($course, true, $cm);
@@ -99,59 +84,12 @@ if (!preg_match("/doit|preview|categories|questions|results|stat/", $view)) {
     }
 }
 
-if (has_capability('mod/magtest:doit', $context)) {
-    $tabname = get_string('doit', 'magtest');
-    $row[] = new tabobject('doit', "view.php?id={$cm->id}&amp;view=doit", $tabname);
-}
-
-if (has_capability('mod/magtest:manage', $context)) {
-    $tabname = get_string('preview', 'magtest');
-    $row[] = new tabobject('preview', "view.php?id={$cm->id}&amp;view=preview", $tabname);
-    $tabname = get_string('categories', 'magtest');
-    $row[] = new tabobject('categories', "view.php?id={$cm->id}&amp;view=categories", $tabname);
-    $tabname = get_string('questions', 'magtest');
-    $row[] = new tabobject('questions', "view.php?id={$cm->id}&amp;view=questions", $tabname);
-    $tabname = get_string('import', 'magtest');
-    $row[] = new tabobject('import', $CFG->wwwroot."/mod/magtest/import/import_questions.php?id={$cm->id}", $tabname);
-}
-
-if (has_capability('mod/magtest:viewotherresults', $context)) {
-    $tabname = get_string('results', 'magtest');
-    $row[]   = new tabobject('results', "view.php?id={$cm->id}&amp;view=results", $tabname);
-}
-
-if (has_capability('mod/magtest:viewgeneralstat', $context)) {
-    $tabname = get_string('stat', 'magtest');
-    $row[]   = new tabobject('stat', "view.php?id={$cm->id}&amp;view=stat", $tabname);
-}
-
-$tabrows[] = $row;
-
-if ($view == 'results') {
-    if (!preg_match("/byusers|bycats/", $page)) {
-        $page = 'bycats';
-    }
-
-    $tabname = get_string('resultsbyusers', 'magtest');
-    $tabrows[1][] = new tabobject('byusers', "view.php?id={$cm->id}&amp;view=results&amp;page=byusers", $tabname);
-    $tabname = get_string('resultsbycats', 'magtest');
-    $tabrows[1][] = new tabobject('bycats', "view.php?id={$cm->id}&amp;view=results&amp;page=bycats", $tabname);
-
-    if (!empty($page)) {
-        $selected = $page;
-        $activated = array($view);
-    }
-} else {
-    $selected = $view;
-    $activated = '';
-}
-
 // Print the main part of the page.
 
 switch ($view) {
     case 'doit':
         if (!has_capability('mod/magtest:doit', $context)) {
-            print_error('errornotallowed', 'magtest');
+            throw new moodle_exception(get_string('errornotallowed', 'magtest'));
         }
         $filetoinclude = 'maketest.php';
         break;
@@ -203,19 +141,27 @@ switch ($view) {
 
 // Start printing the whole view.
 
+mod_magtest\compat::init_page($cm, $magtest);
 $PAGE->set_title("$course->shortname: $magtest->name");
 $PAGE->set_heading("$course->fullname");
 $PAGE->navbar->add(get_string($view, 'magtest'));
 $PAGE->set_focuscontrol('');
 $PAGE->set_cacheable(true);
-$PAGE->set_url(new moodle_url('/mod/magtest/view.php', array('id' => $id)));
+$params = array('id' => $id);
+if (!empty($view)) {
+    $params['view'] = $view;
+}
+if (!empty($page)) {
+    $params['page'] = $page;
+}
+if (!empty($action)) {
+    $params['what'] = $action;
+}
+$PAGE->set_url(new moodle_url('/mod/magtest/view.php', $params));
 
 echo $OUTPUT->header();
 
-echo $OUTPUT->container_start('mod-header');
-print_tabs($tabrows, $selected, '', $activated);
-echo '<br/>';
-echo $OUTPUT->container_end();
+echo mod_magtest\compat::legacy_nav($cm, $context, $view, $page);
 
 require($CFG->dirroot.'/mod/magtest/'.$filetoinclude);
 

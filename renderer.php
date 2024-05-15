@@ -27,8 +27,11 @@ defined('MOODLE_INTERNAL') || die();
 
 class mod_magtest_renderer extends plugin_renderer_base {
 
+    protected $filtermanager;
+
     public function __construct() {
         global $PAGE;
+        $this->filtermanager = filter_manager::instance();
         parent::__construct($PAGE, null);
     }
 
@@ -62,76 +65,87 @@ class mod_magtest_renderer extends plugin_renderer_base {
         return html_writer::tag('span', $output, array('class' => 'helplink'));
     }
 
-    public function print_magtest_quiz(&$questions, &$categories, $context) {
+	/**
+	 * Print a multichoice quiz
+	 *
+	 */
+    public function print_magtest_quiz(&$questions, &$categories, $context, $magtest) {
+        global $PAGE;
 
-        $str = '';
+        $template = new StdClass;
 
         foreach ($questions as $question) {
-            $str .= '<tr align="top">';
-            $str .= '<td width="20%" align="right"><b>'.get_string('question', 'magtest').':</b></td>';
-            $str .= '<td align="left" colspan="2">';
+            $qtpl = new StdClass;
+            $qtpl->qid = $question->id;
             $qt = file_rewrite_pluginfile_urls($question->questiontext, 'pluginfile.php', $context->id,
                                                'mod_magtest', 'question', 0);
-            $str .= $question->questiontext = $qt;
-            $question->questiontext = format_string($question->questiontext);
+            $this->filtermanager = filter_manager::instance();
+            $this->filtermanager->setup_page_for_filters($PAGE, $PAGE->context); // Setup global stuff filters may have.
+            $qt = $this->filtermanager->filter_string($qt, $PAGE->context);
+            if (strpos($qt, '<p>') !== 0) {
+                // Add a formatting paragraph around.
+                $qt = '<p class="magtest-question-wrapper">'.$qt.'</p>';
+            }
+            $qtpl->questiontext = $qt;
 
-            $str .= '</td>';
-            $str .= '</tr>';
             $i = 0;
             shuffle($question->answers);
 
             foreach ($question->answers as $answer) {
-                $str .= '<tr align="middle">';
-                $str .= '<td width="20%" align="right">&nbsp;</td>';
-                $str .= '<td align="left" class="magtest-answerline">';
-                $catsymbol = $categories[$answer->categoryid]->symbol;
-                $symbolurl = magtest_get_symbols_baseurl($magtest).$catsymbol;
-                $symbolimage = '<img class="magtest-qsymbol" src="'.$symbolurl.'" align="bottom" />&nbsp;&nbsp;';
-                $str .= $symbolimage;
+                $atpl = new StdClass;
+                $atpl->aid = $answer->id;
+                if (empty($magtest->hidesymbols)) {
+                    $catsymbol = $categories[$answer->categoryid]->symbol;
+                    $atpl->symbolurl = magtest_get_symbols_baseurl($magtest).$catsymbol;
+                }
                 $at = file_rewrite_pluginfile_urls($answer->answertext, 'pluginfile.php', $context->id,
                                                    'mod_magtest', 'questionanswer', $answer->id);
-                $answer->answertext  = $at;
-                $answertext = preg_replace('/^<p>(.*)<\/p>$/', '\\1', $answer->answertext);
-                $str .= ($answertext).' ';
-                if (!empty($answer->helper)) {
-                    $str .= $this->answer_help_icon($answer->id);
+                $this->filtermanager = filter_manager::instance();
+                $this->filtermanager->setup_page_for_filters($PAGE, $PAGE->context); // Setup global stuff filters may have.
+                $at = $this->filtermanager->filter_string($at, $PAGE->context);
+                if (strpos($at, '<p>') !== 0) {
+                    // Add a formatting paragraph around.
+                    $at = '<p class="magtest-answer-wrapper">'.$at.'</p>';
                 }
-                $str .= '<br/>';
-                $str .= '</td>';
-                $str .= '<td class="magtest-answerline">';
-                $str .= '<input type="radio" name="answer'.$question->id.'" value="'.$answer->id.'" /><br/> ';
-                $str .= '</td>';
-                $str .= '</tr>';
+                $atpl->answertext = $at;
+                if (!empty($answer->helper)) {
+                    $atpl->hashelper = true;
+                    $atpl->helper = $this->answer_help_icon($answer->id);
+                }
+                $qtpl->answers[] = $atpl;
             }
+            $template->questions[] = $qtpl;
         }
 
-        return $str;
+        return $this->output->render_from_template('mod_magtest/magtest_quiz', $template);
     }
 
     public function print_magtest_singlechoice(&$questions, $context) {
 
-        $str = '';
+        $template = new StdClass;
 
         foreach ($questions as $question) {
-            $str .= '<tr align="top">';
-            $str .= '<td align="left">';
+            $qtpl = new StdClass;
+            $qtpl->qid = $question->id;
             $qt = file_rewrite_pluginfile_urls($question->questiontext, 'pluginfile.php', $context->id,
                                                'mod_magtest', 'question', 0);
-            $str .= $question->questiontext = $qt;
-            $question->questiontext = format_string($question->questiontext);
-            $str .= '</td>';
-            $i = 0;
-
-            $str .= '<td class="magtest-answerline">';
-            $str .= '<input type="checkbox" name="answers[]" value="'.$question->id.'" />';
-            $str .= '<input type="hidden" name="qids[]" value="'.$question->id.'" />';
-            $str .= '</td>';
-            $str .= '</tr>';
+            $this->filtermanager = filter_manager::instance();
+            $this->filtermanager->setup_page_for_filters($PAGE, $PAGE->context); // Setup global stuff filters may have.
+            $qt = $this->filtermanager->filter_string($qt, $PAGE->context);
+            if (strpos($qt, '<p>') !== 0) {
+                // Add a formatting paragraph around.
+                $qt = '<p class="magtest-question-wrapper">'.$qt.'</p>';
+            }
+            $qtpl->questiontext = $qt;
+            $template->questions[] = $qtpl;
         }
 
-        return $str;
+        return $this->output->render_from_template('mod_magtest/magtest_singlechoice', $template);
     }
 
+    /**
+     * Effective test form.
+     */
     public function make_test(&$magtest, &$cm, &$context, &$nextset, &$categories) {
         global $COURSE;
 
@@ -143,23 +157,20 @@ class mod_magtest_renderer extends plugin_renderer_base {
         $template->nextpage = $currentpage + 1;
 
         if (empty($magtest->singlechoice)) {
-            $template->magteststandard = $this->print_magtest_quiz($nextset, $categories, $context);
+            $template->magteststandard = $this->print_magtest_quiz($nextset, $categories, $context, $magtest);
         } else {
             $template->magtestsingle = $this->print_magtest_singlechoice($nextset, $context);
         }
 
-        $template->savestr = get_string('save', 'magtest');
         $template->savehandler = 'if (checkanswers()){document.forms[\'maketest\'].what.value = \'save\'; document.forms[\'maketest\'].submit();} return true;';
         $template->canreplay = false;
         if (!$magtest->endtimeenable || time() < $magtest->endtime) {
             if ($magtest->allowreplay && has_capability('mod/magtest:multipleattempts', $context)) {
                 $template->canreplay = true;
-                $template->resetstr = get_string('reset', 'magtest');
                 $template->resethandler = 'document.forms[\'maketest\'].what.value = \'reset\'; document.forms[\'maketest\'].submit(); return true;';
             }
         }
         $courseurl = new moodle_url('/course/view.php', array('id' => $COURSE->id));
-        $template->backtocoursestr = get_string('backtocourse', 'magtest');
         $template->backhandler = 'document.location.href = \''.$courseurl.'\'; return true;';
 
         if (!$magtest->singlechoice) {
@@ -167,5 +178,80 @@ class mod_magtest_renderer extends plugin_renderer_base {
             $template->nextsetarray = implode(',', array_keys($nextset));
         }
         return $this->output->render_from_template('mod_magtest/test', $template);
+    }
+
+    public function categories_preview($categories) {
+        
+    }
+
+    /**
+     * Test preview mode.
+     */
+    public function preview($questions, $magtest) {
+        global $DB, $COURSE, $PAGE;
+
+        $template = new StdClass;
+
+        if (empty($questions)) {
+            $template->noquestions = true;
+        }
+
+        $template->singlechoice = $magtest->singlechoice;
+        $template->weighted = $magtest->weighted;
+        $template->questions = [];
+
+        $courseurl = new moodle_url('/course/view.php', array('id' => $COURSE->id));
+        $template->backhandler = 'document.location.href = \''.$courseurl.'\'; return true;';
+
+        if ($magtest->singlechoice) {
+            foreach ($questions as $question) {
+                $qtpl = new StdClass;
+                $question->questiontext = file_rewrite_pluginfile_urls($question->questiontext, 'pluginfile.php', $context->id,
+                                                                       'mod_magtest', 'question', 0);
+                $qtpl->questiontext = format_string($question->questiontext);
+                $weights = array();
+                foreach ($question->answers as $answer) {
+                    $weights[] = $answer->weight;
+                }
+                $qtpl->weights = ' ('.implode(',', $weights).') ';
+                $template->questions[] = $qtpl;
+            }
+        } else {
+            foreach ($questions as $question) {
+                $qtpl = new StdClass;
+                $qt = file_rewrite_pluginfile_urls($question->questiontext, 'pluginfile.php', $context->id,
+                                                                       'mod_magtest', 'question', 0);
+
+                $this->filtermanager = filter_manager::instance();
+                $this->filtermanager->setup_page_for_filters($PAGE, $PAGE->context); // Setup global stuff filters may have.
+                $qt = $this->filtermanager->filter_string($qt, $PAGE->context);
+                $qtpl->questiontext = $qt;
+
+                shuffle($question->answers);
+                foreach ($question->answers as $answer) {
+                    $answertpl = new StdClass;
+                    $cat = $DB->get_record('magtest_category', array('id' => $answer->categoryid));
+                    if (empty($magtest->hidesymbols)) {
+                        $answertpl->symbolurl = magtest_get_symbols_baseurl($magtest).$cat->symbol;
+                    }
+
+                    $answer->answertext  = file_rewrite_pluginfile_urls($answer->answertext, 'pluginfile.php', $context->id,
+                                                                        'mod_magtest', 'questionanswer', $answer->id);
+
+                    $answertpl->answertext = format_string($answer->answertext);
+                    $answertpl->catname = format_string($cat->name);
+                    if ($magtest->weighted) {
+                        $answertpl->weight = $answer->weight;
+                    }
+                    if (!empty($answer->helper)) {
+                        $answertpl->helper = $this->answer_help_icon($answer->id);
+                    }
+                    $qtpl->answers[] = $answertpl;
+                }
+                $template->questions[] = $qtpl;
+            }
+        }
+
+        return $this->output->render_from_template('mod_magtest/preview', $template);
     }
 }
