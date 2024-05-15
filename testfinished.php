@@ -123,5 +123,10 @@ if ($magtest->allowreplay && has_capability('mod/magtest:multipleattempts', $con
     } else {
         echo $OUTPUT->box(get_string('closedtestadvice', 'magtest'));
     }
+
+    $options = array();
+    $options['id'] = $course->id;
+    $buttonurl = new moodle_url('/course/view.php', $options);
+    echo $OUTPUT->single_button($buttonurl, get_string('backtocourse', 'magtest'), 'get');
 }
 echo '</center>';

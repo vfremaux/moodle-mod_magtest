@@ -223,5 +223,18 @@ function xmldb_magtest_upgrade($oldversion = 0) {
         upgrade_mod_savepoint(true, 2019071800, 'magtest');
     }
 
+    if ($oldversion < 2024050200) {
+        // Define field course to be added to magtest.
+        $table = new xmldb_table('magtest');
+        $field = new xmldb_field('hidesymbols');
+        $field->set_attributes(XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, 0, 'allowreplay');
+
+        // Launch add field course.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        upgrade_mod_savepoint(true, 2024050200, 'magtest');
+    }
+
     return $result;
 }
