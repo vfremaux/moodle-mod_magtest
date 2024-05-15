@@ -1,0 +1,66 @@
+{{!
+    This file is part of The Magtest Module
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_magtest/test
+
+    Classes required for JS:
+    * none
+
+}}
+<!-- mod_magtest/preview -->
+{{#noquestions}}
+{{/noquestions}}
+{{^noquestions}}
+<ul>
+    {{#singlechoice}}
+    {{#questions}}
+    <li class="magtest-item" data-id="{{qid}}">
+        <div class="magtest-question">{{{questiontext}}}</div>
+        <div class="magtest-weights">{{{weights}}}</div>
+    </li>
+    {{/questions}}
+    {{/singlechoice}}
+
+    {{^singlechoice}}
+    {{#questions}}
+    <li>
+        {{{questiontext}}}
+        <ul class="magtest-answer-set">
+            {{#answers}}
+            <li class="magtest-answer">
+            {{#symbolurl}}
+            <img class="magtest-qsymbol" src="{{{symbolurl}}}" />
+            {{/symbolurl}}
+            {{{answertext}}} ({{{catname}}}) {{#weighted}}[ {{{weight}}} ]{{/weighted}}
+            {{#hashelper}}
+            {{{helper}}}
+            {{/hashelper}}
+            </li>
+            {{/answers}}
+        </ul>
+        <br />
+    </li>
+    {{/questions}}
+    {{/singlechoice}}
+
+</ul>
+{{/noquestions}}
+
+<center>
+    <input type="button" name="backtocourse_btn" value="{{#str}}backtocourse, magtest{{/str}}" onclick="{{{backhandler}}}" />
+</center>
+<!-- /mod_magtest/preview -->

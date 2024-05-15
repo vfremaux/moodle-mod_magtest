@@ -121,7 +121,7 @@ $params = array('id' => $cm->id, 'catid' => -1, 'what' => 'addcategories', 'howm
 
 echo '<p>';
 echo $OUTPUT->single_button(new moodle_url('/mod/magtest/editcategories.php', $params), get_string('addone', 'magtest'), 'get');
-$options['howmany'] = 3;
+$params['howmany'] = 3;
 echo $OUTPUT->single_button(new moodle_url('/mod/magtest/editcategories.php', $params), get_string('addthree', 'magtest'), 'get');
 echo '</center>';
 echo '</p>';
