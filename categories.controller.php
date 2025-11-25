@@ -38,6 +38,7 @@ require_once($CFG->dirroot.'/mod/magtest/listlib.php');
 if ($action == 'deletecategory') {
     $catid = required_param('catid', PARAM_INT);
 
+    $transaction = $DB->start_delegated_transaction();
     $answers = $DB->get_records('magtest_answer', array('categoryid' => $catid), '', 'id,id');
     if (!empty($answers)) {
         $DB->delete_records('magtest_answer', array('categoryid' => $catid));
@@ -45,6 +46,7 @@ if ($action == 'deletecategory') {
         $DB->delete_records_select('magtest_useranswer', "answerid IN ('$deletedanswerslist')");
     }
     magtest_list_delete($catid, 'magtest_category');
+    $transaction->allow_commit();
 }
 
 // Raises a category.

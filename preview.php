@@ -44,5 +44,5 @@ echo $renderer->categories_preview($categories);
 
 echo $OUTPUT->heading(get_string('questions', 'magtest'), 3);
 $questions = magtest_get_questions($magtest->id);
-echo $renderer->preview($questions, $magtest);
+echo $renderer->preview($questions, $magtest, $context);
 

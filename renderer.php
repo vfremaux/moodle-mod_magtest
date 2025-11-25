@@ -187,10 +187,10 @@ class mod_magtest_renderer extends plugin_renderer_base {
     /**
      * Test preview mode.
      */
-    public function preview($questions, $magtest) {
+    public function preview($questions, $magtest, $context) {
         global $DB, $COURSE, $PAGE;
 
-        $template = new StdClass;
+        $template = new StdClass();
 
         if (empty($questions)) {
             $template->noquestions = true;

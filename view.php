@@ -29,8 +29,8 @@ require_once($CFG->dirroot.'/mod/magtest/compatlib.php');
 
 $id = optional_param('id', 0, PARAM_INT); // Course Module ID.
 $a = optional_param('a', 0, PARAM_INT); // Magtest ID.
-$view = optional_param('view', @$SESSION->view, PARAM_ACTION); // View.
-$page = optional_param('page', @$SESSION->page, PARAM_ACTION); // Page.
+$view = optional_param('view', $SESSION->view ?? '', PARAM_ACTION); // View.
+$page = optional_param('page', $SESSION->page ?? '', PARAM_ACTION); // Page.
 $action = optional_param('what', '', PARAM_RAW); // Command.
 
 // Load jquery.
@@ -53,10 +53,10 @@ require_course_login($course, true, $cm);
 $context = context_module::instance($cm->id);
 
 // Trigger module viewed event.
-$eventparams = array(
+$eventparams = [
     'objectid' => $magtest->id,
     'context' => $context,
-);
+];
 
 $event = \mod_magtest\event\course_module_viewed::create($eventparams);
 $event->add_record_snapshot('magtest', $magtest);
@@ -70,7 +70,7 @@ $strmagtest  = get_string('modulename', 'magtest');
 // Guest trap.
 
 if (isguestuser()) {
-    print_error('guestcannotuse', 'magtest', '', $CFG->wwwroot.'/course/view.php?id='.$course->id);
+    throw new moodle_exception('guestcannotuse', 'magtest', '', $CFG->wwwroot.'/course/view.php?id='.$course->id);
     exit;
 }
 

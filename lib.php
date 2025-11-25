@@ -400,7 +400,7 @@ function magtest_reset_course_form_definition(&$mform) {
 function magtest_print_overview($courses, &$htmlarray) {
     global $DB;
 
-    $config = get_config('mod_magtest');
+    $config = get_config('magtest');
 
     if (empty($config->showmymoodle)) {
         // Disabled via global config.
@@ -572,4 +572,24 @@ function magtest_dbcleaner_add_keys() {
     );
 
     return $keys;
+}
+
+/**
+ * Standard callback for moodle navigation
+ */
+function magtest_extend_settings_navigation(settings_navigation $settingsnav, navigation_node $magtestnode) {
+    if (has_capability('mod/magtest:manage', $settingsnav->get_page()->context)) {
+
+        $params = ['id' => $settingsnav->get_page()->cm->id, 'view' => 'categories'];
+        $reportlink = new moodle_url("/mod/magtest/view.php", $params);
+        $magtestnode->add(get_string('categories', 'magtest'), $reportlink, navigation_node::TYPE_SETTING);
+
+        $params = ['id' => $settingsnav->get_page()->cm->id, 'view' => 'questions'];
+        $reportlink = new moodle_url("/mod/magtest/view.php", $params);
+        $magtestnode->add(get_string('questions', 'magtest'), $reportlink, navigation_node::TYPE_SETTING);
+
+        $params = ['id' => $settingsnav->get_page()->cm->id];
+        $reportlink = new moodle_url("/mod/magtest/import/import_questions.php", $params);
+        $magtestnode->add(get_string('import', 'magtest'), $reportlink, navigation_node::TYPE_SETTING);
+    }
 }

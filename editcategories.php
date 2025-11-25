@@ -71,9 +71,11 @@ $PAGE->set_focuscontrol('');
 $PAGE->set_cacheable(true);
 $PAGE->set_url($url);
 
+/*
 if ($form->is_cancelled()) {
     redirect($editurl);
 }
+*/
 
 if ($data = $form->get_data()) {
     $cmd = $data->cmd;
@@ -121,7 +123,7 @@ if ($data = $form->get_data()) {
             $catid = magtest::add_category($magtest->id, $cat);
 
             if (!$catid) {
-                 print_error('erroraddcategory', 'magtest', $editurl);
+                 throw new moodle_exception(get_string('erroraddcategory', 'magtest', $editurl));
             }
         }
     } else {

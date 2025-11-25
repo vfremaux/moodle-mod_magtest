@@ -38,7 +38,7 @@ if ($magtest->starttimeenable && time() <= $magtest->starttime) {
 
 if (!magtest_test_configuration($magtest)) {
     echo '<center>';
-    echo $OUTPUT->box(get_string('testnotallok', 'magtest'));
+    echo $OUTPUT->notification(get_string('testnotallok', 'magtest'));
     echo $OUTPUT->continue_button($CFG->wwwroot.'/course/view.php?id='.$course->id);
     echo '</center>';
     return;
